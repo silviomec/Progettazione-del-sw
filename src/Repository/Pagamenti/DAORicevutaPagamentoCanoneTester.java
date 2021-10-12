@@ -5,6 +5,10 @@ import java.util.HashMap;
 import Pagamenti.Model.RicevutaPagamentoCanone;
 import Repository.DAOFactory;
 import Util.NewDate;
+<<<<<<< Updated upstream
+=======
+import Pagamenti.Model.RicevutaPagamentoCanone;
+>>>>>>> Stashed changes
 
 public class DAORicevutaPagamentoCanoneTester {
 	public static void main(String[] args) {

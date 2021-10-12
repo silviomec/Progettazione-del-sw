@@ -9,6 +9,10 @@ import java.util.HashMap;
 
 import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 import Repository.MySQLConnection;
+<<<<<<< Updated upstream
+=======
+import Pagamenti.Model.RicevutaPagamentoPrenotazione;
+>>>>>>> Stashed changes
 
 public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagamentoPrenotazione {
 	private MySQLConnection connection;

@@ -9,6 +9,10 @@ import java.util.HashMap;
 
 import Pagamenti.Model.Canone;
 import Repository.MySQLConnection;
+<<<<<<< Updated upstream
+=======
+import Pagamenti.Model.Canone;
+>>>>>>> Stashed changes
 
 public class DAOCanoneImpl implements DAOCanone {
 	private MySQLConnection connection;
