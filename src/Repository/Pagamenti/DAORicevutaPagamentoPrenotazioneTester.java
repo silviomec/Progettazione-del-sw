@@ -2,9 +2,9 @@ package Repository.Pagamenti;
 
 import java.util.HashMap;
 
-import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 import Repository.DAOFactory;
 import Util.NewDate;
+import pagamenti.model.RicevutaPagamentoPrenotazione;
 
 public class DAORicevutaPagamentoPrenotazioneTester {
 	public static void main(String[] args) {
