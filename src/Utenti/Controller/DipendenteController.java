@@ -9,10 +9,12 @@ import Repository.DAOFactory;
 import Repository.Utenti.DAODipendente;
 import Repository.Utenti.DAODipendenteImpl;
 import Utenti.Model.Dipendente;
+import Utenti.View.Login;
 
 public class DipendenteController {
 	private DAODipendente daoDipendente;
 	private UtenteFacade utenteFacade;
+	private Login login;
 
 	public DipendenteController(UtenteFacade uf) {
 		utenteFacade = uf;
@@ -27,7 +29,7 @@ public class DipendenteController {
 	 * @return void 
 	 * @throws SQLException 
 	 */
-	public void doLogin(String username, String password) throws SQLException {
+	public void doLogin(String username, String password) throws DipendenteNotFoundException, SQLException {
 		Dipendente dip = null;
 		try {
 			dip = daoDipendente.doRetrieveByUsername(username);
@@ -48,9 +50,15 @@ public class DipendenteController {
 		}
 
 	}
+	
+	public void showLoginUI() {
+		if (login != null) login.dispose();
+		login = new Login();
+		login.display();
+	}
 
-	public void showAutistaHomeUI(Autista a) {
+	/*public void showAutistaHomeUI(Autista a) {
 		utenteFacade.disposeAll();
 		utenteFacade.showAutistaHome(a);
-	}
+	} */
 }

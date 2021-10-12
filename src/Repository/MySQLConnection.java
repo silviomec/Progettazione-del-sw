@@ -9,7 +9,7 @@ public class MySQLConnection {
 	private Connection connection;
 	static String url ="jdbc:mysql://localhost:3306/db_pds?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	static String username = "root";
-	static String password = "huawei";
+	static String password = "admin";
 	
 	public MySQLConnection() {
 		connection = null;
