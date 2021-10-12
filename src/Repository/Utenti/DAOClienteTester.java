@@ -3,7 +3,7 @@ package Repository.Utenti;
 import java.util.HashMap;
 
 import Repository.DAOFactory;
-import Utenti.model.Cliente;
+import Utenti.Model.Cliente;
 
 public class DAOClienteTester {
 	public static void main(String[] args) {
