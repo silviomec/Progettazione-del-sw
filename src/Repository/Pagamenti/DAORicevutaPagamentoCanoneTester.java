@@ -2,13 +2,16 @@ package Repository.Pagamenti;
 
 import java.util.HashMap;
 
-import Pagamenti.Model.RicevutaPagamentoCanone;
 import Repository.DAOFactory;
 import Util.NewDate;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 import Pagamenti.Model.RicevutaPagamentoCanone;
 >>>>>>> Stashed changes
+=======
+import pagamenti.model.RicevutaPagamentoCanone;
+>>>>>>> main
 
 public class DAORicevutaPagamentoCanoneTester {
 	public static void main(String[] args) {

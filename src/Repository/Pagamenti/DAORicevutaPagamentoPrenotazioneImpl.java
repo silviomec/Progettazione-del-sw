@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 import Repository.MySQLConnection;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 >>>>>>> Stashed changes
+=======
+import pagamenti.model.RicevutaPagamentoPrenotazione;
+>>>>>>> main
 
 public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagamentoPrenotazione {
 	private MySQLConnection connection;

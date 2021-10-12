@@ -2,7 +2,7 @@ package Repository.Pagamenti;
 
 import java.util.HashMap;
 
-import Pagamenti.Model.Canone;
+import pagamenti.model.Canone;
 
 public interface DAOCanone {
 	public HashMap<String, Canone> doRetrieveAll();
