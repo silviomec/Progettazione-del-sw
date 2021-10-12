@@ -2,7 +2,7 @@ package Repository.Pagamenti;
 
 import java.util.HashMap;
 
-import Pagamenti.Model.RicevutaPagamentoPrenotazione;
+import pagamenti.model.RicevutaPagamentoPrenotazione;
 
 public interface DAORicevutaPagamentoPrenotazione {
 	public HashMap<String, RicevutaPagamentoPrenotazione> doRetrieveAll();
