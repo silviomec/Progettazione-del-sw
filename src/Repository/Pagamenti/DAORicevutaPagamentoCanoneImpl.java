@@ -8,14 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 import Pagamenti.Model.RicevutaPagamentoCanone;
->>>>>>> Stashed changes
-=======
-import pagamenti.model.RicevutaPagamentoCanone;
->>>>>>> main
 
 public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanone {
 	private MySQLConnection connection;

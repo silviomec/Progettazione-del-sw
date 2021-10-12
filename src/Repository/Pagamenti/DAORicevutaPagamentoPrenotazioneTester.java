@@ -4,14 +4,7 @@ import java.util.HashMap;
 
 import Repository.DAOFactory;
 import Util.NewDate;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 import Pagamenti.Model.RicevutaPagamentoPrenotazione;
->>>>>>> Stashed changes
-=======
-import pagamenti.model.RicevutaPagamentoPrenotazione;
->>>>>>> main
 
 public class DAORicevutaPagamentoPrenotazioneTester {
 	public static void main(String[] args) {

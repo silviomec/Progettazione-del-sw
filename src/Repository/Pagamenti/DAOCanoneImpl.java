@@ -8,14 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 import Pagamenti.Model.Canone;
->>>>>>> Stashed changes
-=======
-import pagamenti.model.Canone;
->>>>>>> main
 
 public class DAOCanoneImpl implements DAOCanone {
 	private MySQLConnection connection;
