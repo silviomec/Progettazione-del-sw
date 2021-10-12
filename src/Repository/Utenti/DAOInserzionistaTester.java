@@ -3,7 +3,7 @@ package Repository.Utenti;
 import java.util.HashMap;
 
 import Repository.DAOFactory;
-import Utenti.Model.Inserzionista;
+import Utenti.model.Inserzionista;
 
 public class DAOInserzionistaTester {
 	public static void main(String[] args) {

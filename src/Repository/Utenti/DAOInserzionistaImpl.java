@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-import Utenti.Model.Inserzionista;
+import Utenti.model.Inserzionista;
 
 public class DAOInserzionistaImpl implements DAOInserzionista {
 	private MySQLConnection connection;

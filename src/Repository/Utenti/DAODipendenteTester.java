@@ -3,7 +3,7 @@ package Repository.Utenti;
 import java.util.HashMap;
 
 import Repository.DAOFactory;
-import Utenti.Model.Dipendente;
+import Utenti.model.Dipendente;
 
 public class DAODipendenteTester {
 	public static void main(String[] args) {

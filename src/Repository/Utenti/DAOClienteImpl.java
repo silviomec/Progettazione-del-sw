@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-import Utenti.Model.Cliente;
+import Utenti.model.Cliente;
 
 public class DAOClienteImpl implements DAOCliente {
 	private MySQLConnection connection;

@@ -2,7 +2,7 @@ package Repository.Utenti;
 
 import java.util.HashMap;
 
-import Utenti.Model.Cliente;
+import Utenti.model.Cliente;
 
 public interface DAOCliente {
 	public HashMap<String, Cliente> doRetrieveAll();
