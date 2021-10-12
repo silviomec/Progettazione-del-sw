@@ -1,4 +1,4 @@
-package Utenti.model;
+package Utenti.Model;
 public class Persona {
 	public String getCodiceFiscale() { return codiceFiscale; }
 	public void setCodiceFiscale(String codiceFiscale) { this.codiceFiscale = codiceFiscale; }

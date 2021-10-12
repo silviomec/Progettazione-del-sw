@@ -1,4 +1,4 @@
-package Utenti.model;
+package Utenti.Model;
 public class Cliente extends Persona {
 	public Cliente(String codiceFiscale, String nome, String cognome, String telefono, String email, int idCliente) {
 		this.codiceFiscale = codiceFiscale;
