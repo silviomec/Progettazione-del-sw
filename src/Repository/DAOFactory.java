@@ -13,36 +13,36 @@ public class DAOFactory {
 
 	public DAOFactory() { }
 
-	public static DAODipendente getDAODipendente() {
+	public static DAODipendenteImpl getDAODipendente() {
 		return new DAODipendenteImpl();
 	}
 
-	public static DAOCliente getDAOCliente() {
+	public static DAOClienteImpl getDAOCliente() {
 		return new DAOClienteImpl();
 	}
 
-	public static DAOInserzionista getDAOInserzionista() {
+	public static DAOInserzionistaImpl getDAOInserzionista() {
 		return new DAOInserzionistaImpl();
 	}
 	
-	public static DAOCanone getDAOCanone() {
+	public static DAOCanoneImpl getDAOCanone() {
 		return new DAOCanoneImpl();
 	}
 	
-	public static DAORicevutaPagamentoCanone getDAORicevutaPagamentoCanone() {
+	public static DAORicevutaPagamentoCanoneImpl getDAORicevutaPagamentoCanone() {
 		return new DAORicevutaPagamentoCanoneImpl();
 	}
 	
-	public static DAORicevutaPagamentoPrenotazione getDAORicevutaPagamentoPrenotazione() {
+	public static DAORicevutaPagamentoPrenotazioneImpl getDAORicevutaPagamentoPrenotazione() {
 		return new DAORicevutaPagamentoPrenotazioneImpl();
 	}
-	public static DAOStrutturaTuristica getDAOStrutturaTuristica() {
+	public static DAOStrutturaTuristicaImpl getDAOStrutturaTuristica() {
 		return new DAOStrutturaTuristicaImpl();
 	}
-	public static DAOInserzione getDAOInserzione() {
+	public static DAOInserzioneImpl getDAOInserzione() {
 		return new DAOInserzioneImpl();
 	}
-	public static DAOPrenotazione getDAOPrenotazione() {
+	public static DAOPrenotazioneImpl getDAOPrenotazione() {
 		return new DAOPrenotazioneImpl();
 	}
 	
