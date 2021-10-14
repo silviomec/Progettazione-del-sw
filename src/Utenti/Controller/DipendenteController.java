@@ -12,14 +12,14 @@ import Utenti.Model.Dipendente;
 import Utenti.View.Login;
 
 public class DipendenteController {
-	private DAODipendente daoDipendente;
+	private DAODipendenteImpl daoDipendenteImpl;
 	private UtenteFacade utenteFacade;
 	private Login login;
 
 	public DipendenteController(UtenteFacade uf) {
 		utenteFacade = uf;
 		//DAOFactory df = new DAOFactory();
-		daoDipendente = DAOFactory.getDAODipendente();
+		daoDipendenteImpl = DAOFactory.getDAODipendente();
 	}
 
 	/**
@@ -29,32 +29,35 @@ public class DipendenteController {
 	 * @return void 
 	 * @throws SQLException 
 	 */
-	public void doLogin(String username, String password) throws DipendenteNotFoundException, SQLException {
+	public boolean doLogin(String username, String password) throws DipendenteNotFoundException, SQLException {
 		Dipendente dip = null;
 		try {
-			dip = daoDipendente.doRetrieveByUsername(username);
+			dip = daoDipendenteImpl.doRetrieveByUsername(username);
 
 			boolean passMatch = password.equals(dip.getPassword());
-			if (passMatch) {
+			if(passMatch) {
 				System.out.println("Login successful for user: " + dip.getUsername());
 				if (dip instanceof Dipendente) {
 					Dipendente d = (Dipendente) dip;
 					utenteFacade.showHome(dip);
+					return true;
 				}
 			} else {
 				new GenericMessageDialog("Login fallito", "La password inserita non è corretta per l'utente " + username, null).display();
+				return false;
 			}
 		} catch (DipendenteNotFoundException e) {
 			e.printStackTrace();
 			new GenericMessageDialog("Login fallito", "Dipendente " + username + " non trovato", null).display();
 		}
+		return false;
 
 	}
-	
+
 	public void showLoginUI() {
 		if (login != null) login.dispose();
 		login = new Login();
-		login.display();
+		//login.display();
 	}
 
 	/*public void showAutistaHomeUI(Autista a) {

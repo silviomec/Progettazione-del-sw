@@ -35,7 +35,7 @@ public class Login extends JFrame implements ActionListener {
 	private JLabel lbl_error_username;
 	private JLabel lbl_error_password;
 
-	UtenteFacade uf;
+	UtenteFacade uf = UtenteFacade.getInstance();
 
 	/**
 	 * Launch the application.
@@ -126,10 +126,10 @@ public class Login extends JFrame implements ActionListener {
 		createEvents();
 	}
 
-	public void display() {
+	/*public void display() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
-	}
+	}*/
 
 	public void warn() {
 		if(!usernameTextField.getText().equals("") && !String.valueOf(passwordTextField.getPassword()).equals(""))
@@ -193,7 +193,9 @@ public class Login extends JFrame implements ActionListener {
 		}
 		
 		try {
-			uf.getDipendenteController().doLogin(usernameTextField.getText(), String.valueOf(passwordTextField.getPassword()));
+			boolean passMatch = uf.getDipendenteController().doLogin(usernameTextField.getText(), String.valueOf(passwordTextField.getPassword()));
+			if(passMatch)
+				this.dispose();
 		} catch (DipendenteNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
