@@ -45,6 +45,7 @@ public class Home extends JFrame {
 	 */
 	public Home(Dipendente dip) {
 		this.dip = dip;
+		Home thisHome = this;
 		
 		setTitle("Home");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,6 +77,8 @@ public class Home extends JFrame {
 		JButton btnUtenti = new JButton("Utenti");
 		btnUtenti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				uf.showGestioneUtenti(dip);
+				thisHome.dispose();
 			}
 		});
 		btnUtenti.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -84,7 +87,6 @@ public class Home extends JFrame {
 		
 		JButton btnLogout = new JButton("LOGOUT");
 		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		Home thisHome = this;
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Login.main(null);

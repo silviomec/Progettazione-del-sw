@@ -6,35 +6,41 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import Utenti.Model.Dipendente;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.util.regex.Pattern;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class RegistraCliente extends JFrame {
+public class RegistraCliente extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JLabel lblNewLabel_5;
-	private JLabel lblIDCliente;
-	private JButton btnNewButton;
+	private JTextField nomeTextField;
+	private JTextField cfTextField;
+	private JTextField cognomeTextField;
+	private JTextField telefonoTextField;
+	private JTextField emailTextField;
+	private JButton btnRegistra = new JButton("Registra");
 	private JLabel lblCognome;
 	private JLabel lblTelefono;
-	private JLabel lblC;
+	private JLabel lblCf;
 	private JLabel lblEmail;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display(Dipendente dip) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistraCliente frame = new RegistraCliente();
+					RegistraCliente frame = new RegistraCliente(dip);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,7 +52,7 @@ public class RegistraCliente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistraCliente() {
+	public RegistraCliente(Dipendente dip) {
 		setTitle("Registra Cliente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -55,51 +61,46 @@ public class RegistraCliente extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Nome");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel.setBounds(46, 54, 134, 29);
-		contentPane.add(lblNewLabel);
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNome.setBounds(46, 54, 134, 29);
+		contentPane.add(lblNome);
 		
-		textField = new JTextField();
-		textField.setBounds(46, 87, 235, 35);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		nomeTextField = new JTextField();
+		nomeTextField.setBounds(46, 87, 235, 35);
+		contentPane.add(nomeTextField);
+		nomeTextField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(46, 174, 235, 35);
-		contentPane.add(textField_1);
+		cfTextField = new JTextField();
+		cfTextField.setColumns(10);
+		cfTextField.setBounds(46, 174, 235, 35);
+		contentPane.add(cfTextField);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(442, 87, 235, 35);
-		contentPane.add(textField_2);
+		cognomeTextField = new JTextField();
+		cognomeTextField.setColumns(10);
+		cognomeTextField.setBounds(442, 87, 235, 35);
+		contentPane.add(cognomeTextField);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(442, 174, 235, 35);
-		contentPane.add(textField_3);
+		telefonoTextField = new JTextField();
+		telefonoTextField.setColumns(10);
+		telefonoTextField.setBounds(442, 174, 235, 35);
+		contentPane.add(telefonoTextField);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(46, 271, 235, 35);
-		contentPane.add(textField_4);
+		emailTextField = new JTextField();
+		emailTextField.setColumns(10);
+		emailTextField.setBounds(46, 271, 235, 35);
+		contentPane.add(emailTextField);
 		
-		lblNewLabel_5 = new JLabel("Id Cliente");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_5.setBounds(442, 246, 134, 29);
-		contentPane.add(lblNewLabel_5);
 		
-		lblIDCliente = new JLabel("*****");
-		lblIDCliente.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblIDCliente.setBounds(442, 282, 45, 13);
-		contentPane.add(lblIDCliente);
-		
-		btnNewButton = new JButton("Registra");
-		btnNewButton.setEnabled(false);
-		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnNewButton.setBounds(253, 389, 212, 67);
-		contentPane.add(btnNewButton);
+		btnRegistra.addActionListener(this);
+		/*(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		}); */
+		btnRegistra.setEnabled(false);
+		btnRegistra.setFont(new Font("Dialog", Font.BOLD, 18));
+		btnRegistra.setBounds(253, 389, 212, 67);
+		contentPane.add(btnRegistra);
 		
 		lblCognome = new JLabel("Cognome");
 		lblCognome.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -111,15 +112,102 @@ public class RegistraCliente extends JFrame {
 		lblTelefono.setBounds(442, 141, 134, 29);
 		contentPane.add(lblTelefono);
 		
-		lblC = new JLabel("Codice Fiscale");
-		lblC.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblC.setBounds(46, 141, 134, 29);
-		contentPane.add(lblC);
+		lblCf = new JLabel("Codice Fiscale");
+		lblCf.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblCf.setBounds(46, 141, 134, 29);
+		contentPane.add(lblCf);
 		
 		lblEmail = new JLabel("Email");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblEmail.setBounds(46, 246, 134, 29);
 		contentPane.add(lblEmail);
+		
+		createEvents();
+	}
+	
+	public void warn() {
+		if(!nomeTextField.getText().equals("") && !cognomeTextField.getText().equals("") && !cfTextField.getText().equals("") && !telefonoTextField.getText().equals("") && !emailTextField.getText().equals(""))
+			btnRegistra.setEnabled(true);
+		else
+			btnRegistra.setEnabled(false);
+	}
+	
+	private void createEvents() {
+		nomeTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		cognomeTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+		
+		cfTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+		
+		telefonoTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+		
+		emailTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+	}
+	
+	public boolean checkCf() {
+		String cf = cfTextField.getText().toUpperCase();
+		if(cf.length() != 16)
+			return false;
+		else {
+			String cfPattern = "/^[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]$/i";
+			Pattern pattern = Pattern.compile(cfPattern);
+	        return pattern.matcher(cf).matches();
+		}
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

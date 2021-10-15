@@ -51,7 +51,6 @@ public class DipendenteController {
 			new GenericMessageDialog("Login fallito", "Dipendente " + username + " non trovato", null).display();
 		}
 		return false;
-
 	}
 
 	public void showLoginUI() {
