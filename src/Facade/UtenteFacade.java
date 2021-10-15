@@ -3,7 +3,7 @@ package Facade;
 
 import Utenti.Controller.DipendenteController;
 import Utenti.Model.Dipendente;
-import Utenti.View.Home;
+import Utenti.View.*;
 
 public class UtenteFacade {
 	private DipendenteController dipendenteController;
@@ -19,6 +19,14 @@ public class UtenteFacade {
 	
 	public void showHome(Dipendente dip) {
 		Home.display(dip);
+	}
+	
+	public void showGestioneUtenti(Dipendente dip) {
+		GestioneUtentiUI.display(dip);
+	}
+	
+	public void showRegistraCliente(Dipendente dip) {
+		RegistraCliente.display(dip);
 	}
 
 	public DipendenteController getDipendenteController() {

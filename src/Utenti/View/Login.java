@@ -193,7 +193,7 @@ public class Login extends JFrame implements ActionListener {
 		}
 		
 		try {
-			boolean passMatch = uf.getDipendenteController().doLogin(usernameTextField.getText(), String.valueOf(passwordTextField.getPassword()));
+			boolean passMatch = uf.getDipendenteController().doLogin(username, password);
 			if(passMatch)
 				this.dispose();
 		} catch (DipendenteNotFoundException e1) {
