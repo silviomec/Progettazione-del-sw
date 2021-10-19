@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-import pagamenti.model.Canone;
+import Pagamenti.Model.Canone;
 
 public class DAOCanoneImpl implements DAOCanone {
 	private MySQLConnection connection;

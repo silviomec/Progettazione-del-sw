@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-import pagamenti.model.RicevutaPagamentoPrenotazione;
+import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 
 public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagamentoPrenotazione {
 	private MySQLConnection connection;

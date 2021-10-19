@@ -1,22 +1,18 @@
 package Utenti.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JToolBar;
-import javax.swing.JMenu;
+
+import Utenti.Model.Dipendente;
+
 import javax.swing.JTextPane;
 import java.awt.Font;
 import javax.swing.JList;
-import java.awt.List;
-import javax.swing.JScrollBar;
-import java.awt.Scrollbar;
-import javax.swing.JComboBox;
-import javax.swing.border.BevelBorder;
 
+@SuppressWarnings("serial")
 public class VisualizzaClienti extends JFrame {
 
 	private JPanel contentPane;
@@ -24,11 +20,11 @@ public class VisualizzaClienti extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display(Dipendente dip) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VisualizzaClienti frame = new VisualizzaClienti();
+					VisualizzaClienti frame = new VisualizzaClienti(dip);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,9 +36,9 @@ public class VisualizzaClienti extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VisualizzaClienti() {
+	public VisualizzaClienti(Dipendente dip) {
 		setTitle("Visualizza Clienti");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

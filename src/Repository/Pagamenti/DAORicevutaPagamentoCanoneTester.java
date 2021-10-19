@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import Repository.DAOFactory;
 import Util.NewDate;
-import pagamenti.model.RicevutaPagamentoCanone;
+import Pagamenti.Model.RicevutaPagamentoCanone;
 
 public class DAORicevutaPagamentoCanoneTester {
 	public static void main(String[] args) {
