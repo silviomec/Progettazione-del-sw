@@ -131,146 +131,148 @@ public class RegistraCliente extends JFrame implements ActionListener{
 		createEvents();
 	}
 
-	public void warn() {
-		if(!nomeTextField.getText().equals("") && !cognomeTextField.getText().equals("") && !cfTextField.getText().equals("") && !telefonoTextField.getText().equals("") && !emailTextField.getText().equals(""))
-			btnRegistra.setEnabled(true);
-		else
-			btnRegistra.setEnabled(false);
-	}
 
-	private void createEvents() {
-		nomeTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void removeUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void insertUpdate(DocumentEvent e) {
-				warn();
-			}
-		});
 
-		cognomeTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void removeUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void insertUpdate(DocumentEvent e) {
-				warn();
-			}
-		});
-
-		cfTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void removeUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void insertUpdate(DocumentEvent e) {
-				warn();
-			}
-		});
-
-		telefonoTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void removeUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void insertUpdate(DocumentEvent e) {
-				warn();
-			}
-		});
-
-		emailTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void removeUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void insertUpdate(DocumentEvent e) {
-				warn();
-			}
-		});
-	}
-
-	public String checkCf() {
-		String cf = cfTextField.getText().toUpperCase();
-		String msg = "";
-
-		if(cf.length() != 16) {
-			System.out.println("Codice fiscale della lunghezza sbagliata.");
-			msg = "Codice fiscale della lunghezza sbagliata.\n";
-			return msg;
+		public void warn() {
+			if(!nomeTextField.getText().equals("") && !cognomeTextField.getText().equals("") && !cfTextField.getText().equals("") && !telefonoTextField.getText().equals("") && !emailTextField.getText().equals(""))
+				btnRegistra.setEnabled(true);
+			else
+				btnRegistra.setEnabled(false);
 		}
-		else {
-			String cfPattern = "^[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]$";
-			Pattern pattern = Pattern.compile(cfPattern);
-			if(!pattern.matcher(cf).matches()) {
-				System.out.println("Codice fiscale non valido.");
-				msg = "Codice fiscale non valido.\n";
+
+		private void createEvents() {
+			nomeTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+			});
+
+			cognomeTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+			});
+
+			cfTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+			});
+
+			telefonoTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+			});
+
+			emailTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+			});
+		}
+
+		public String checkCf() {
+			String cf = cfTextField.getText().toUpperCase();
+			String msg = "";
+
+			if(cf.length() != 16) {
+				System.out.println("Codice fiscale della lunghezza sbagliata.");
+				msg = "Codice fiscale della lunghezza sbagliata.\n";
 				return msg;
 			}
 			else {
-				if(uf.getClienteController().checkCf(cf)) {
-					System.out.println("Codice fiscale gi� registrato.");
-					msg = "Codice fiscale gi� registrato.\n";
+				String cfPattern = "^[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]$";
+				Pattern pattern = Pattern.compile(cfPattern);
+				if(!pattern.matcher(cf).matches()) {
+					System.out.println("Codice fiscale non valido.");
+					msg = "Codice fiscale non valido.\n";
 					return msg;
 				}
 				else {
-					//System.out.println("Codice fiscale corretto e non ancora registrato.");
-					return msg;
+					if(uf.getClienteController().checkCf(cf)) {
+						System.out.println("Codice fiscale giï¿½ registrato.");
+						msg = "Codice fiscale giï¿½ registrato.\n";
+						return msg;
+					}
+					else {
+						//System.out.println("Codice fiscale corretto e non ancora registrato.");
+						return msg;
+					}
 				}
 			}
 		}
-	}
-	
-	public String checkEmail() {
-		String email = emailTextField.getText();
-		String msg = "";
-		
-		String emailPattern = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
-		if(!pattern.matcher(email).matches()) {
-			System.out.println("Indirizzo email non valido.");
-			msg = "Indirizzo email non valido.";
-			return msg;
-		}
-		else {
-			//System.out.println("Indirizzo email valido.");
-			return msg;
-		}
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String msg;
-		
-		msg = checkCf();
-		msg += checkEmail();
-		
-		if(!msg.equals("")) {
-			JOptionPane.showMessageDialog(this, msg, "Errore", 0);
+		public String checkEmail() {
+			String email = emailTextField.getText();
+			String msg = "";
+
+			String emailPattern = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+			Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
+			if(!pattern.matcher(email).matches()) {
+				System.out.println("Indirizzo email non valido.");
+				msg = "Indirizzo email non valido.";
+				return msg;
+			}
+			else {
+				//System.out.println("Indirizzo email valido.");
+				return msg;
+			}
 		}
-		else {
-			String nome = nomeTextField.getText().toString();
-			String cognome = cognomeTextField.getText().toString();
-			String cf = cfTextField.getText().toString();
-			String telefono = telefonoTextField.getText().toString();
-			String email = emailTextField.getText().toString();
-			
-			DAOCliente daoCliente = DAOFactory.getDAOCliente();
-			if(daoCliente.updateCliente(new Cliente(cf, nome, cognome, telefono, email)) == 0)
-				System.out.println("Errore nell'aggiornamento del cliente!");
-			
-			System.out.println("Cliente registrato con successo!");
-			JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String msg;
+
+			msg = checkCf();
+			msg += checkEmail();
+
+			if(!msg.equals("")) {
+				JOptionPane.showMessageDialog(this, msg, "Errore", 0);
+			}
+			else {
+				String nome = nomeTextField.getText().toString();
+				String cognome = cognomeTextField.getText().toString();
+				String cf = cfTextField.getText().toString();
+				String telefono = telefonoTextField.getText().toString();
+				String email = emailTextField.getText().toString();
+
+				DAOCliente daoCliente = DAOFactory.getDAOCliente();
+				if(daoCliente.updateCliente(new Cliente(cf, nome, cognome, telefono, email)) == 0)
+					System.out.println("Errore nell'aggiornamento del cliente!");
+
+				System.out.println("Cliente registrato con successo!");
+				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
+			}
 		}
 	}
-}
