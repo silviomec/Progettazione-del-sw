@@ -1,6 +1,5 @@
 package Utenti.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,10 +13,9 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.JTextPane;
 import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class Home extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
 	Dipendente dip;
