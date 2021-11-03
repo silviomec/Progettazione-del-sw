@@ -9,6 +9,15 @@ public class Cliente extends Persona {
 		this.idCliente = idCliente;
 	}
 	
+	public Cliente(String codiceFiscale, String nome, String cognome, String telefono, String email) {
+		this.codiceFiscale = codiceFiscale;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.telefono = telefono;
+		this.email = email;
+		this.idCliente = -1;
+	}
+	
 	public int getIdCliente() { return idCliente; }
 	public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
 
