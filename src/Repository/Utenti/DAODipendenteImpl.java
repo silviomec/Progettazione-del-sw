@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import Exception.DipendenteNotFoundException;
 import Repository.MySQLConnection;
-import Utenti.model.Dipendente;
+import Utenti.Model.Dipendente;
 
 public class DAODipendenteImpl implements DAODipendente {
 	private MySQLConnection connection;
@@ -47,7 +48,7 @@ public class DAODipendenteImpl implements DAODipendente {
 	}
 
 	@Override
-	public Dipendente doRetrieveByUsername(String username) {
+	public Dipendente doRetrieveByUsername(String username) throws DipendenteNotFoundException {
 		Dipendente dip = null;
 		Statement statement = null;
 		try {
@@ -64,6 +65,8 @@ public class DAODipendenteImpl implements DAODipendente {
 				String email = result.getString("email");
 				dip = new  Dipendente(codf, nome, cognome, telefono, email, nickname, password);
 			}
+			
+			if(dip == null) throw new DipendenteNotFoundException();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

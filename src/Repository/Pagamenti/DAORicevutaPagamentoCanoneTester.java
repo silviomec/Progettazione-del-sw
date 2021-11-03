@@ -2,9 +2,9 @@ package Repository.Pagamenti;
 
 import java.util.HashMap;
 
-import Pagamenti.Model.RicevutaPagamentoCanone;
 import Repository.DAOFactory;
 import Util.NewDate;
+import Pagamenti.Model.RicevutaPagamentoCanone;
 
 public class DAORicevutaPagamentoCanoneTester {
 	public static void main(String[] args) {

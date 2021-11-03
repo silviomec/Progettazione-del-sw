@@ -1,18 +1,20 @@
 package Utenti.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Utenti.Model.Dipendente;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+@SuppressWarnings("serial")
 public class RegistraInserzionista extends JFrame {
-
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -23,11 +25,11 @@ public class RegistraInserzionista extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display(Dipendente dip) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistraInserzionista frame = new RegistraInserzionista();
+					RegistraInserzionista frame = new RegistraInserzionista(dip);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,9 +41,9 @@ public class RegistraInserzionista extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistraInserzionista() {
+	public RegistraInserzionista(Dipendente dip) {
 		setTitle("Registra Inserzionista");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

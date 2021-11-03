@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
-import Utenti.model.Cliente;
+import Utenti.Model.Cliente;
 
 public class DAOClienteImpl implements DAOCliente {
 	private MySQLConnection connection;
@@ -68,6 +68,30 @@ public class DAOClienteImpl implements DAOCliente {
 		}
 		return c;
 	}
+	
+	@Override
+	public Cliente doRetrieveByCf(String cf) {
+		Cliente c = null;
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM CLIENTI WHERE codiceFiscale=\"" + cf + "\"");
+
+			while (result.next()) {
+				int idCliente = result.getInt("idcliente");
+				String codf = result.getString("codiceFiscale");
+				String nome = result.getString("nome");
+				String cognome = result.getString("cognome");
+				String telefono = result.getString("telefono");
+				String email = result.getString("email");
+				c = new  Cliente(codf, nome, cognome, telefono, email, idCliente);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return c;
+	}
 
 	@Override
 	public void delete(int id) {
@@ -90,7 +114,7 @@ public class DAOClienteImpl implements DAOCliente {
 			String query = " insert into clienti (idCliente, CodiceFiscale, Nome, Cognome, Telefono, Email)"
 					+ " values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setInt(1, c.getIdCliente());
+			preparedStmt.setString(1, null);
 			preparedStmt.setString(2, c.getCodiceFiscale());
 			preparedStmt.setString(3, c.getNome());
 			preparedStmt.setString(4, c.getCognome());

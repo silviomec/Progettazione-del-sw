@@ -2,7 +2,7 @@ package Repository.Utenti;
 
 import java.util.HashMap;
 
-import Utenti.model.Inserzionista;
+import Utenti.Model.Inserzionista;
 
 public interface DAOInserzionista {
 	public HashMap<String, Inserzionista> doRetrieveAll();

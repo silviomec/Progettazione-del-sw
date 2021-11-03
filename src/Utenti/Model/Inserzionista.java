@@ -1,4 +1,4 @@
-package Utenti.model;
+package Utenti.Model;
 public class Inserzionista extends Persona {
 	public Inserzionista(String codiceFiscale, String nome, String cognome, String telefono, String email, int idInserzionista) {
 		this.codiceFiscale = codiceFiscale;

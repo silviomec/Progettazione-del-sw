@@ -1,4 +1,4 @@
-package Utenti.model;
+package Utenti.Model;
 public class Cliente extends Persona {
 	public Cliente(String codiceFiscale, String nome, String cognome, String telefono, String email, int idCliente) {
 		this.codiceFiscale = codiceFiscale;
@@ -7,6 +7,15 @@ public class Cliente extends Persona {
 		this.telefono = telefono;
 		this.email = email;
 		this.idCliente = idCliente;
+	}
+	
+	public Cliente(String codiceFiscale, String nome, String cognome, String telefono, String email) {
+		this.codiceFiscale = codiceFiscale;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.telefono = telefono;
+		this.email = email;
+		this.idCliente = -1;
 	}
 	
 	public int getIdCliente() { return idCliente; }
