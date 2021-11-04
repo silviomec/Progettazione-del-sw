@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
+	-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
 -- Host: localhost    Database: db_pds
 -- ------------------------------------------------------
@@ -74,7 +74,9 @@ CREATE TABLE `clienti` (
 
 LOCK TABLES `clienti` WRITE;
 /*!40000 ALTER TABLE `clienti` DISABLE KEYS */;
-INSERT INTO `clienti` VALUES (1,'LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),(2,'RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it'),(15,'LMPFR','Rituccia','mimmo','5824','rita@hot');
+INSERT INTO `clienti` VALUES
+	('LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),
+	('RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it');
 /*!40000 ALTER TABLE `clienti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,7 +174,8 @@ CREATE TABLE `inserzionisti` (
 
 LOCK TABLES `inserzionisti` WRITE;
 /*!40000 ALTER TABLE `inserzionisti` DISABLE KEYS */;
-INSERT INTO `inserzionisti` VALUES (15,'LMP','Rita','Lamp','777','rita@hot.it');
+INSERT INTO `inserzionisti` VALUES
+	('LMPRTI99B65A783J','Rita','Lamp','777','rita@hot.it');
 /*!40000 ALTER TABLE `inserzionisti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,3 +315,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2021-10-15 16:15:54
+	
