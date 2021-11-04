@@ -1,21 +1,22 @@
 package Repository.Utenti;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import Repository.DAOFactory;
-import Utenti.Model.Cliente;
+import Utenti.Model.Persona;
 
-public class DAOClienteTester {
+public class DAOPersonaTester {
 	public static void main(String[] args) {
 		DAOFactory df = new DAOFactory();
-		HashMap<String,Cliente> clienti = df.getDAOCliente().doRetrieveAll();
+		HashMap<String, Persona> persone = df.getDAOPersona().doRetrieveAll();
 
-		if (!clienti.isEmpty())
-			for (Cliente c : clienti.values())
-				System.out.println(c.getCodiceFiscale());
+		if (!persone.isEmpty())
+			for (Persona pers : persone.values())
+				System.out.println(pers.getCodiceFiscale());
 		
-		//Cliente c1 = new Cliente("LMPFR", "Rituccia", "mimmo", "5824", "rita@hot", 15);
-		//Cliente c2 = df.getDAOCliente().doRetrieveByIdCliente(1);
-		//df.getDAOCliente().updateCliente(c1);
+		//Persona pers1 = new Persona("LMPFR", "Rituccia", "mimmo", "5824", "rita@hot", 15);
+		//Persona pers2 = df.getDAOPersona().doRetrieveByIdCliente(1);	// C'è ancora il vecchio metodo
+		//df.getDAOPersona().updatePersona(c1);
 	}
 }

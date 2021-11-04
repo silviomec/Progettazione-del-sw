@@ -1,20 +1,20 @@
 package Facade;
 
-import Utenti.Controller.ClienteController;
 import Utenti.Controller.DipendenteController;
+import Utenti.Controller.PersonaController;
 import Utenti.Model.Dipendente;
 import Utenti.View.*;
 
 public class UtenteFacade {
 	private DipendenteController dipendenteController;
-	private ClienteController clienteController;
+	private PersonaController personaController;
 	private static UtenteFacade instance;
 	
 	public static UtenteFacade getInstance() {
 		if (instance == null) {
 			instance = new UtenteFacade();
 			instance.setDipendenteController(new DipendenteController(instance));
-			instance.setClienteController(new ClienteController(instance));
+			instance.setPersonaController(new PersonaController(instance));
 		}
 		return instance;
 	}
@@ -42,7 +42,7 @@ public class UtenteFacade {
 	public void showRegistraInserzionista(Dipendente dip) {
 		RegistraInserzionista.display(dip);
 	}
-
+	
 	public DipendenteController getDipendenteController() {
 		return dipendenteController;
 	}
@@ -51,11 +51,11 @@ public class UtenteFacade {
 		this.dipendenteController = dipendenteController;
 	}
 	
-	public ClienteController getClienteController() {
-		return clienteController;
+	public PersonaController getPersonaController() {
+		return personaController;
 	}
 	
-	public void setClienteController(ClienteController clienteController) {
-		this.clienteController = clienteController;
+	public void setPersonaController(PersonaController personaController) {
+		this.personaController = personaController;
 	}
 }

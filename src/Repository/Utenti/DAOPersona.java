@@ -2,12 +2,11 @@ package Repository.Utenti;
 
 import java.util.HashMap;
 
-import Utenti.Model.Cliente;
+import Utenti.Model.Persona;
 
-public interface DAOCliente {
-	public HashMap<String, Cliente> doRetrieveAll();
-	public Cliente doRetrieveByIdCliente(int id);
-	public Cliente doRetrieveByCf(String cf);
-	public void delete(int id);
-	public int updateCliente(Cliente c);
+public interface DAOPersona {
+	public HashMap<String, Persona> doRetrieveAll();
+	public Persona doRetrieve(String filtro, int tipologia);
+	public void delete(String cf);
+	public int updatePersona(Persona pers);
 }

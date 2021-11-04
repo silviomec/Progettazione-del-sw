@@ -10,9 +10,10 @@ import javax.swing.event.DocumentListener;
 
 import Facade.UtenteFacade;
 import Repository.DAOFactory;
-import Repository.Utenti.DAOCliente;
-import Utenti.Model.Cliente;
+import Repository.Utenti.DAOPersona;
+import Utenti.Controller.PersonaController;
 import Utenti.Model.Dipendente;
+import Utenti.Model.Persona;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -133,146 +134,168 @@ public class RegistraCliente extends JFrame implements ActionListener{
 
 
 
-		public void warn() {
-			if(!nomeTextField.getText().equals("") && !cognomeTextField.getText().equals("") && !cfTextField.getText().equals("") && !telefonoTextField.getText().equals("") && !emailTextField.getText().equals(""))
-				btnRegistra.setEnabled(true);
+	public void warn() {
+		if(!nomeTextField.getText().equals("") && !cognomeTextField.getText().equals("") && !cfTextField.getText().equals("") && !telefonoTextField.getText().equals("") && !emailTextField.getText().equals(""))
+			btnRegistra.setEnabled(true);
+		else
+			btnRegistra.setEnabled(false);
+	}
+
+	private void createEvents() {
+		nomeTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		cognomeTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		cfTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		telefonoTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		emailTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+	}
+
+	public String checkCfTextField() {
+		String cf = cfTextField.getText().toUpperCase();
+		String msg = "";
+
+		if(cf.length() != 16) {
+			System.out.println("Codice fiscale della lunghezza sbagliata.");
+			msg = "Codice fiscale della lunghezza sbagliata.\n";
+			return msg;
+		}
+		else {
+			String cfPattern = "^[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]$";
+			Pattern pattern = Pattern.compile(cfPattern);
+			if(!pattern.matcher(cf).matches()) {
+				System.out.println("Codice fiscale " + cf + " non valido.");
+				msg = "Codice fiscale non valido.\n";
+				return msg;
+			}
 			else
-				btnRegistra.setEnabled(false);
-		}
-
-		private void createEvents() {
-			nomeTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void removeUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void insertUpdate(DocumentEvent e) {
-					warn();
-				}
-			});
-
-			cognomeTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void removeUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void insertUpdate(DocumentEvent e) {
-					warn();
-				}
-			});
-
-			cfTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void removeUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void insertUpdate(DocumentEvent e) {
-					warn();
-				}
-			});
-
-			telefonoTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void removeUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void insertUpdate(DocumentEvent e) {
-					warn();
-				}
-			});
-
-			emailTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void removeUpdate(DocumentEvent e) {
-					warn();
-				}
-				public void insertUpdate(DocumentEvent e) {
-					warn();
-				}
-			});
-		}
-
-		public String checkCf() {
-			String cf = cfTextField.getText().toUpperCase();
-			String msg = "";
-
-			if(cf.length() != 16) {
-				System.out.println("Codice fiscale della lunghezza sbagliata.");
-				msg = "Codice fiscale della lunghezza sbagliata.\n";
 				return msg;
-			}
-			else {
-				String cfPattern = "^[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]$";
-				Pattern pattern = Pattern.compile(cfPattern);
-				if(!pattern.matcher(cf).matches()) {
-					System.out.println("Codice fiscale non valido.");
-					msg = "Codice fiscale non valido.\n";
-					return msg;
-				}
-				else {
-					if(uf.getClienteController().checkCf(cf)) {
-						System.out.println("Codice fiscale giï¿½ registrato.");
-						msg = "Codice fiscale giï¿½ registrato.\n";
-						return msg;
-					}
-					else {
-						//System.out.println("Codice fiscale corretto e non ancora registrato.");
-						return msg;
-					}
-				}
-			}
 		}
+	}
 
-		public String checkEmail() {
-			String email = emailTextField.getText();
-			String msg = "";
+	public String checkEmailTextField() {
+		String email = emailTextField.getText();
+		String msg = "";
 
-			String emailPattern = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-			Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
-			if(!pattern.matcher(email).matches()) {
-				System.out.println("Indirizzo email non valido.");
-				msg = "Indirizzo email non valido.";
-				return msg;
-			}
-			else {
-				//System.out.println("Indirizzo email valido.");
-				return msg;
-			}
+		String emailPattern = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
+		if(!pattern.matcher(email).matches()) {
+			System.out.println("Indirizzo email non valido.");
+			msg = "Indirizzo email non valido.";
+			return msg;
 		}
+		else {
+			//System.out.println("Indirizzo email valido.");
+			return msg;
+		}
+	}
+	
+	public String contains() {
+		String target;
+		String msg = "";
+		
+		target = cfTextField.getText().toString();
+		if(uf.getPersonaController().contains(target, PersonaController.CODICE_FISCALE) == true) {
+			System.out.println("Codice fiscale " + target + " già registrato.");
+			msg = "Codice fiscale già registrato.\n";
+		}
+		
+		target = telefonoTextField.getText().toString();
+		if(uf.getPersonaController().contains(target, PersonaController.TELEFONO) == true) {
+			System.out.println("Numero di telefono " + target + " già registrato.");
+			msg += "Numero di telefono già registrato.\n";
+		}
+		
+		target = emailTextField.getText().toString();
+		if(uf.getPersonaController().contains(target, PersonaController.EMAIL) == true) {
+			System.out.println("Indirizzo email " + target + " già registrato.");
+			msg += "Indirizzo email già registrato.";
+		}
+		
+		return msg;
+	}
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String msg;
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String msg;
 
-			msg = checkCf();
-			msg += checkEmail();
+		msg = checkCfTextField();
+		msg += checkEmailTextField();
 
-			if(!msg.equals("")) {
+		if(!msg.equals("")) {	// Il codice fiscale o l'email inseriti non rispettano il pattern giusto
+			JOptionPane.showMessageDialog(this, msg, "Errore", 0);
+		}
+		else {	// Il codice fiscale e l'email inseriti rispettano il pattern giusto
+			String nome = nomeTextField.getText().toString();
+			String cognome = cognomeTextField.getText().toString();
+			String cf = cfTextField.getText().toString();
+			String telefono = telefonoTextField.getText().toString();
+			String email = emailTextField.getText().toString();
+
+			DAOPersona daoPersona = DAOFactory.getDAOPersona();
+			
+			msg = contains();
+			
+			if(!msg.equals("")) {	// Codice fiscale, telefono e/o email sono già inseriti nel database
 				JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 			}
 			else {
-				String nome = nomeTextField.getText().toString();
-				String cognome = cognomeTextField.getText().toString();
-				String cf = cfTextField.getText().toString();
-				String telefono = telefonoTextField.getText().toString();
-				String email = emailTextField.getText().toString();
-
-				DAOCliente daoCliente = DAOFactory.getDAOCliente();
-				if(daoCliente.updateCliente(new Cliente(cf, nome, cognome, telefono, email)) == 0)
-					System.out.println("Errore nell'aggiornamento del cliente!");
-
+				daoPersona.updatePersona(new Persona(cf, nome, cognome, telefono, email));
 				System.out.println("Cliente registrato con successo!");
 				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 			}
 		}
 	}
+}
