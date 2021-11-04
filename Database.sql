@@ -18,7 +18,9 @@
 --
 -- Table structure for table `canoni`
 --
-
+DROP DATABASE IF EXISTS db_pds;
+Create database db_pds;
+Use db_pds;
 DROP TABLE IF EXISTS `canoni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -27,13 +29,13 @@ CREATE TABLE `canoni` (
   `importoAnnuale` decimal(6,2) NOT NULL,
   `scadenza` date NOT NULL,
   `saldato` tinyint(1) NOT NULL,
-  `INSERZIONISTA` int DEFAULT NULL,
+  `INSERZIONISTA` varchar(16) DEFAULT NULL,
   `STRUTTURATURISTICA` int DEFAULT NULL,
   PRIMARY KEY (`idcanone`),
   UNIQUE KEY `idcanone_UNIQUE` (`idcanone`),
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
   KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
-  CONSTRAINT `canoni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`idinserzionista`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `canoni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `canoni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -55,14 +57,12 @@ DROP TABLE IF EXISTS `clienti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clienti` (
-  `idcliente` int NOT NULL AUTO_INCREMENT,
   `codiceFiscale` char(16) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `cognome` varchar(50) NOT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idcliente`),
-  UNIQUE KEY `codiceFiscale_UNIQUE` (`codiceFiscale`),
+  PRIMARY KEY (`codiceFiscale`),
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -125,12 +125,12 @@ CREATE TABLE `inserzioni` (
   `descrizione` varchar(200) NOT NULL,
   `numeroPersone` int NOT NULL,
   `STRUTTURATURISTICA` int DEFAULT NULL,
-  `INSERZIONISTA` int DEFAULT NULL,
+  `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`idInserzione`),
   UNIQUE KEY `idInserzioni_UNIQUE` (`idInserzione`),
   KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
-  CONSTRAINT `inserzioni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`idinserzionista`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `inserzioni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `numeroPersone` CHECK ((`numeroPersone` >= 0)),
   CONSTRAINT `prezzoPerNotte` CHECK ((`prezzoPerNotte` >= 0))
@@ -155,15 +155,12 @@ DROP TABLE IF EXISTS `inserzionisti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inserzionisti` (
-  `idinserzionista` int NOT NULL,
   `codiceFiscale` char(16) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `cognome` varchar(50) NOT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idinserzionista`),
-  UNIQUE KEY `idinserzionisti_UNIQUE` (`idinserzionista`),
-  UNIQUE KEY `codiceFiscale_UNIQUE` (`codiceFiscale`),
+  PRIMARY KEY (`codiceFiscale`),
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -191,7 +188,7 @@ CREATE TABLE `prenotazioni` (
   `dataArrivo` date NOT NULL,
   `dataPartenza` date NOT NULL,
   `prezzoTotale` decimal(7,2) NOT NULL,
-  `CLIENTE` int DEFAULT NULL,
+  `CLIENTE` varchar(16) DEFAULT NULL,
   `INSERZIONE` int DEFAULT NULL,
   `STRUTTURATURISTICA` int DEFAULT NULL,
   PRIMARY KEY (`idprenotazione`),
@@ -199,7 +196,7 @@ CREATE TABLE `prenotazioni` (
   KEY `prenotazioni_CLIENTE_idx` (`CLIENTE`),
   KEY `prenotazioni_INSERZIONE_idx` (`INSERZIONE`),
   KEY `prenotazioni_STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
-  CONSTRAINT `prenotazioni_CLIENTE` FOREIGN KEY (`CLIENTE`) REFERENCES `clienti` (`idcliente`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `prenotazioni_CLIENTE` FOREIGN KEY (`CLIENTE`) REFERENCES `clienti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_INSERZIONE` FOREIGN KEY (`INSERZIONE`) REFERENCES `inserzioni` (`idInserzione`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_chk_1` CHECK ((`dataPartenza` > `dataArrivo`)),
@@ -288,10 +285,10 @@ CREATE TABLE `struttureturistiche` (
   `stelle` enum('1','2','3','4','5') NOT NULL,
   `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
   `indirizzo` varchar(100) NOT NULL,
-  `INSERZIONISTA` int DEFAULT NULL,
+  `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`idstrutturaTuristica`),
   KEY `struttureturistiche_INSERZIONISTA_idx` (`INSERZIONISTA`),
-  CONSTRAINT `struttureturistiche_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`idinserzionista`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `struttureturistiche_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
