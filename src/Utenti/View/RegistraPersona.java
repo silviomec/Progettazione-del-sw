@@ -25,7 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
-public class RegistraCliente extends JFrame implements ActionListener{
+public class RegistraPersona extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField nomeTextField;
 	private JTextField cognomeTextField;
@@ -37,17 +37,19 @@ public class RegistraCliente extends JFrame implements ActionListener{
 	private JLabel lblTelefono;
 	private JLabel lblCf;
 	private JLabel lblEmail;
+	private int tipologiaPersona;
+	private String tabella = "";
 
 	UtenteFacade uf = UtenteFacade.getInstance();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void display(Dipendente dip) {
+	public static void display(int tipologiaPersona, Dipendente dip) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistraCliente frame = new RegistraCliente(dip);
+					RegistraPersona frame = new RegistraPersona(tipologiaPersona, dip);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,8 +61,21 @@ public class RegistraCliente extends JFrame implements ActionListener{
 	/**
 	 * Create the frame.
 	 */
-	public RegistraCliente(Dipendente dip) {
-		setTitle("Registra Cliente");
+	public RegistraPersona(int tipologiaPersona, Dipendente dip) {
+		this.tipologiaPersona = tipologiaPersona;
+		
+		switch(tipologiaPersona) {
+		case CLIENTE:
+			tabella = "Cliente";
+			break;
+		case INSERZIONISTA:
+			tabella = "Inserzionista";
+			break;
+		//default:
+		//	return null;
+		}
+		
+		setTitle("Registra " + tabella);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -131,8 +146,6 @@ public class RegistraCliente extends JFrame implements ActionListener{
 
 		createEvents();
 	}
-
-
 
 	public void warn() {
 		if(!nomeTextField.getText().equals("") && !cognomeTextField.getText().equals("") && !cfTextField.getText().equals("") && !telefonoTextField.getText().equals("") && !emailTextField.getText().equals(""))
@@ -247,19 +260,19 @@ public class RegistraCliente extends JFrame implements ActionListener{
 		String msg = "";
 		
 		target = cfTextField.getText().toString();
-		if(uf.getPersonaController().contains(target, PersonaController.CODICE_FISCALE) == true) {
+		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.CODICE_FISCALE, target) == true) {
 			System.out.println("Codice fiscale " + target + " già registrato.");
 			msg = "Codice fiscale già registrato.\n";
 		}
-		
+
 		target = telefonoTextField.getText().toString();
-		if(uf.getPersonaController().contains(target, PersonaController.TELEFONO) == true) {
+		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.TELEFONO, target) == true) {
 			System.out.println("Numero di telefono " + target + " già registrato.");
 			msg += "Numero di telefono già registrato.\n";
 		}
 		
 		target = emailTextField.getText().toString();
-		if(uf.getPersonaController().contains(target, PersonaController.EMAIL) == true) {
+		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.EMAIL, target) == true) {
 			System.out.println("Indirizzo email " + target + " già registrato.");
 			msg += "Indirizzo email già registrato.";
 		}
@@ -292,10 +305,13 @@ public class RegistraCliente extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 			}
 			else {
-				daoPersona.updatePersona(new Persona(cf, nome, cognome, telefono, email));
-				System.out.println("Cliente registrato con successo!");
+				daoPersona.updatePersona(tipologiaPersona, new Persona(cf, nome, cognome, telefono, email));
+				System.out.println(tabella + " registrato con successo!");
 				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 			}
 		}
 	}
+	
+	public static final int CLIENTE = 0;
+	public static final int INSERZIONISTA = 1;
 }

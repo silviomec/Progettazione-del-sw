@@ -9,7 +9,7 @@ import Utenti.Model.Persona;
 public class DAOPersonaTester {
 	public static void main(String[] args) {
 		DAOFactory df = new DAOFactory();
-		HashMap<String, Persona> persone = df.getDAOPersona().doRetrieveAll();
+		HashMap<String, Persona> persone = df.getDAOPersona().doRetrieveAll(0);
 
 		if (!persone.isEmpty())
 			for (Persona pers : persone.values())

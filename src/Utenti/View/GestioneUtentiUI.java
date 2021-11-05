@@ -60,7 +60,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnVisualizzaClienti = new JButton("Visualizza Clienti");
 		btnVisualizzaClienti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showVisualizzaClienti(dip);
+				uf.showVisualizzaPersone(RegistraPersona.CLIENTE, dip);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});
@@ -81,7 +81,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnRegistraInserzionista = new JButton("Registra Inserzionisti");
 		btnRegistraInserzionista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showRegistraInserzionista(dip);
+				uf.showRegistraPersona(RegistraPersona.INSERZIONISTA, dip);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});
@@ -92,7 +92,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnVisualizzaInserzionisti = new JButton("Visualizza Inserzionisti");
 		btnVisualizzaInserzionisti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showVisualizzaInserzionisti(dip);
+				uf.showVisualizzaPersone(RegistraPersona.INSERZIONISTA, dip);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});
@@ -103,7 +103,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnRegistraClienti = new JButton("Registra Clienti");
 		btnRegistraClienti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showRegistraCliente(dip);
+				uf.showRegistraPersona(RegistraPersona.CLIENTE, dip);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});

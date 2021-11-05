@@ -27,20 +27,12 @@ public class UtenteFacade {
 		GestioneUtentiUI.display(dip);
 	}
 	
-	public void showVisualizzaClienti(Dipendente dip) {
-		VisualizzaClienti.display(dip);
+	public void showVisualizzaPersone(int tipologia, Dipendente dip) {
+		VisualizzaPersone.display(tipologia, dip);
 	}
 	
-	public void showRegistraCliente(Dipendente dip) {
-		RegistraCliente.display(dip);
-	}
-	
-	public void showVisualizzaInserzionisti(Dipendente dip) {
-		VisualizzaInserzionisti.display(dip);
-	}
-	
-	public void showRegistraInserzionista(Dipendente dip) {
-		RegistraInserzionista.display(dip);
+	public void showRegistraPersona(int tipologia, Dipendente dip) {
+		RegistraPersona.display(tipologia, dip);
 	}
 	
 	public DipendenteController getDipendenteController() {
