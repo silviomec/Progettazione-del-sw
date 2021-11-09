@@ -1,8 +1,8 @@
 package Facade;
 
+import StruttureTuristiche.View.*;
 import Utenti.Controller.DipendenteController;
 import Utenti.Controller.PersonaController;
-import Utenti.Model.Dipendente;
 import Utenti.View.*;
 
 public class UtenteFacade {
@@ -19,20 +19,20 @@ public class UtenteFacade {
 		return instance;
 	}
 	
-	public void showHome(Dipendente dip) {
-		Home.display(dip);
+	public void showHome() {
+		Home.display();
 	}
 	
-	public void showGestioneUtenti(Dipendente dip) {
-		GestioneUtentiUI.display(dip);
+	public void showGestioneUtenti() {
+		GestioneUtentiUI.display();
 	}
 	
-	public void showVisualizzaPersone(int tipologia, Dipendente dip) {
-		VisualizzaPersone.display(tipologia, dip);
+	public void showVisualizzaPersone(int tipologia) {
+		VisualizzaPersone.display(tipologia);
 	}
 	
-	public void showRegistraPersona(int tipologia, Dipendente dip) {
-		RegistraPersona.display(tipologia, dip);
+	public void showRegistraPersona(int tipologia) {
+		RegistraPersona.display(tipologia);
 	}
 	
 	public DipendenteController getDipendenteController() {
@@ -49,5 +49,17 @@ public class UtenteFacade {
 	
 	public void setPersonaController(PersonaController personaController) {
 		this.personaController = personaController;
+	}
+	
+	public void showStruttureTuristicheUI() {
+		StruttureTuristicheUI.display();
+	}
+	
+	public void showNuovaStruttura() {
+		NuovaStruttura.display();
+	}
+	
+	public void showModificaStruttura() {
+		ModificaStruttura.display();
 	}
 }

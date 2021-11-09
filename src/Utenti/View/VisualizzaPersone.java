@@ -49,11 +49,11 @@ public class VisualizzaPersone extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void display(int tipologia, Dipendente dip) {
+	public static void display(int tipologia) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VisualizzaPersone frame = new VisualizzaPersone(tipologia, dip);
+					VisualizzaPersone frame = new VisualizzaPersone(tipologia);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,7 +65,7 @@ public class VisualizzaPersone extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VisualizzaPersone(int tipologia, Dipendente dip) {
+	public VisualizzaPersone(int tipologia) {
 		tipologiaPersona = tipologia;
 		String tabella = "";
 

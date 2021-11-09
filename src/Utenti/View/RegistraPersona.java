@@ -45,11 +45,11 @@ public class RegistraPersona extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void display(int tipologiaPersona, Dipendente dip) {
+	public static void display(int tipologiaPersona) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistraPersona frame = new RegistraPersona(tipologiaPersona, dip);
+					RegistraPersona frame = new RegistraPersona(tipologiaPersona);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +61,7 @@ public class RegistraPersona extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public RegistraPersona(int tipologiaPersona, Dipendente dip) {
+	public RegistraPersona(int tipologiaPersona) {
 		this.tipologiaPersona = tipologiaPersona;
 		
 		switch(tipologiaPersona) {
@@ -259,7 +259,7 @@ public class RegistraPersona extends JFrame implements ActionListener {
 		String target;
 		String msg = "";
 		
-		target = cfTextField.getText().toString();
+		target = cfTextField.getText().toString().toUpperCase();
 		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.CODICE_FISCALE, target) == true) {
 			System.out.println("Codice fiscale " + target + " già registrato.");
 			msg = "Codice fiscale già registrato.\n";
@@ -293,7 +293,7 @@ public class RegistraPersona extends JFrame implements ActionListener {
 		else {	// Il codice fiscale e l'email inseriti rispettano il pattern giusto
 			String nome = nomeTextField.getText().toString();
 			String cognome = cognomeTextField.getText().toString();
-			String cf = cfTextField.getText().toString();
+			String cf = cfTextField.getText().toString().toUpperCase();
 			String telefono = telefonoTextField.getText().toString();
 			String email = emailTextField.getText().toString();
 
@@ -308,6 +308,11 @@ public class RegistraPersona extends JFrame implements ActionListener {
 				daoPersona.updatePersona(tipologiaPersona, new Persona(cf, nome, cognome, telefono, email));
 				System.out.println(tabella + " registrato con successo!");
 				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
+				nomeTextField.setText("");
+				cognomeTextField.setText("");
+				cfTextField.setText("");
+				telefonoTextField.setText("");
+				emailTextField.setText("");
 			}
 		}
 	}
