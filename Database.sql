@@ -36,7 +36,7 @@ CREATE TABLE `canoni` (
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
   KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
   CONSTRAINT `canoni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `canoni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `canoni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,6 +124,8 @@ CREATE TABLE `inserzioni` (
   `prezzoPerNotte` decimal(6,2) unsigned zerofill NOT NULL,
   `descrizione` varchar(200) NOT NULL,
   `numeroPersone` int NOT NULL,
+  `dataInizio` date NOT NULL,
+  `dataFine` date NOT NULL,
   `STRUTTURATURISTICA` int DEFAULT NULL,
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`idInserzione`),
@@ -143,7 +145,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona',0070.00,'Camera Matrimoniale',2,NULL,NULL),(15,'marta',0060.00,'ampia camera',3,5,'15');
+INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona',0070.00,'Camera Matrimoniale',2,'2021-08-08','2021-08-20',NULL,NULL),(15,'marta',0060.00,'ampia camera',3,'2021-10-19','2021-10-26',5,NULL);
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,7 +200,7 @@ CREATE TABLE `prenotazioni` (
   KEY `prenotazioni_STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
   CONSTRAINT `prenotazioni_CLIENTE` FOREIGN KEY (`CLIENTE`) REFERENCES `clienti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_INSERZIONE` FOREIGN KEY (`INSERZIONE`) REFERENCES `inserzioni` (`idInserzione`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `prenotazioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `prenotazioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_chk_1` CHECK ((`dataPartenza` > `dataArrivo`)),
   CONSTRAINT `prenotazioni_chk_2` CHECK ((`prezzoTotale` > 0))
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -286,7 +288,7 @@ CREATE TABLE `struttureturistiche` (
   `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
   `indirizzo` varchar(100) NOT NULL,
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`idstrutturaTuristica`),
+  PRIMARY KEY (`PartitaIva`),
   KEY `struttureturistiche_INSERZIONISTA_idx` (`INSERZIONISTA`),
   CONSTRAINT `struttureturistiche_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

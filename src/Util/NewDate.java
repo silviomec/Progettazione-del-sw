@@ -14,5 +14,10 @@ public class NewDate {
 		return sqlDate;
 	}
 	
+	public java.util.Date getUtilDate() {
+		java.util.Date myDate = new java.util.Date(mese + "/" + giorno + "/" + anno);
+		return myDate;
+	}
+	
 	int anno, mese, giorno;
 }

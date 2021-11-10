@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.HashMap;
 
 import StruttureTuristiche.Model.*;
+import Util.NewDate;
 import Repository.MySQLConnection;
 
 public class DAOPrenotazioneImpl implements DAOPrenotazione {
@@ -60,10 +62,10 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 				Date dataArrivo = result.getDate("dataArrivo");
 				Date dataPartenza = result.getDate("dataPartenza");
 				double prezzoTot = result.getDouble("prezzoTotale");
-				int idCliente = result.getInt("cliente");
+				String cfCliente = result.getString("cliente");
 				int idInserzione = result.getInt("inserzione");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, idCliente, idInserzione, idStrutturaTuristica);
+				String pIva = result.getString("strutturaTuristica");
+				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
 			}
 
 		} catch (SQLException e) {
@@ -86,25 +88,35 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public int updatePrenotazione(Prenotazione p) {
+	public Prenotazione updatePrenotazione(Prenotazione p) {
 		try {
 			delete(p.getIdPrenotazione());
 			
 			String query = " insert into PRENOTAZIONI (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setInt(1, p.getIdPrenotazione());
+			preparedStmt.setString(1, null); //vediamo se è così che si passano i valori per l'autoincrement
 			preparedStmt.setDate(2, p.getDataArrivo());
 			preparedStmt.setDate(3, p.getDataPartenza());
 			preparedStmt.setDouble(4, p.getPrezzoTot());
-			preparedStmt.setInt(5, p.getIdCliente());
+			preparedStmt.setString(5, p.getCfCliente());
 			preparedStmt.setInt(6, p.getIdInserzione());
-			preparedStmt.setInt(7, p.getIdStrutturaTuristica());
-		
-			return preparedStmt.executeUpdate();
+			preparedStmt.setString(7, p.getPIva());
+			preparedStmt.executeUpdate();
+			
+			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return null;
+	}
+	
+	@Override
+	public boolean controlloDisponibilità(Inserzione in, NewDate dataArrivo, NewDate dataPartenza) {
+		boolean disponibilità = false;
+		Date dataInizio = in.getDataInizio();
+		Date dataFine = in.getDataFine();
+		
+		return disponibilità;
 	}
 }

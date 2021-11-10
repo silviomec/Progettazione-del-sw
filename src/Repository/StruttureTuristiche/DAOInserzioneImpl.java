@@ -19,7 +19,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 		super();
 		this.connection = connection;
 	}
-	
+
 	@Override
 	public HashMap<String, Inserzione> doRetrieveAll() {
 		HashMap<String, Inserzione> InserzioneCollection = new HashMap<String, Inserzione>();
@@ -34,9 +34,9 @@ public class DAOInserzioneImpl implements DAOInserzione {
 				String descrizione = result.getString("descrizione");
 				double prezzoPerNotte = result.getDouble("prezzoPerNotte");
 				int numeroPersone = result.getInt("numeroPersone");
-				int strutturaTuristica = result.getInt("strutturaTuristica");
-				int inserzionista = result.getInt("inserzionista");
-				Inserzione in = new  Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista);
+				String strutturaTuristica = result.getString("strutturaTuristica");
+				String inserzionista = result.getString("inserzionista");
+				Inserzione in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista);
 				InserzioneCollection.put(Integer.toString(idInserzione), in);
 			}
 
@@ -55,14 +55,14 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			ResultSet result = statement.executeQuery("SELECT * FROM INSERZIONI WHERE idInserzione=\"" + idInserzione + "\"");
 
 			while (result.next()) {
-				 idInserzione = result.getInt("idInserzione");
+				idInserzione = result.getInt("idInserzione");
 				String titolo = result.getString(" titolo");
 				String descrizione = result.getString("descrizione");
 				double prezzoPerNotte = result.getDouble("prezzoPerNotte");
 				int numeroPersone = result.getInt("numeroPersone");
-				int strutturaTuristica = result.getInt("strutturaTuristica");
-				int inserzionista = result.getInt("inserzionista");
-				 in = new  Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista);			}
+				String strutturaTuristica = result.getString("strutturaTuristica");
+				String inserzionista = result.getString("inserzionista");
+				in = new  Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista);			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,10 +84,10 @@ public class DAOInserzioneImpl implements DAOInserzione {
 	}
 
 	@Override
-	public int updateInserzione(Inserzione in) {
+	public Inserzione updateInserzione(Inserzione in) {
 		try {
 			delete(in.getIdInserzione());
-			
+
 			String query = " insert into inserzioni (idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
@@ -96,13 +96,14 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			preparedStmt.setString(3, in.getDescrizione());
 			preparedStmt.setDouble(4, in.getPrezzoPerNotte());
 			preparedStmt.setInt(5, in.getNumeroPersone());
-			preparedStmt.setInt(6, in.getStrutturaTuristica());
-			preparedStmt.setInt(7, in.getInserzionista());
-		
-			return preparedStmt.executeUpdate();
+			preparedStmt.setString(6, in.getStrutturaTuristica());
+			preparedStmt.setString(7, in.getInserzionista());
+			preparedStmt.executeUpdate();
+			
+			return in;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return null;
 	}
 } 

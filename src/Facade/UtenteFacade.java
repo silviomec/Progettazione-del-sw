@@ -50,16 +50,4 @@ public class UtenteFacade {
 	public void setPersonaController(PersonaController personaController) {
 		this.personaController = personaController;
 	}
-	
-	public void showStruttureTuristicheUI() {
-		StruttureTuristicheUI.display();
-	}
-	
-	public void showNuovaStruttura() {
-		NuovaStruttura.display();
-	}
-	
-	public void showModificaStruttura() {
-		ModificaStruttura.display();
-	}
 }

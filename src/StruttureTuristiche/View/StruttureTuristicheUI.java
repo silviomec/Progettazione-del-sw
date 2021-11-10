@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.JTextPane;
 
 public class StruttureTuristicheUI extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
 

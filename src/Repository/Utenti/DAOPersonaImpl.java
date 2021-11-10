@@ -16,6 +16,7 @@ public class DAOPersonaImpl implements DAOPersona {
 	public DAOPersonaImpl() {
 		this.connection = new MySQLConnection();
 	}
+	
 	public DAOPersonaImpl(MySQLConnection connection) {
 		super();
 		this.connection = connection;

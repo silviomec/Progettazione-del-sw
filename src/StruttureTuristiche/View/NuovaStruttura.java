@@ -10,9 +10,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import Facade.UtenteFacade;
 import Repository.DAOFactory;
 import Repository.Utenti.DAOPersona;
 import Repository.Utenti.DAOPersonaImpl;
+import Utenti.Controller.PersonaController;
 import Utenti.Model.Persona;
 
 import javax.swing.JTextField;
@@ -37,6 +39,9 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 	private JComboBox hotelComboBox;
 	private JComboBox cfInserzionistaComboBox;
 	private JComboBox stelleComboBox;
+	private JTextField pIvaTextField;
+
+	UtenteFacade uf = UtenteFacade.getInstance();
 
 	/**
 	 * Launch the application.
@@ -89,19 +94,19 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		{
 			JLabel lblIndirizzo = new JLabel("Indirizzo");
 			lblIndirizzo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblIndirizzo.setBounds(526, 125, 134, 29);
+			lblIndirizzo.setBounds(526, 212, 134, 29);
 			contentPanel.add(lblIndirizzo);
 		}
 		{
 			indirizzoTextField = new JTextField();
 			indirizzoTextField.setColumns(10);
-			indirizzoTextField.setBounds(526, 158, 235, 35);
+			indirizzoTextField.setBounds(526, 246, 235, 35);
 			contentPanel.add(indirizzoTextField);
 		}
 		{
 			JLabel lblCFInserzionista = new JLabel("CF Inserzionista");
 			lblCFInserzionista.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblCFInserzionista.setBounds(526, 212, 134, 29);
+			lblCFInserzionista.setBounds(526, 317, 134, 29);
 			contentPanel.add(lblCFInserzionista);
 		}
 		{
@@ -144,13 +149,20 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		cfInserzionistaComboBox.setEditable(true);
 		cfInserzionistaComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
 		cfInserzionistaComboBox.setModel(new DefaultComboBoxModel(getCfInserzionistiOrdered()));
-		cfInserzionistaComboBox.setBounds(526, 245, 235, 35);
+		cfInserzionistaComboBox.setBounds(526, 348, 235, 35);
 		cfInserzionistaComboBox.setSelectedItem(null);
 		contentPanel.add(cfInserzionistaComboBox);
+		
+		JLabel lblPIva = new JLabel("Partita IVA");
+		lblPIva.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblPIva.setBounds(526, 125, 134, 29);
+		contentPanel.add(lblPIva);
+		
+		pIvaTextField = new JTextField();
+		pIvaTextField.setColumns(10);
+		pIvaTextField.setBounds(526, 158, 235, 35);
+		contentPanel.add(pIvaTextField);
 	}
-
-
-
 
 	public String[] getCfInserzionistiOrdered() {
 		HashMap<String, Persona> inserzionisti = new HashMap<String, Persona>(); 
@@ -180,10 +192,11 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		}
 		else {	// La Partita Iva e il Codice Fiscale inseriti rispettano il pattern giusto
 			String nome = nomeTextField.getText().toString();
+			String pIva = pIvaTextField.getText().toString();
 			String indirizzo = indirizzoTextField.getText().toString();
-			String hotel = hotelComboBox.getText().toString();
-			String cfInserzionista = cfInserzionistaComboBox.getText().toString().toUpperCase();
-			String stelle = stelleComboBox.getText().toString();
+			String hotel = hotelComboBox.getSelectedItem().toString();
+			String cfInserzionista = cfInserzionistaComboBox.getSelectedItem().toString().toUpperCase();
+			String stelle = stelleComboBox.getSelectedItem().toString();
 
 			DAOPersona daoPersona = DAOFactory.getDAOPersona();
 
@@ -223,7 +236,7 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 	}
 
 	public String checkCfInserzionistaTextField() {
-		String cf = cfInserzionistaTextField.getText().toUpperCase();
+		String cf = cfInserzionistaComboBox.getSelectedItem().toString().toUpperCase();
 		String msg = "";
 
 		if(cf.length() != 16) {
@@ -244,4 +257,16 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		}
 	}
 
+	public String contains() {
+		String target;
+		String msg = "";
+		
+		target = pIvaTextField.getText().toString().toUpperCase();
+		if(uf.getStrutturaTuristicaController().contains(target) == true) {
+			System.out.println("Partita IVA " + target + " già registrata.");
+			msg = "Partita IVA già registrata.\n";
+		}
+		
+		return msg;
+	}
 }

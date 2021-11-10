@@ -6,8 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Facade.UtenteFacade;
-import Utenti.Model.Dipendente;
+import Facade.*;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -18,6 +17,7 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class Home extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
 
@@ -54,7 +54,7 @@ public class Home extends JFrame {
 		JButton btnStrutture = new JButton("Strutture");
 		btnStrutture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showStruttureTuristicheUI();
+				stf.showStruttureTuristicheUI();
 				thisHome.dispose();
 			}
 		});
