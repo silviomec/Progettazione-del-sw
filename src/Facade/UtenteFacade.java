@@ -1,48 +1,40 @@
 package Facade;
 
-import Utenti.Controller.ClienteController;
+import StruttureTuristiche.View.*;
 import Utenti.Controller.DipendenteController;
-import Utenti.Model.Dipendente;
+import Utenti.Controller.PersonaController;
 import Utenti.View.*;
 
 public class UtenteFacade {
 	private DipendenteController dipendenteController;
-	private ClienteController clienteController;
+	private PersonaController personaController;
 	private static UtenteFacade instance;
 	
 	public static UtenteFacade getInstance() {
 		if (instance == null) {
 			instance = new UtenteFacade();
 			instance.setDipendenteController(new DipendenteController(instance));
-			instance.setClienteController(new ClienteController(instance));
+			instance.setPersonaController(new PersonaController(instance));
 		}
 		return instance;
 	}
 	
-	public void showHome(Dipendente dip) {
-		Home.display(dip);
+	public void showHome() {
+		Home.display();
 	}
 	
-	public void showGestioneUtenti(Dipendente dip) {
-		GestioneUtentiUI.display(dip);
+	public void showGestioneUtenti() {
+		GestioneUtentiUI.display();
 	}
 	
-	public void showVisualizzaClienti(Dipendente dip) {
-		VisualizzaClienti.display(dip);
+	public void showVisualizzaPersone(int tipologia) {
+		VisualizzaPersone.display(tipologia);
 	}
 	
-	public void showRegistraCliente(Dipendente dip) {
-		RegistraCliente.display(dip);
+	public void showRegistraPersona(int tipologia) {
+		RegistraPersona.display(tipologia);
 	}
 	
-	public void showVisualizzaInserzionisti(Dipendente dip) {
-		VisualizzaInserzionisti.display(dip);
-	}
-	
-	public void showRegistraInserzionista(Dipendente dip) {
-		RegistraInserzionista.display(dip);
-	}
-
 	public DipendenteController getDipendenteController() {
 		return dipendenteController;
 	}
@@ -51,11 +43,23 @@ public class UtenteFacade {
 		this.dipendenteController = dipendenteController;
 	}
 	
-	public ClienteController getClienteController() {
-		return clienteController;
+	public PersonaController getPersonaController() {
+		return personaController;
 	}
 	
-	public void setClienteController(ClienteController clienteController) {
-		this.clienteController = clienteController;
+	public void setPersonaController(PersonaController personaController) {
+		this.personaController = personaController;
+	}
+	
+	public void showStruttureTuristicheUI() {
+		StruttureTuristicheUI.display();
+	}
+	
+	public void showNuovaStruttura() {
+		NuovaStruttura.display();
+	}
+	
+	public void showModificaStruttura() {
+		ModificaStruttura.display();
 	}
 }

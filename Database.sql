@@ -1,4 +1,4 @@
-	-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
 -- Host: localhost    Database: db_pds
 -- ------------------------------------------------------
@@ -19,8 +19,8 @@
 -- Table structure for table `canoni`
 --
 DROP DATABASE IF EXISTS db_pds;
-Create database db_pds;
-Use db_pds;
+CREATE DATABASE db_pds;
+USE DB_PDS;
 DROP TABLE IF EXISTS `canoni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -65,7 +65,7 @@ CREATE TABLE `clienti` (
   PRIMARY KEY (`codiceFiscale`),
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,9 +74,7 @@ CREATE TABLE `clienti` (
 
 LOCK TABLES `clienti` WRITE;
 /*!40000 ALTER TABLE `clienti` DISABLE KEYS */;
-INSERT INTO `clienti` VALUES
-	('LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),
-	('RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it');
+INSERT INTO `clienti` VALUES ('DTMKNL98L02A783Z','Kevin Luca','De Toma','388777','k.detoma@studenti.unisannio.it'),('LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),('RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it');
 /*!40000 ALTER TABLE `clienti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,10 +128,10 @@ CREATE TABLE `inserzioni` (
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`idInserzione`),
   UNIQUE KEY `idInserzioni_UNIQUE` (`idInserzione`),
-  KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
+  KEY `STRUTTURATURISTICA_` (`STRUTTURATURISTICA`),
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
   CONSTRAINT `inserzioni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `numeroPersone` CHECK ((`numeroPersone` >= 0)),
   CONSTRAINT `prezzoPerNotte` CHECK ((`prezzoPerNotte` >= 0))
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -145,7 +143,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona',0070.00,'Camera Matrimoniale',2,NULL,NULL),(15,'marta',0060.00,'ampia camera',3,5,15);
+INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona',0070.00,'Camera Matrimoniale',2,NULL,NULL),(15,'marta',0060.00,'ampia camera',3,5,'15');
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,8 +172,7 @@ CREATE TABLE `inserzionisti` (
 
 LOCK TABLES `inserzionisti` WRITE;
 /*!40000 ALTER TABLE `inserzionisti` DISABLE KEYS */;
-INSERT INTO `inserzionisti` VALUES
-	('LMPRTI99B65A783J','Rita','Lamp','777','rita@hot.it');
+INSERT INTO `inserzionisti` VALUES ('DTMKNL98L02A783Z','Kevin Luca','De Toma','388777','k.detoma@studenti.unisannio.it'),('LMPRTI99B65A783J','Rita','Lamp','777','rita@hot.it'),('MCCSLV98M11A783F','Silvio','Mecchella','456','ok@okok.it');
 /*!40000 ALTER TABLE `inserzionisti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,7 +280,7 @@ DROP TABLE IF EXISTS `struttureturistiche`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `struttureturistiche` (
-  `idstrutturaTuristica` int NOT NULL AUTO_INCREMENT,
+  `PartitaIva` int NOT NULL,
   `nome` varchar(45) NOT NULL,
   `stelle` enum('1','2','3','4','5') NOT NULL,
   `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
@@ -301,7 +298,7 @@ CREATE TABLE `struttureturistiche` (
 
 LOCK TABLES `struttureturistiche` WRITE;
 /*!40000 ALTER TABLE `struttureturistiche` DISABLE KEYS */;
-INSERT INTO `struttureturistiche` VALUES (5,'Rituccia','5','B&B','Benevento',15),(6,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn',15);
+INSERT INTO `struttureturistiche` VALUES (5,'Rituccia','5','B&B','Benevento','LMPRTI99B65A783J'),(6,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn','LMPRTI99B65A783J');
 /*!40000 ALTER TABLE `struttureturistiche` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -314,5 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-15 16:15:54
-	
+-- Dump completed on 2021-11-09 16:02:50
