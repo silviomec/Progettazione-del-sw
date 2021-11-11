@@ -15,6 +15,7 @@ public class DipendenteController {
 	private DAODipendenteImpl daoDipendenteImpl;
 	private UtenteFacade utenteFacade;
 	private Login login;
+	private Dipendente dipendenteAttivo;
 
 	public DipendenteController(UtenteFacade uf) {
 		utenteFacade = uf;
@@ -39,7 +40,8 @@ public class DipendenteController {
 				System.out.println("Login successful for user: " + dip.getUsername());
 				if (dip instanceof Dipendente) {
 					Dipendente d = (Dipendente) dip;
-					utenteFacade.showHome(dip);
+					utenteFacade.showHome();
+					dipendenteAttivo = dip;
 					return true;
 				}
 			} else {
@@ -57,6 +59,10 @@ public class DipendenteController {
 		if (login != null) login.dispose();
 		login = new Login();
 		//login.display();
+	}
+
+	public Dipendente getDipendenteAttivo() {
+		return dipendenteAttivo;
 	}
 
 	/*public void showAutistaHomeUI(Autista a) {

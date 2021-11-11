@@ -1,10 +1,8 @@
 package StruttureTuristiche.Model;
 
-
-
 public class StrutturaTuristica {
-	public StrutturaTuristica(int idStruttura, String nome, String stelle, String tipologia, String indirizzo, int inserzionista) {
-		this.idStruttura = idStruttura;
+	public StrutturaTuristica(String pIva, String nome, String stelle, String tipologia, String indirizzo, String inserzionista) {
+		this.pIva = pIva;
 		this.nome = nome;
 		this.stelle = stelle;
 		this.tipologia = tipologia;
@@ -12,10 +10,10 @@ public class StrutturaTuristica {
 		this.inserzionista = inserzionista;
 	}
 	
-	public int getIdStruttura() { return idStruttura; }
-	public void setIdStruttura(int idStruttura) { this.idStruttura = idStruttura; }
-	public int getInserzionista() { return inserzionista; }
-	public void setInserzionista(int inserzionista) { this.inserzionista = inserzionista; }
+	public String getPIva() { return pIva; }
+	public void setPIva(String pIva) { this.pIva = pIva; }
+	public String getInserzionista() { return inserzionista; }
+	public void setInserzionista(String inserzionista) { this.inserzionista = inserzionista; }
 	public String getNome() { return nome; }
 	public void setNome(String nome) { this.nome = nome; }
 	public String getStelle() { return stelle; }
@@ -26,11 +24,11 @@ public class StrutturaTuristica {
 	public void setIndirizzo(String indirizzo) { this.indirizzo = indirizzo; }
 	
 
-	private int idStruttura;
-	private int inserzionista;
+	private String pIva;
 	private String nome;
 	private String stelle;
 	private String tipologia;
 	private String indirizzo;
+	private String inserzionista;
 	
 }

@@ -17,12 +17,8 @@ public class DAOFactory {
 		return new DAODipendenteImpl();
 	}
 
-	public static DAOClienteImpl getDAOCliente() {
-		return new DAOClienteImpl();
-	}
-
-	public static DAOInserzionistaImpl getDAOInserzionista() {
-		return new DAOInserzionistaImpl();
+	public static DAOPersonaImpl getDAOPersona() {
+		return new DAOPersonaImpl();
 	}
 	
 	public static DAOCanoneImpl getDAOCanone() {

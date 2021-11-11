@@ -29,14 +29,14 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 			ResultSet result = statement.executeQuery("SELECT * FROM STRUTTURETURISTICHE");
 
 			while (result.next()) {
-				int idStrutturaTuristica = result.getInt("idStruttura");
+				String pIva = result.getString("PartitaIva");
 				String nome = result.getString("nome");
 				String stelle = result.getString("stelle");
 				String tipologia = result.getString("tipologia");
 				String indirizzo = result.getString("indirizzo");
-				int inserzionista = result.getInt("inserzionista");
-				StrutturaTuristica s = new  StrutturaTuristica(idStrutturaTuristica, nome, stelle, tipologia, indirizzo, inserzionista);
-				StrutturaTuristicaCollection.put(Integer.toString(idStrutturaTuristica), s);
+				String inserzionista = result.getString("inserzionista");
+				StrutturaTuristica s = new  StrutturaTuristica(pIva, nome, stelle, tipologia, indirizzo, inserzionista);
+				StrutturaTuristicaCollection.put(pIva, s);
 			}
 
 		} catch (SQLException e) {
@@ -46,21 +46,21 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 	}
 
 	@Override
-	public StrutturaTuristica doRetrieveByIdStrutturaTuristica(int idStruttura) {
+	public StrutturaTuristica doRetrieveByPartitaIva(String pIva) {
 		StrutturaTuristica s = null;
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM STRUTTURETURISTICHE WHERE idstrutturaTuristica=\"" + idStruttura + "\"");
+			ResultSet result = statement.executeQuery("SELECT * FROM STRUTTURETURISTICHE WHERE PartitaIva=\"" + pIva + "\"");
 
 			while (result.next()) {
-				int idStrutturaTuristica = result.getInt("idstruttura");
+				String partitaIva = result.getString("PartitaIva");
 				String nome = result.getString("nome");
 				String stelle = result.getString("stelle");
 				String tipologia = result.getString("tipologia");
 				String indirizzo = result.getString("indirizzo");
-				int inserzionista = result.getInt("inserzionista");
-				 s = new  StrutturaTuristica(idStrutturaTuristica, nome, stelle, tipologia, indirizzo, inserzionista);
+				String inserzionista = result.getString("inserzionista");
+				 s = new  StrutturaTuristica(partitaIva, nome, stelle, tipologia, indirizzo, inserzionista);
 			}
 
 		} catch (SQLException e) {
@@ -70,11 +70,11 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 	}
 
 	@Override
-	public void delete(int id) {
+	public void delete(String string) {
 		try {
-			System.out.println(id);
+			System.out.println(string);
 			Statement statement = connection.getConnection().createStatement();
-			int result = statement.executeUpdate("DELETE FROM STRUTTURETURISTICHE WHERE idstrutturaTuristica=\"" + id + "\"");
+			int result = statement.executeUpdate("DELETE FROM STRUTTURETURISTICHE WHERE partitaIva=\"" + string + "\"");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -83,24 +83,26 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 	}
 
 	@Override
-	public int updateStrutturaTuristica(StrutturaTuristica s) {
+	public StrutturaTuristica updateStrutturaTuristica(StrutturaTuristica s) {
 		try {
-			delete(s.getIdStruttura());
+			delete(s.getPIva());
 			
-			String query = " insert into struttureturistiche (idstrutturaTuristica, Nome, Stelle, Tipologia, Indirizzo, inserzionista)"
+			String query = "INSERT INTO struttureturistiche (PartitaIva, Nome, Stelle, Tipologia, Indirizzo, inserzionista)"
 					+ " values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setInt(1, s.getIdStruttura());
+			preparedStmt.setString(1, s.getPIva());
 			preparedStmt.setString(2, s.getNome());
 			preparedStmt.setString(3, s.getStelle());
 			preparedStmt.setString(4, s.getTipologia());
 			preparedStmt.setString(5, s.getIndirizzo());
-			preparedStmt.setInt(6, s.getInserzionista());
-		
-			return preparedStmt.executeUpdate();
+			preparedStmt.setString(6, s.getInserzionista());
+			preparedStmt.executeUpdate();
+			
+			return s;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return null;
 	}
+	
 } 

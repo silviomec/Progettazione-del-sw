@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Facade.StrutturaTuristicaFacade;
+import Facade.UtenteFacade;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JPasswordField;
@@ -19,13 +23,15 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 public class StruttureTuristicheUI extends JFrame {
+	UtenteFacade uf = UtenteFacade.getInstance();
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -42,6 +48,8 @@ public class StruttureTuristicheUI extends JFrame {
 	 * Create the frame.
 	 */
 	public StruttureTuristicheUI() {
+		StruttureTuristicheUI thisStruttureTuristicheUI = this;
+		
 		setTitle("Strutture Turistiche");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 650);
@@ -49,10 +57,13 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+	
 		
 		JButton btnNewButton = new JButton("Inserisci Struttura");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				stf.showNuovaStruttura();
+				thisStruttureTuristicheUI.dispose();
 			}
 		});
 		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -63,6 +74,8 @@ public class StruttureTuristicheUI extends JFrame {
 		btnNewButton_1.setEnabled(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				stf.showModificaStruttura();
+				thisStruttureTuristicheUI.dispose();
 			}
 		});
 		btnNewButton_1.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -70,6 +83,11 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Modifica Struttura");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnNewButton_2.setEnabled(false);
 		btnNewButton_2.setFont(new Font("Dialog", Font.BOLD, 18));
 		btnNewButton_2.setBounds(27, 336, 193, 97);
