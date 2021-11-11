@@ -87,4 +87,8 @@ public class StrutturaTuristicaFacade {
 	public void showModificaStruttura() {
 		ModificaStruttura.display();
 	}
+
+	public void showUpdateStruttura(int operazione) {
+		UpdateStruttura.display(operazione);
+	}
 }
