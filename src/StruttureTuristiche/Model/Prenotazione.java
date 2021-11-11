@@ -1,9 +1,10 @@
 package StruttureTuristiche.Model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Prenotazione {
-	public Prenotazione(Date dataArrivo, Date dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
+	public Prenotazione(LocalDate dataArrivo, LocalDate dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
 		this.dataArrivo = dataArrivo;
 		this.dataPartenza = dataPartenza;
 		this.prezzoTot = prezzoTot;
@@ -12,7 +13,7 @@ public class Prenotazione {
 		this.pIva = pIva;
 	}
 	
-	public Prenotazione(int idPrenotazione, Date dataArrivo, Date dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
+	public Prenotazione(int idPrenotazione, LocalDate dataArrivo, LocalDate dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
 		this.idPrenotazione = idPrenotazione;
 		this.dataArrivo = dataArrivo;
 		this.dataPartenza = dataPartenza;
@@ -30,10 +31,10 @@ public class Prenotazione {
 	public void setIdInserzione(int idInserzione) { this.idInserzione = idInserzione; }
 	public String getPIva() { return pIva; }
 	public void setPIva(String pIva) { this.pIva = pIva; }
-	public Date getDataArrivo() { return dataArrivo; }
-	public void setDataArrivo(Date dataArrivo) { this.dataArrivo = dataArrivo; }
-	public Date getDataPartenza() { return dataPartenza; }
-	public void setDataPartenza(Date dataPartenza) { this.dataPartenza = dataPartenza; }
+	public LocalDate getDataArrivo() { return dataArrivo; }
+	public void setDataArrivo(LocalDate dataArrivo) { this.dataArrivo = dataArrivo; }
+	public LocalDate getDataPartenza() { return dataPartenza; }
+	public void setDataPartenza(LocalDate dataPartenza) { this.dataPartenza = dataPartenza; }
 	public double getPrezzoTot() { return prezzoTot; }
 	public void setPrezzoTot(double prezzoTot) { this.prezzoTot = prezzoTot; }
 
@@ -41,8 +42,7 @@ public class Prenotazione {
 	private String cfCliente;
 	private int idInserzione;
 	private String pIva;
-	private Date dataArrivo;
-	private Date dataPartenza;
+	private LocalDate dataArrivo;
+	private LocalDate dataPartenza;
 	private double prezzoTot;
-	
 }

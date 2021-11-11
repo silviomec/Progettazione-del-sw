@@ -10,10 +10,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 import Repository.DAOFactory;
+import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import Repository.Utenti.DAOPersona;
 import Repository.Utenti.DAOPersonaImpl;
+import StruttureTuristiche.Model.StrutturaTuristica;
 import Utenti.Controller.PersonaController;
 import Utenti.Model.Persona;
 
@@ -42,6 +45,7 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 	private JTextField pIvaTextField;
 
 	UtenteFacade uf = UtenteFacade.getInstance();
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	/**
 	 * Launch the application.
@@ -60,90 +64,91 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public NuovaStruttura() {
-		setTitle("Nuova Inserzione");
+		setTitle("Nuova Struttura");
 		setBounds(100, 100, 950, 650);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 936, 582);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
-		{
-			nomeTextField = new JTextField();
-			nomeTextField.setColumns(10);
-			nomeTextField.setBounds(130, 158, 235, 35);
-			contentPanel.add(nomeTextField);
-		}
-		{
-			JLabel lblNome = new JLabel("Nome Struttura");
-			lblNome.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblNome.setBounds(130, 125, 134, 29);
-			contentPanel.add(lblNome);
-		}
-		{
-			JLabel lblTipologia = new JLabel("Tipologia");
-			lblTipologia.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblTipologia.setBounds(130, 212, 134, 29);
-			contentPanel.add(lblTipologia);
-		}
-		{
-			JLabel lblStelle = new JLabel("Stelle");
-			lblStelle.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblStelle.setBounds(130, 317, 134, 29);
-			contentPanel.add(lblStelle);
-		}
-		{
-			JLabel lblIndirizzo = new JLabel("Indirizzo");
-			lblIndirizzo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblIndirizzo.setBounds(526, 212, 134, 29);
-			contentPanel.add(lblIndirizzo);
-		}
-		{
-			indirizzoTextField = new JTextField();
-			indirizzoTextField.setColumns(10);
-			indirizzoTextField.setBounds(526, 246, 235, 35);
-			contentPanel.add(indirizzoTextField);
-		}
-		{
-			JLabel lblCFInserzionista = new JLabel("CF Inserzionista");
-			lblCFInserzionista.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblCFInserzionista.setBounds(526, 317, 134, 29);
-			contentPanel.add(lblCFInserzionista);
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 509, 936, 73);
-			contentPanel.add(buttonPane);
-			buttonPane.setLayout(null);
-			{
-				JButton okButton = new JButton("Conferma");
-				okButton.setFont(new Font("Dialog", Font.BOLD, 15));
-				okButton.setBounds(194, 9, 144, 44);
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Annulla");
-				cancelButton.setFont(new Font("Dialog", Font.BOLD, 15));
-				cancelButton.setBounds(561, 7, 144, 44);
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
-		{
-			stelleComboBox = new JComboBox();
-			stelleComboBox.setFont(new Font("Dialog", Font.BOLD, 14));
-			stelleComboBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
-			stelleComboBox.setBounds(130, 347, 235, 35);
-			contentPanel.add(stelleComboBox);
-		}
-		{
-			hotelComboBox = new JComboBox();
-			hotelComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
-			hotelComboBox.setModel(new DefaultComboBoxModel(new String[] {"Hotel", "B&B", "Residence", "Ostello"}));
-			hotelComboBox.setBounds(130, 245, 235, 35);
-			contentPanel.add(hotelComboBox);
-		}
+
+		nomeTextField = new JTextField();
+		nomeTextField.setColumns(10);
+		nomeTextField.setBounds(130, 158, 235, 35);
+		contentPanel.add(nomeTextField);
+
+
+		JLabel lblNome = new JLabel("Nome Struttura");
+		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNome.setBounds(130, 125, 134, 29);
+		contentPanel.add(lblNome);
+
+
+		JLabel lblTipologia = new JLabel("Tipologia");
+		lblTipologia.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTipologia.setBounds(130, 212, 134, 29);
+		contentPanel.add(lblTipologia);
+
+
+		JLabel lblStelle = new JLabel("Stelle");
+		lblStelle.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblStelle.setBounds(130, 317, 134, 29);
+		contentPanel.add(lblStelle);
+
+
+		JLabel lblIndirizzo = new JLabel("Indirizzo");
+		lblIndirizzo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblIndirizzo.setBounds(526, 212, 134, 29);
+		contentPanel.add(lblIndirizzo);
+
+
+		indirizzoTextField = new JTextField();
+		indirizzoTextField.setColumns(10);
+		indirizzoTextField.setBounds(526, 246, 235, 35);
+		contentPanel.add(indirizzoTextField);
+
+
+		JLabel lblCFInserzionista = new JLabel("CF Inserzionista");
+		lblCFInserzionista.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblCFInserzionista.setBounds(526, 317, 134, 29);
+		contentPanel.add(lblCFInserzionista);
+
+
+		JPanel buttonPane = new JPanel();
+		buttonPane.setBounds(0, 509, 936, 73);
+		contentPanel.add(buttonPane);
+		buttonPane.setLayout(null);
+
+		JButton confermaButton = new JButton("Conferma");
+		confermaButton.addActionListener(this);
+		confermaButton.setFont(new Font("Dialog", Font.BOLD, 15));
+		confermaButton.setBounds(194, 9, 144, 44);
+		confermaButton.setActionCommand("OK");
+		buttonPane.add(confermaButton);
+		getRootPane().setDefaultButton(confermaButton);
+
+
+		JButton cancelButton = new JButton("Annulla");
+		cancelButton.setFont(new Font("Dialog", Font.BOLD, 15));
+		cancelButton.setBounds(561, 7, 144, 44);
+		cancelButton.setActionCommand("Cancel");
+		buttonPane.add(cancelButton);
+
+
+
+		stelleComboBox = new JComboBox();
+		stelleComboBox.setFont(new Font("Dialog", Font.BOLD, 14));
+		stelleComboBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
+		stelleComboBox.setBounds(130, 347, 235, 35);
+		contentPanel.add(stelleComboBox);
+
+
+		hotelComboBox = new JComboBox();
+		hotelComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
+		hotelComboBox.setModel(new DefaultComboBoxModel(new String[] {"Hotel", "B&B", "Residence", "Ostello"}));
+		hotelComboBox.setBounds(130, 245, 235, 35);
+		contentPanel.add(hotelComboBox);
+
 
 		cfInserzionistaComboBox = new JComboBox();
 		cfInserzionistaComboBox.setEditable(true);
@@ -152,12 +157,12 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		cfInserzionistaComboBox.setBounds(526, 348, 235, 35);
 		cfInserzionistaComboBox.setSelectedItem(null);
 		contentPanel.add(cfInserzionistaComboBox);
-		
+
 		JLabel lblPIva = new JLabel("Partita IVA");
 		lblPIva.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblPIva.setBounds(526, 125, 134, 29);
 		contentPanel.add(lblPIva);
-		
+
 		pIvaTextField = new JTextField();
 		pIvaTextField.setColumns(10);
 		pIvaTextField.setBounds(526, 158, 235, 35);
@@ -187,7 +192,7 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		msg = checkPIvaTextField();
 		msg += checkCfInserzionistaTextField();
 
-		if(!msg.equals("")) {	// La Partita Iva o il Codice Fiscale inseriti non rispettano il pattern giusto
+		if(!msg.equals("")) {	// La Partita Iva e/o il Codice Fiscale inseriti non rispettano il pattern giusto
 			JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 		}
 		else {	// La Partita Iva e il Codice Fiscale inseriti rispettano il pattern giusto
@@ -198,7 +203,7 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 			String cfInserzionista = cfInserzionistaComboBox.getSelectedItem().toString().toUpperCase();
 			String stelle = stelleComboBox.getSelectedItem().toString();
 
-			DAOPersona daoPersona = DAOFactory.getDAOPersona();
+			DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
 
 			msg = contains();
 
@@ -206,14 +211,15 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 			}
 			else {
-				daoPersona.updatePersona(tipologiaPersona, new Persona(cf, nome, cognome, telefono, email));
-				System.out.println(tabella + " registrato con successo!");
+				daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, stelle, hotel, indirizzo, cfInserzionista));
+				System.out.println("Struttura turistica registrata con successo!");
 				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 				nomeTextField.setText("");
-				cognomeTextField.setText("");
-				cfTextField.setText("");
-				telefonoTextField.setText("");
-				emailTextField.setText("");
+				pIvaTextField.setText("");
+				indirizzoTextField.setText("");
+				hotelComboBox.setSelectedIndex(0);;
+				cfInserzionistaComboBox.setSelectedIndex(-1);
+				stelleComboBox.setSelectedIndex(0);
 			}
 		}
 	}
@@ -225,8 +231,8 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 		String pIvaPattern = "^[0-9]{11}$";
 		Pattern pattern = Pattern.compile(pIvaPattern, Pattern.CASE_INSENSITIVE);
 		if(!pattern.matcher(pIva).matches()) {
-			System.out.println("");
-			msg = "";
+			System.out.println("Partita IVA " + pIva + " non valida.");
+			msg = "Partita IVA non valida.";
 			return msg;
 		}
 		else {
@@ -260,13 +266,13 @@ public class NuovaStruttura extends JFrame implements ActionListener {
 	public String contains() {
 		String target;
 		String msg = "";
-		
+
 		target = pIvaTextField.getText().toString().toUpperCase();
-		if(uf.getStrutturaTuristicaController().contains(target) == true) {
+		if(stf.getStrutturaTuristicaController().contains(target) == true) {
 			System.out.println("Partita IVA " + target + " già registrata.");
 			msg = "Partita IVA già registrata.\n";
 		}
-		
+
 		return msg;
 	}
 }

@@ -1,9 +1,11 @@
 package Repository.StruttureTuristiche;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
@@ -34,9 +36,11 @@ public class DAOInserzioneImpl implements DAOInserzione {
 				String descrizione = result.getString("descrizione");
 				double prezzoPerNotte = result.getDouble("prezzoPerNotte");
 				int numeroPersone = result.getInt("numeroPersone");
+				LocalDate dataInizio = LocalDate.parse(result.getDate("dataInizio").toString());
+				LocalDate dataFine = LocalDate.parse(result.getDate("dataFine").toString());
 				String strutturaTuristica = result.getString("strutturaTuristica");
 				String inserzionista = result.getString("inserzionista");
-				Inserzione in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista);
+				Inserzione in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
 				InserzioneCollection.put(Integer.toString(idInserzione), in);
 			}
 
@@ -55,15 +59,16 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			ResultSet result = statement.executeQuery("SELECT * FROM INSERZIONI WHERE idInserzione=\"" + idInserzione + "\"");
 
 			while (result.next()) {
-				idInserzione = result.getInt("idInserzione");
-				String titolo = result.getString(" titolo");
+				String titolo = result.getString("titolo");
 				String descrizione = result.getString("descrizione");
 				double prezzoPerNotte = result.getDouble("prezzoPerNotte");
 				int numeroPersone = result.getInt("numeroPersone");
+				LocalDate dataInizio = LocalDate.parse(result.getDate("dataInizio").toString());
+				LocalDate dataFine = LocalDate.parse(result.getDate("dataFine").toString());
 				String strutturaTuristica = result.getString("strutturaTuristica");
 				String inserzionista = result.getString("inserzionista");
-				in = new  Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista);			}
-
+				in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -88,18 +93,20 @@ public class DAOInserzioneImpl implements DAOInserzione {
 		try {
 			delete(in.getIdInserzione());
 
-			String query = " insert into inserzioni (idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, strutturaTuristica, inserzionista)"
-					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			String query = " insert into inserzioni (idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista)"
+					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, in.getIdInserzione());
 			preparedStmt.setString(2, in.getTitolo());
 			preparedStmt.setString(3, in.getDescrizione());
 			preparedStmt.setDouble(4, in.getPrezzoPerNotte());
 			preparedStmt.setInt(5, in.getNumeroPersone());
-			preparedStmt.setString(6, in.getStrutturaTuristica());
-			preparedStmt.setString(7, in.getInserzionista());
+			preparedStmt.setDate(6, Date.valueOf(in.getDataInizio()));
+			preparedStmt.setDate(7, Date.valueOf(in.getDataFine()));
+			preparedStmt.setString(8, in.getStrutturaTuristica());
+			preparedStmt.setString(9, in.getInserzionista());
 			preparedStmt.executeUpdate();
-			
+
 			return in;
 		} catch (SQLException e) {
 			e.printStackTrace();

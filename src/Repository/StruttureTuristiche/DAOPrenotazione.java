@@ -1,15 +1,16 @@
 package Repository.StruttureTuristiche;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import StruttureTuristiche.Model.*;
-import Util.NewDate;
 
 public interface DAOPrenotazione {
 	public HashMap<String, Prenotazione> doRetrieveAll();
+	public HashMap<String, Prenotazione> doRetrieveAllByIdInserzione(int id);
 	public Prenotazione doRetrieveByIdPrenotazione(int idPrenotazione);
 	public void delete(int id);
 	public Prenotazione updatePrenotazione(Prenotazione p);
-	public boolean controllaDisponibilità(Inserzione in, NewDate dataArrivo, NewDate dataPartenza);
+	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza);
 }
 

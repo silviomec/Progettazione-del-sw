@@ -1,5 +1,6 @@
 package Facade;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import Repository.DAOFactory;
@@ -7,7 +8,6 @@ import StruttureTuristiche.Controller.StrutturaTuristicaController;
 import StruttureTuristiche.Model.*;
 import StruttureTuristiche.View.*;
 import Utenti.Model.Persona;
-import Util.NewDate;
 
 public class StrutturaTuristicaFacade {
 	private StrutturaTuristicaController strutturaTuristicaController;
@@ -34,7 +34,7 @@ public class StrutturaTuristicaFacade {
 		DAOFactory.getDAOStrutturaTuristica().delete(s.getPIva());
 	}
 
-	public Inserzione creaInserzione(String titolo, String descrizione, double prezzoPerNotte, int numeroPersone, Date dataInizio, Date dataFine, String pIva, String cfInserzionista) {
+	public Inserzione creaInserzione(String titolo, String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String pIva, String cfInserzionista) {
 		Inserzione in = new Inserzione(titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, pIva, cfInserzionista);
 		return DAOFactory.getDAOInserzione().updateInserzione(in);
 	}
@@ -51,8 +51,8 @@ public class StrutturaTuristicaFacade {
 		// Cosa fa di diverso rispetto a modificaInserzione() ?
 	}
 
-	public Prenotazione creaPrenotazione(NewDate dataArrivo, NewDate dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
-		Prenotazione p = new Prenotazione(dataArrivo.getSqlDate(), dataPartenza.getSqlDate(), prezzoTot, cfCliente, idInserzione, pIva);
+	public Prenotazione creaPrenotazione(LocalDate dataArrivo, LocalDate dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
+		Prenotazione p = new Prenotazione(dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
 		return DAOFactory.getDAOPrenotazione().updatePrenotazione(p);
 	}
 
@@ -64,7 +64,7 @@ public class StrutturaTuristicaFacade {
 		DAOFactory.getDAOPrenotazione().delete(p.getIdPrenotazione());
 	}
 
-	public boolean controlloDisponibilità(Inserzione in, NewDate dataArrivo, NewDate dataPartenza) {
+	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
 		return DAOFactory.getDAOPrenotazione().controlloDisponibilità(in, dataArrivo, dataPartenza);
 	}
 

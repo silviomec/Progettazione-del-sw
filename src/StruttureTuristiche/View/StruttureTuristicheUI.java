@@ -62,7 +62,7 @@ public class StruttureTuristicheUI extends JFrame {
 		JButton btnNewButton = new JButton("Inserisci Struttura");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showNuovaStruttura();
+				stf.showNuovaStruttura();
 				thisStruttureTuristicheUI.dispose();
 			}
 		});
@@ -74,7 +74,7 @@ public class StruttureTuristicheUI extends JFrame {
 		btnNewButton_1.setEnabled(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showModificaStruttura();
+				stf.showModificaStruttura();
 				thisStruttureTuristicheUI.dispose();
 			}
 		});
