@@ -1,5 +1,14 @@
 package Utenti.Model;
 public class Persona {
+	public Persona(String codiceFiscale, String nome, String cognome, String telefono, String email) {
+		this.codiceFiscale = codiceFiscale;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.telefono = telefono;
+		this.email = email;
+	}
+	
+	public Persona() {}
 	public String getCodiceFiscale() { return codiceFiscale; }
 	public void setCodiceFiscale(String codiceFiscale) { this.codiceFiscale = codiceFiscale; }
 	public String getNome() { return nome; }
