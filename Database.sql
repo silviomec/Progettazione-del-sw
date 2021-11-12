@@ -30,7 +30,7 @@ CREATE TABLE `canoni` (
   `scadenza` date NOT NULL,
   `saldato` tinyint(1) NOT NULL,
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
-  `STRUTTURATURISTICA` int DEFAULT NULL,
+  `STRUTTURATURISTICA` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`idcanone`),
   UNIQUE KEY `idcanone_UNIQUE` (`idcanone`),
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
@@ -121,12 +121,12 @@ DROP TABLE IF EXISTS `inserzioni`;
 CREATE TABLE `inserzioni` (
   `idInserzione` int NOT NULL AUTO_INCREMENT,
   `titolo` varchar(45) NOT NULL,
-  `prezzoPerNotte` decimal(6,2) unsigned zerofill NOT NULL,
   `descrizione` varchar(200) NOT NULL,
+  `prezzoPerNotte` decimal(6,2) unsigned zerofill NOT NULL,
   `numeroPersone` int NOT NULL,
   `dataInizio` date NOT NULL,
   `dataFine` date NOT NULL,
-  `STRUTTURATURISTICA` int DEFAULT NULL,
+  `STRUTTURATURISTICA` varchar(11) DEFAULT NULL,
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`idInserzione`),
   UNIQUE KEY `idInserzioni_UNIQUE` (`idInserzione`),
@@ -145,7 +145,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona',0070.00,'Camera Matrimoniale',2,'2021-08-08','2021-08-20',NULL,NULL),(15,'marta',0060.00,'ampia camera',3,'2021-10-19','2021-10-26',5,NULL);
+INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona','Camera Matrimoniale',0070.00,2,'2021-08-08','2021-08-20',NULL,NULL),(15,'marta','ampia camera',0060.00,3,'2021-10-19','2021-10-26',5,NULL);
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +192,7 @@ CREATE TABLE `prenotazioni` (
   `prezzoTotale` decimal(7,2) NOT NULL,
   `CLIENTE` varchar(16) DEFAULT NULL,
   `INSERZIONE` int DEFAULT NULL,
-  `STRUTTURATURISTICA` int DEFAULT NULL,
+  `STRUTTURATURISTICA` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`idprenotazione`),
   UNIQUE KEY `idprenotazioni_UNIQUE` (`idprenotazione`),
   KEY `prenotazioni_CLIENTE_idx` (`CLIENTE`),
@@ -282,7 +282,7 @@ DROP TABLE IF EXISTS `struttureturistiche`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `struttureturistiche` (
-  `PartitaIva` int NOT NULL,
+  `PartitaIva` varchar(11) NOT NULL,
   `nome` varchar(45) NOT NULL,
   `stelle` enum('1','2','3','4','5') NOT NULL,
   `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
@@ -300,7 +300,7 @@ CREATE TABLE `struttureturistiche` (
 
 LOCK TABLES `struttureturistiche` WRITE;
 /*!40000 ALTER TABLE `struttureturistiche` DISABLE KEYS */;
-INSERT INTO `struttureturistiche` VALUES (5,'Rituccia','5','B&B','Benevento','LMPRTI99B65A783J'),(6,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn','LMPRTI99B65A783J');
+INSERT INTO `struttureturistiche` VALUES (47654387986,'Rituccia','5','B&B','Benevento','LMPRTI99B65A783J'),(69745223097,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn','LMPRTI99B65A783J');
 /*!40000 ALTER TABLE `struttureturistiche` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
