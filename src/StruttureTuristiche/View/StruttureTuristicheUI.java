@@ -63,7 +63,7 @@ public class StruttureTuristicheUI extends JFrame {
 		inserisciStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				stf.showUpdateStruttura(UpdateStruttura.AGGIUNGI);
-				thisStruttureTuristicheUI.dispose();
+				//thisStruttureTuristicheUI.dispose();
 			}
 		});
 		inserisciStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -74,7 +74,7 @@ public class StruttureTuristicheUI extends JFrame {
 		rimuoviStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				stf.showModificaStruttura();
-				thisStruttureTuristicheUI.dispose();
+				//thisStruttureTuristicheUI.dispose();
 			}
 		});
 		rimuoviStrutturaButton.setEnabled(false);
@@ -86,7 +86,7 @@ public class StruttureTuristicheUI extends JFrame {
 		modificaStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				stf.showUpdateStruttura(UpdateStruttura.MODIFICA);
-				thisStruttureTuristicheUI.dispose();
+				//thisStruttureTuristicheUI.dispose();
 			}
 		});
 		modificaStrutturaButton.setEnabled(true);

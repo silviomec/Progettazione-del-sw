@@ -60,7 +60,7 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 				String tipologia = result.getString("tipologia");
 				String indirizzo = result.getString("indirizzo");
 				String inserzionista = result.getString("inserzionista");
-				 s = new  StrutturaTuristica(partitaIva, nome, stelle, tipologia, indirizzo, inserzionista);
+				s = new  StrutturaTuristica(partitaIva, nome, stelle, tipologia, indirizzo, inserzionista);
 			}
 
 		} catch (SQLException e) {

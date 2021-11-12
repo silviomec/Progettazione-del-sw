@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
@@ -175,7 +176,6 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 
 		pIvaComboBox = new JComboBox();
 		pIvaComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
-		pIvaComboBox.setEditable(true);
 		pIvaComboBox.setModel(new DefaultComboBoxModel(getPIvaOrdered()));
 		pIvaComboBox.setBounds(526, 158, 235, 35);
 		pIvaComboBox.setSelectedItem(null);
@@ -198,17 +198,21 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	public void warn() {
 		switch(operazione) {
 		case AGGIUNGI:
-			if(!nomeTextField.getText().equals("") && !pIvaTextField.getText().equals("") && !indirizzoTextField.getText().equals("") && !cfInserzionistaComboBox.getSelectedItem().toString().equals(""))
-				confermaButton.setEnabled(true);
-			else
-				confermaButton.setEnabled(false);
-			break;
+			if(cfInserzionistaComboBox.getEditor().getItem() != null) {
+				if(!nomeTextField.getText().equals("") && !pIvaTextField.getText().equals("") && !indirizzoTextField.getText().equals("") && !cfInserzionistaComboBox.getEditor().getItem().toString().equals(""))
+					confermaButton.setEnabled(true);
+				else
+					confermaButton.setEnabled(false);
+				break;
+			}
 		case MODIFICA:
-			if(!nomeTextField.getText().equals("") && !pIvaComboBox.getSelectedItem().toString().equals("") && !indirizzoTextField.getText().equals("") && !cfInserzionistaComboBox.getSelectedItem().toString().equals(""))
-				confermaButton.setEnabled(true);
-			else
-				confermaButton.setEnabled(false);
-			break;
+			if(cfInserzionistaComboBox.getEditor().getItem() != null && pIvaComboBox.getEditor().getItem() != null) {
+				if(!nomeTextField.getText().equals("") && !pIvaComboBox.getEditor().getItem().toString().equals("") && !indirizzoTextField.getText().equals("") && !cfInserzionistaComboBox.getEditor().getItem().toString().equals(""))
+					confermaButton.setEnabled(true);
+				else
+					confermaButton.setEnabled(false);
+				break;
+			}
 		}
 	}
 
@@ -225,17 +229,150 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 			}
 		});
 
-		pIvaTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void removeUpdate(DocumentEvent e) {
-				warn();
-			}
-			public void insertUpdate(DocumentEvent e) {
-				warn();
-			}
-		});
+		switch(operazione) {
+		case AGGIUNGI:
+			pIvaTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+			});
+			break;
+		case MODIFICA:
+			DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
+			
+			final JTextComponent pIvaTC = (JTextComponent) pIvaComboBox.getEditor().getEditorComponent();
+			pIvaTC.getDocument().addDocumentListener(new DocumentListener() {
+				private int x, y;
+				private StrutturaTuristica s;
+				public void changedUpdate(DocumentEvent e) {
+					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
+					nomeTextField.setText(s.getNome());
+					indirizzoTextField.setText(s.getIndirizzo());
+					final JTextComponent cfInserzionistaTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
+					cfInserzionistaTC.setText(s.getInserzionista());
+					switch(s.getTipologia()) {
+					case "Hotel":
+						x = 0;
+						break;
+					case "B&B":
+						x = 1;
+						break;
+					case "Residence":
+						x = 2;
+						break;
+					case "Ostello":
+						x = 3;
+						break;
+					} hotelComboBox.setSelectedIndex(x);
+					switch(s.getStelle()) {
+					case "1":
+						y = 0;
+						break;
+					case "2":
+						y = 1;
+						break;
+					case "3":
+						y = 2;
+						break;
+					case "4":
+						y = 3;
+						break;
+					case "5":
+						y = 4;
+						break;
+					} stelleComboBox.setSelectedIndex(y);
+					
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
+					nomeTextField.setText(s.getNome());
+					indirizzoTextField.setText(s.getIndirizzo());
+					final JTextComponent cfInserzionistaTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
+					cfInserzionistaTC.setText(s.getInserzionista());
+					switch(s.getTipologia()) {
+					case "Hotel":
+						x = 0;
+						break;
+					case "B&B":
+						x = 1;
+						break;
+					case "Residence":
+						x = 2;
+						break;
+					case "Ostello":
+						x = 3;
+						break;
+					} hotelComboBox.setSelectedIndex(x);
+					switch(s.getStelle()) {
+					case "1":
+						y = 0;
+						break;
+					case "2":
+						y = 1;
+						break;
+					case "3":
+						y = 2;
+						break;
+					case "4":
+						y = 3;
+						break;
+					case "5":
+						y = 4;
+						break;
+					} stelleComboBox.setSelectedIndex(y);
+					
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
+					nomeTextField.setText(s.getNome());
+					indirizzoTextField.setText(s.getIndirizzo());
+					final JTextComponent cfInserzionistaTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
+					cfInserzionistaTC.setText(s.getInserzionista());
+					switch(s.getTipologia()) {
+					case "Hotel":
+						x = 0;
+						break;
+					case "B&B":
+						x = 1;
+						break;
+					case "Residence":
+						x = 2;
+						break;
+					case "Ostello":
+						x = 3;
+						break;
+					} hotelComboBox.setSelectedIndex(x);
+					switch(s.getStelle()) {
+					case "1":
+						y = 0;
+						break;
+					case "2":
+						y = 1;
+						break;
+					case "3":
+						y = 2;
+						break;
+					case "4":
+						y = 3;
+						break;
+					case "5":
+						y = 4;
+						break;
+					} stelleComboBox.setSelectedIndex(y);
+					
+					warn();
+				}
+			});
+			break;
+		}
 
 		indirizzoTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -249,6 +386,19 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 			}
 		});
 		
+		final JTextComponent cfTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
+		cfTC.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
 		// Andrebbe aggiunto un DocumentListener (?) ai due JComboBox
 	}
 
@@ -296,17 +446,25 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		}
 		else {	// La partita IVA e il codice fiscale dell'inserzionista rispettano il pattern giusto
 			String nome = nomeTextField.getText().toString();
-			String pIva = pIvaTextField.getText().toString();
+			String pIva = "";
+			switch(operazione) {
+			case AGGIUNGI:
+				pIva = pIvaTextField.getText().toString();
+				break;
+			case MODIFICA:
+				pIva = pIvaComboBox.getEditor().getItem().toString();
+				break;
+			}
 			String indirizzo = indirizzoTextField.getText().toString();
-			String hotel = hotelComboBox.getSelectedItem().toString();
-			String cfInserzionista = cfInserzionistaComboBox.getSelectedItem().toString().toUpperCase();
-			String stelle = stelleComboBox.getSelectedItem().toString();
+			String hotel = hotelComboBox.getEditor().getItem().toString();
+			String cfInserzionista = cfInserzionistaComboBox.getEditor().getItem().toString().toUpperCase();
+			String stelle = stelleComboBox.getEditor().getItem().toString();
 
 			DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
 
 			msg = contains();
 
-			if(!msg.equals("")) {	// Partita IVA già inserita nel database
+			if(!msg.equals("")) {
 				switch(operazione) {
 				case AGGIUNGI:
 					JOptionPane.showMessageDialog(this, msg, "Errore", 0);
@@ -317,6 +475,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(this, "Modifica avvenuta con successo!", "Messaggio", 1);
 					nomeTextField.setText("");
 					pIvaTextField.setText("");
+					pIvaComboBox.setSelectedIndex(-1);
 					indirizzoTextField.setText("");
 					hotelComboBox.setSelectedIndex(0);;
 					cfInserzionistaComboBox.setSelectedIndex(-1);
@@ -332,6 +491,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 					nomeTextField.setText("");
 					pIvaTextField.setText("");
+					pIvaComboBox.setSelectedIndex(-1);
 					indirizzoTextField.setText("");
 					hotelComboBox.setSelectedIndex(0);;
 					cfInserzionistaComboBox.setSelectedIndex(-1);
@@ -347,14 +507,23 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	}
 
 	public String checkPIvaTextField() {
-		String pIva = pIvaTextField.getText();
+		String pIva = "";
+
+		switch(operazione) {
+		case AGGIUNGI:
+			pIva = pIvaTextField.getText();
+			break;
+		case MODIFICA:
+			pIva = pIvaComboBox.getEditor().getItem().toString();
+			break;
+		}
 		String msg = "";
 
 		String pIvaPattern = "^[0-9]{11}$";
-		Pattern pattern = Pattern.compile(pIvaPattern, Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile(pIvaPattern);
 		if(!pattern.matcher(pIva).matches()) {
 			System.out.println("Partita IVA " + pIva + " non valida.");
-			msg = "Partita IVA non valida.";
+			msg = "Partita IVA non valida.\n";
 			return msg;
 		}
 		else {
@@ -364,7 +533,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	}
 
 	public String checkCfInserzionistaTextField() {
-		String cf = cfInserzionistaComboBox.getSelectedItem().toString().toUpperCase();
+		String cf = cfInserzionistaComboBox.getEditor().getItem().toString().toUpperCase();
 		String msg = "";
 
 		if(cf.length() != 16) {
@@ -386,10 +555,18 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	}
 
 	public String contains() {
-		String target;
+		String target = "";
 		String msg = "";
 
-		target = pIvaTextField.getText().toString().toUpperCase();
+		switch(operazione) {
+		case AGGIUNGI:
+			target = pIvaTextField.getText().toString();
+			break;
+		case MODIFICA:
+			target = pIvaComboBox.getEditor().getItem().toString();
+			break;
+		}
+
 		if(stf.getStrutturaTuristicaController().contains(target) == true) {
 			System.out.println("Partita IVA " + target + " già registrata.");
 			msg = "Partita IVA già registrata.";
