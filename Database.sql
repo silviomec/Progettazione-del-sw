@@ -18,7 +18,9 @@
 --
 -- Table structure for table `canoni`
 --
-
+DROP DATABASE IF EXISTS db_pds;
+CREATE DATABASE db_pds;
+USE DB_PDS;
 DROP TABLE IF EXISTS `canoni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -27,14 +29,14 @@ CREATE TABLE `canoni` (
   `importoAnnuale` decimal(6,2) NOT NULL,
   `scadenza` date NOT NULL,
   `saldato` tinyint(1) NOT NULL,
-  `INSERZIONISTA` int DEFAULT NULL,
-  `STRUTTURATURISTICA` int DEFAULT NULL,
+  `INSERZIONISTA` varchar(16) DEFAULT NULL,
+  `STRUTTURATURISTICA` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`idcanone`),
   UNIQUE KEY `idcanone_UNIQUE` (`idcanone`),
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
   KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
-  CONSTRAINT `canoni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`idinserzionista`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `canoni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `canoni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `canoni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,17 +57,15 @@ DROP TABLE IF EXISTS `clienti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clienti` (
-  `idcliente` int NOT NULL AUTO_INCREMENT,
   `codiceFiscale` char(16) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `cognome` varchar(50) NOT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idcliente`),
-  UNIQUE KEY `codiceFiscale_UNIQUE` (`codiceFiscale`),
+  PRIMARY KEY (`codiceFiscale`),
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `clienti` (
 
 LOCK TABLES `clienti` WRITE;
 /*!40000 ALTER TABLE `clienti` DISABLE KEYS */;
-INSERT INTO `clienti` VALUES (1,'LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),(2,'RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it'),(15,'LMPFR','Rituccia','mimmo','5824','rita@hot');
+INSERT INTO `clienti` VALUES ('DTMKNL98L02A783Z','Kevin Luca','De Toma','388777','k.detoma@studenti.unisannio.it'),('LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),('RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it');
 /*!40000 ALTER TABLE `clienti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,17 +121,19 @@ DROP TABLE IF EXISTS `inserzioni`;
 CREATE TABLE `inserzioni` (
   `idInserzione` int NOT NULL AUTO_INCREMENT,
   `titolo` varchar(45) NOT NULL,
-  `prezzoPerNotte` decimal(6,2) unsigned zerofill NOT NULL,
   `descrizione` varchar(200) NOT NULL,
+  `prezzoPerNotte` decimal(6,2) unsigned zerofill NOT NULL,
   `numeroPersone` int NOT NULL,
-  `STRUTTURATURISTICA` int DEFAULT NULL,
-  `INSERZIONISTA` int DEFAULT NULL,
+  `dataInizio` date NOT NULL,
+  `dataFine` date NOT NULL,
+  `STRUTTURATURISTICA` varchar(11) DEFAULT NULL,
+  `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`idInserzione`),
   UNIQUE KEY `idInserzioni_UNIQUE` (`idInserzione`),
-  KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
+  KEY `STRUTTURATURISTICA_` (`STRUTTURATURISTICA`),
   KEY `INSERZIONISTA_idx` (`INSERZIONISTA`),
-  CONSTRAINT `inserzioni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`idinserzionista`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `inserzioni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `numeroPersone` CHECK ((`numeroPersone` >= 0)),
   CONSTRAINT `prezzoPerNotte` CHECK ((`prezzoPerNotte` >= 0))
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -143,7 +145,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona',0070.00,'Camera Matrimoniale',2,NULL,NULL),(15,'marta',0060.00,'ampia camera',3,5,15);
+INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona','Camera Matrimoniale',0070.00,2,'2021-08-08','2021-08-20',NULL,NULL),(15,'marta','ampia camera',0060.00,3,'2021-10-19','2021-10-26',5,NULL);
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,15 +157,12 @@ DROP TABLE IF EXISTS `inserzionisti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inserzionisti` (
-  `idinserzionista` int NOT NULL,
   `codiceFiscale` char(16) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `cognome` varchar(50) NOT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idinserzionista`),
-  UNIQUE KEY `idinserzionisti_UNIQUE` (`idinserzionista`),
-  UNIQUE KEY `codiceFiscale_UNIQUE` (`codiceFiscale`),
+  PRIMARY KEY (`codiceFiscale`),
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -175,7 +174,7 @@ CREATE TABLE `inserzionisti` (
 
 LOCK TABLES `inserzionisti` WRITE;
 /*!40000 ALTER TABLE `inserzionisti` DISABLE KEYS */;
-INSERT INTO `inserzionisti` VALUES (15,'LMP','Rita','Lamp','777','rita@hot.it');
+INSERT INTO `inserzionisti` VALUES ('DTMKNL98L02A783Z','Kevin Luca','De Toma','388777','k.detoma@studenti.unisannio.it'),('LMPRTI99B65A783J','Rita','Lamp','777','rita@hot.it'),('MCCSLV98M11A783F','Silvio','Mecchella','456','ok@okok.it');
 /*!40000 ALTER TABLE `inserzionisti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,17 +190,17 @@ CREATE TABLE `prenotazioni` (
   `dataArrivo` date NOT NULL,
   `dataPartenza` date NOT NULL,
   `prezzoTotale` decimal(7,2) NOT NULL,
-  `CLIENTE` int DEFAULT NULL,
+  `CLIENTE` varchar(16) DEFAULT NULL,
   `INSERZIONE` int DEFAULT NULL,
-  `STRUTTURATURISTICA` int DEFAULT NULL,
+  `STRUTTURATURISTICA` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`idprenotazione`),
   UNIQUE KEY `idprenotazioni_UNIQUE` (`idprenotazione`),
   KEY `prenotazioni_CLIENTE_idx` (`CLIENTE`),
   KEY `prenotazioni_INSERZIONE_idx` (`INSERZIONE`),
   KEY `prenotazioni_STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
-  CONSTRAINT `prenotazioni_CLIENTE` FOREIGN KEY (`CLIENTE`) REFERENCES `clienti` (`idcliente`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `prenotazioni_CLIENTE` FOREIGN KEY (`CLIENTE`) REFERENCES `clienti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_INSERZIONE` FOREIGN KEY (`INSERZIONE`) REFERENCES `inserzioni` (`idInserzione`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `prenotazioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`idstrutturaTuristica`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `prenotazioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_chk_1` CHECK ((`dataPartenza` > `dataArrivo`)),
   CONSTRAINT `prenotazioni_chk_2` CHECK ((`prezzoTotale` > 0))
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -283,15 +282,15 @@ DROP TABLE IF EXISTS `struttureturistiche`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `struttureturistiche` (
-  `idstrutturaTuristica` int NOT NULL AUTO_INCREMENT,
+  `PartitaIva` varchar(11) NOT NULL,
   `nome` varchar(45) NOT NULL,
   `stelle` enum('1','2','3','4','5') NOT NULL,
   `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
   `indirizzo` varchar(100) NOT NULL,
-  `INSERZIONISTA` int DEFAULT NULL,
-  PRIMARY KEY (`idstrutturaTuristica`),
+  `INSERZIONISTA` varchar(16) DEFAULT NULL,
+  PRIMARY KEY (`PartitaIva`),
   KEY `struttureturistiche_INSERZIONISTA_idx` (`INSERZIONISTA`),
-  CONSTRAINT `struttureturistiche_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`idinserzionista`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `struttureturistiche_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -301,7 +300,7 @@ CREATE TABLE `struttureturistiche` (
 
 LOCK TABLES `struttureturistiche` WRITE;
 /*!40000 ALTER TABLE `struttureturistiche` DISABLE KEYS */;
-INSERT INTO `struttureturistiche` VALUES (5,'Rituccia','5','B&B','Benevento',15),(6,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn',15);
+INSERT INTO `struttureturistiche` VALUES (47654387986,'Rituccia','5','B&B','Benevento','LMPRTI99B65A783J'),(69745223097,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn','LMPRTI99B65A783J');
 /*!40000 ALTER TABLE `struttureturistiche` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -314,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-15 16:15:54
+-- Dump completed on 2021-11-09 16:02:50

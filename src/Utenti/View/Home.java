@@ -1,37 +1,34 @@
 package Utenti.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Facade.UtenteFacade;
-import Utenti.Model.Dipendente;
+import Facade.*;
 
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.JTextPane;
 import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class Home extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
-	Dipendente dip;
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void display(Dipendente dip) {
+	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Home frame = new Home(dip);
+					Home frame = new Home();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,8 +40,7 @@ public class Home extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Home(Dipendente dip) {
-		this.dip = dip;
+	public Home() {
 		Home thisHome = this;
 		
 		setTitle("Home");
@@ -58,6 +54,8 @@ public class Home extends JFrame {
 		JButton btnStrutture = new JButton("Strutture");
 		btnStrutture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				stf.showStruttureTuristicheUI();
+				thisHome.dispose();
 			}
 		});
 		btnStrutture.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -77,7 +75,7 @@ public class Home extends JFrame {
 		JButton btnUtenti = new JButton("Utenti");
 		btnUtenti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showGestioneUtenti(dip);
+				uf.showGestioneUtenti();
 				thisHome.dispose();
 			}
 		});
@@ -101,7 +99,7 @@ public class Home extends JFrame {
 		btnPagamenti.setBounds(333, 62, 261, 97);
 		contentPane.add(btnPagamenti);
 		
-		JLabel utenteLabel = new JLabel("" + dip.getNome() + " " + dip.getCognome());
+		JLabel utenteLabel = new JLabel("" + uf.getDipendenteController().getDipendenteAttivo().getNome() + " " + uf.getDipendenteController().getDipendenteAttivo().getCognome());
 		utenteLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		utenteLabel.setBounds(645, 62, 102, 30);
 		contentPane.add(utenteLabel);

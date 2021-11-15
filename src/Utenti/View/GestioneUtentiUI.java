@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Facade.UtenteFacade;
 import Utenti.Model.Dipendente;
 
 import javax.swing.JButton;
@@ -14,31 +15,32 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class GestioneUtentiUI extends JFrame {
-
+	UtenteFacade uf = UtenteFacade.getInstance();
 	private JPanel contentPane;
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void display(Dipendente dip) {
+	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GestioneUtentiUI frame = new GestioneUtentiUI(dip);
+					GestioneUtentiUI frame = new GestioneUtentiUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		});
+		}); 
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	
-	public GestioneUtentiUI(Dipendente dip) {
+	public GestioneUtentiUI() {
 		GestioneUtentiUI thisGestioneUtentiUI = this;
 		
 		setTitle("Gestione Utenti");
@@ -55,45 +57,59 @@ public class GestioneUtentiUI extends JFrame {
 		contentPane_1.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(contentPane_1, BorderLayout.CENTER);
 		
-		JButton btnNewButton = new JButton("Visualizza Clienti");
-		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 16));
-		btnNewButton.setBounds(104, 182, 217, 97);
-		contentPane_1.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Indietro");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnVisualizzaClienti = new JButton("Visualizza Clienti");
+		btnVisualizzaClienti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Home.display(dip);
-				thisGestioneUtentiUI.dispose();
+				uf.showVisualizzaPersone(RegistraPersona.CLIENTE);
+				//thisGestioneUtentiUI.dispose();
 			}
 		});
-		btnNewButton_1.setBounds(10, 30, 102, 21);
-		contentPane_1.add(btnNewButton_1);
+		btnVisualizzaClienti.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnVisualizzaClienti.setBounds(104, 182, 217, 97);
+		contentPane_1.add(btnVisualizzaClienti);
 		
-		JButton btnNewButton_2 = new JButton("Registra Inserzionisti");
-		btnNewButton_2.setFont(new Font("Dialog", Font.BOLD, 16));
-		btnNewButton_2.setBounds(448, 361, 217, 97);
-		contentPane_1.add(btnNewButton_2);
+		JButton btnIndietro = new JButton("Indietro");
+		btnIndietro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Home.display();
+				//thisGestioneUtentiUI.dispose();
+			}
+		});
+		btnIndietro.setBounds(10, 30, 102, 21);
+		contentPane_1.add(btnIndietro);
+		
+		JButton btnRegistraInserzionista = new JButton("Registra Inserzionisti");
+		btnRegistraInserzionista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				uf.showRegistraPersona(RegistraPersona.INSERZIONISTA);
+				//thisGestioneUtentiUI.dispose();
+			}
+		});
+		btnRegistraInserzionista.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnRegistraInserzionista.setBounds(448, 361, 217, 97);
+		contentPane_1.add(btnRegistraInserzionista);
 		
 		JButton btnVisualizzaInserzionisti = new JButton("Visualizza Inserzionisti");
 		btnVisualizzaInserzionisti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				uf.showVisualizzaPersone(RegistraPersona.INSERZIONISTA);
+				//thisGestioneUtentiUI.dispose();
 			}
 		});
 		btnVisualizzaInserzionisti.setFont(new Font("Dialog", Font.BOLD, 16));
 		btnVisualizzaInserzionisti.setBounds(104, 361, 217, 97);
 		contentPane_1.add(btnVisualizzaInserzionisti);
 		
-		JButton btnNewButton_4 = new JButton("Registra Clienti");
-		btnNewButton_4.addActionListener(new ActionListener() {
+		JButton btnRegistraClienti = new JButton("Registra Clienti");
+		btnRegistraClienti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistraCliente.display(dip);
-				thisGestioneUtentiUI.dispose();
+				uf.showRegistraPersona(RegistraPersona.CLIENTE);
+				//thisGestioneUtentiUI.dispose();
 			}
 		});
-		btnNewButton_4.setFont(new Font("Dialog", Font.BOLD, 16));
-		btnNewButton_4.setBounds(448, 182, 217, 97);
-		contentPane_1.add(btnNewButton_4);
+		btnRegistraClienti.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnRegistraClienti.setBounds(448, 182, 217, 97);
+		contentPane_1.add(btnRegistraClienti);
 	}
 
 }
