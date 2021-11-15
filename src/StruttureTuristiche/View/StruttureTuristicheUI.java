@@ -1,32 +1,53 @@
 package StruttureTuristiche.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
+import Repository.DAOFactory;
+import Repository.StruttureTuristiche.DAOStrutturaTuristica;
+import StruttureTuristiche.Model.StrutturaTuristica;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.Font;
-import javax.swing.JPasswordField;
-import javax.swing.JInternalFrame;
-import javax.swing.JLayeredPane;
+import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 public class StruttureTuristicheUI extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
+	private ArrayList<StrutturaTuristica> struttureTuristiche = new ArrayList<StrutturaTuristica>();
+	private JTextField cercaTextField;
+	private JButton btnCerca;
+	private JButton rimuoviStrutturaButton;
+	private JTable table;
+	private static DefaultListModel<StrutturaTuristica> listmodel;
+	DefaultTableModel dtm = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 
 	/**
 	 * Launch the application.
@@ -57,8 +78,22 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-	
 		
+		cercaTextField = new JTextField();
+		cercaTextField.setBounds(27, 26, 716, 25);
+		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
+		contentPane.add(cercaTextField);
+		
+		btnCerca = new JButton("Cerca");
+		btnCerca.setEnabled(false);
+		btnCerca.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cerca(cercaTextField.getText());
+			}
+		});
+		btnCerca.setBounds(753, 26, 85, 21);
+		contentPane.add(btnCerca);
+	
 		JButton inserisciStrutturaButton = new JButton("Inserisci Struttura");
 		inserisciStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -70,11 +105,18 @@ public class StruttureTuristicheUI extends JFrame {
 		inserisciStrutturaButton.setBounds(27, 100, 193, 97);
 		contentPane.add(inserisciStrutturaButton);
 		
-		JButton rimuoviStrutturaButton = new JButton("Rimuovi Struttura");
+		DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
+
+		rimuoviStrutturaButton = new JButton("Rimuovi Struttura");
 		rimuoviStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stf.showModificaStruttura();
-				//thisStruttureTuristicheUI.dispose();
+				int scelta = JOptionPane.showConfirmDialog(thisStruttureTuristicheUI, "Vuoi rimuovere la struttura selezionata?", "Rimuovi struttura", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(scelta == 0) {
+					daoStrutturaTuristica.delete(struttureTuristiche.get(table.getSelectedRow()).getPIva());
+					cerca(cercaTextField.getText());
+					JOptionPane.showMessageDialog(thisStruttureTuristicheUI, "Rimozione avvenuta con successo!", "Messaggio", JOptionPane.INFORMATION_MESSAGE);
+				}
+				System.out.println(table.getSelectionModel().getLeadSelectionIndex());;
 			}
 		});
 		rimuoviStrutturaButton.setEnabled(false);
@@ -94,24 +136,91 @@ public class StruttureTuristicheUI extends JFrame {
 		modificaStrutturaButton.setBounds(27, 336, 193, 97);
 		contentPane.add(modificaStrutturaButton);
 		
-		JList list = new JList();
-		list.setBounds(293, 559, 585, -424);
-		contentPane.add(list);
-		
-		JTextPane txtpnSearch_1 = new JTextPane();
-		txtpnSearch_1.setText("Search...");
-		txtpnSearch_1.setFont(new Font("Dialog", Font.ITALIC, 14));
-		txtpnSearch_1.setBounds(210, 30, 716, 25);
-		contentPane.add(txtpnSearch_1);
-		
-		JButton btnNewButton_3 = new JButton("Gestisci Canone");
-		btnNewButton_3.setEnabled(false);
-		btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnNewButton_3.addActionListener(new ActionListener() {
+		JButton gestisciCanoneButton = new JButton("Gestisci Canone");
+		gestisciCanoneButton.setEnabled(false);
+		gestisciCanoneButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		gestisciCanoneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_3.setBounds(54, 524, 166, 35);
-		contentPane.add(btnNewButton_3);
+		gestisciCanoneButton.setBounds(54, 524, 166, 35);
+		contentPane.add(gestisciCanoneButton);
+		
+		JList list = new JList();
+		list.setBounds(230, 559, 706, -458);
+		contentPane.add(list);
+		
+		listmodel = new DefaultListModel<StrutturaTuristica>();
+
+		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista"});
+
+		cerca("");
+		
+		table = new JTable();
+		table.setBounds(344, 322, 314, -206);
+		table.setModel(dtm);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		//table.getSelectionModel().addListSelectionListener(this);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(252, 82, 674, 521);
+		contentPane.add(scrollPane);
+		
+		JButton btnRipristina = new JButton("Ripristina");
+		btnRipristina.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cerca("");
+				cercaTextField.setText("");
+			}
+		});
+		btnRipristina.setBounds(841, 26, 85, 21);
+		contentPane.add(btnRipristina);
+
+		createEvents();
+	}
+
+	public void warn() {
+		if(!cercaTextField.getText().equals(""))
+			btnCerca.setEnabled(true);
+		else
+			btnCerca.setEnabled(false);
+		
+		if(table.isRowSelected(table.getSelectedRow()))
+			rimuoviStrutturaButton.setEnabled(true);
+	}
+
+	private void createEvents() {
+		cercaTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+		
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				warn();
+			}
+		});
+	}
+	
+	public void cerca(String target) {
+		int i, j;
+
+		for(i = 0, j = dtm.getRowCount(); i < j; i++)
+			dtm.removeRow(0);
+
+		struttureTuristiche = new ArrayList<StrutturaTuristica>();
+		for (StrutturaTuristica s : DAOFactory.getDAOStrutturaTuristica().doRetrieveAllFiltered(target).values()) {
+			struttureTuristiche.add(s);
+		}
+		for(StrutturaTuristica s : struttureTuristiche) {
+			dtm.addRow(new Object[]{s.getPIva(), s.getNome(),  s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista()});
+		}
 	}
 }

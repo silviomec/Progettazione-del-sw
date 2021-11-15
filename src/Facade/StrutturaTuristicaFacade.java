@@ -80,10 +80,6 @@ public class StrutturaTuristicaFacade {
 		StruttureTuristicheUI.display();
 	}
 
-	public void showNuovaStruttura() {
-		NuovaStruttura.display();
-	}
-
 	public void showModificaStruttura() {
 		ModificaStruttura.display();
 	}
