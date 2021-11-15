@@ -53,9 +53,9 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void display(int operazione) {
+	public static void display(int operazione, String pIvaModificabile) {
 		try {
-			UpdateStruttura frame = new UpdateStruttura(operazione);
+			UpdateStruttura frame = new UpdateStruttura(operazione, pIvaModificabile);
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame.setVisible(true);
 		} catch (Exception e) {
@@ -66,7 +66,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public UpdateStruttura(int operazione) {
+	public UpdateStruttura(int operazione, String pIvaModificabile) {
 		this.operazione = operazione;
 		String operazioneString = "";
 		switch(this.operazione) {
@@ -159,7 +159,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		cfInserzionistiArrayList = getCfInserzionistiOrdered();
 		cfInserzionistaComboBox.setModel(new DefaultComboBoxModel(cfInserzionistiArrayList.toArray()));
 		cfInserzionistaComboBox.setBounds(526, 348, 235, 35);
-		cfInserzionistaComboBox.setSelectedItem(null);
+		cfInserzionistaComboBox.setSelectedIndex(-1);
 		contentPanel.add(cfInserzionistaComboBox);
 
 		JLabel lblPIva = new JLabel("Partita IVA");
@@ -176,8 +176,13 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		pIvaComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
 		pIvaComboBox.setModel(new DefaultComboBoxModel(getPIvaOrdered()));
 		pIvaComboBox.setBounds(526, 158, 235, 35);
-		pIvaComboBox.setSelectedItem(null);
+		pIvaComboBox.setSelectedIndex(-1);
 		contentPanel.add(pIvaComboBox);
+
+		if(pIvaModificabile != null) {
+			pIvaComboBox.setSelectedItem(pIvaModificabile);
+			riempimento();
+		}
 
 		switch(this.operazione) {
 		case AGGIUNGI:
@@ -242,128 +247,16 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 			});
 			break;
 		case MODIFICA:
-			DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
-			
 			final JTextComponent pIvaTC = (JTextComponent) pIvaComboBox.getEditor().getEditorComponent();
 			pIvaTC.getDocument().addDocumentListener(new DocumentListener() {
-				private int x, y;
-				private StrutturaTuristica s;
 				public void changedUpdate(DocumentEvent e) {
-					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
-					nomeTextField.setText(s.getNome());
-					indirizzoTextField.setText(s.getIndirizzo());
-					cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
-					switch(s.getTipologia()) {
-					case "Hotel":
-						x = 0;
-						break;
-					case "B&B":
-						x = 1;
-						break;
-					case "Residence":
-						x = 2;
-						break;
-					case "Ostello":
-						x = 3;
-						break;
-					} hotelComboBox.setSelectedIndex(x);
-					switch(s.getStelle()) {
-					case "1":
-						y = 0;
-						break;
-					case "2":
-						y = 1;
-						break;
-					case "3":
-						y = 2;
-						break;
-					case "4":
-						y = 3;
-						break;
-					case "5":
-						y = 4;
-						break;
-					} stelleComboBox.setSelectedIndex(y);
-					
-					warn();
+					riempimento();
 				}
 				public void removeUpdate(DocumentEvent e) {
-					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
-					nomeTextField.setText(s.getNome());
-					indirizzoTextField.setText(s.getIndirizzo());
-					cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
-					switch(s.getTipologia()) {
-					case "Hotel":
-						x = 0;
-						break;
-					case "B&B":
-						x = 1;
-						break;
-					case "Residence":
-						x = 2;
-						break;
-					case "Ostello":
-						x = 3;
-						break;
-					} hotelComboBox.setSelectedIndex(x);
-					switch(s.getStelle()) {
-					case "1":
-						y = 0;
-						break;
-					case "2":
-						y = 1;
-						break;
-					case "3":
-						y = 2;
-						break;
-					case "4":
-						y = 3;
-						break;
-					case "5":
-						y = 4;
-						break;
-					} stelleComboBox.setSelectedIndex(y);
-					
-					warn();
+					riempimento();
 				}
 				public void insertUpdate(DocumentEvent e) {
-					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
-					nomeTextField.setText(s.getNome());
-					indirizzoTextField.setText(s.getIndirizzo());
-					cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
-					switch(s.getTipologia()) {
-					case "Hotel":
-						x = 0;
-						break;
-					case "B&B":
-						x = 1;
-						break;
-					case "Residence":
-						x = 2;
-						break;
-					case "Ostello":
-						x = 3;
-						break;
-					} hotelComboBox.setSelectedIndex(x);
-					switch(s.getStelle()) {
-					case "1":
-						y = 0;
-						break;
-					case "2":
-						y = 1;
-						break;
-					case "3":
-						y = 2;
-						break;
-					case "4":
-						y = 3;
-						break;
-					case "5":
-						y = 4;
-						break;
-					} stelleComboBox.setSelectedIndex(y);
-					
-					warn();
+					riempimento();
 				}
 			});
 			break;
@@ -393,6 +286,49 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 				warn();
 			}
 		});
+	}
+	
+	public void riempimento() {
+		int x = 0, y = 0;
+		
+		DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
+		StrutturaTuristica s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getSelectedItem().toString());
+		nomeTextField.setText(s.getNome());
+		indirizzoTextField.setText(s.getIndirizzo());
+		cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
+		switch(s.getTipologia()) {
+		case "Hotel":
+			x = 0;
+			break;
+		case "B&B":
+			x = 1;
+			break;
+		case "Residence":
+			x = 2;
+			break;
+		case "Ostello":
+			x = 3;
+			break;
+		} hotelComboBox.setSelectedIndex(x);
+		switch(s.getStelle()) {
+		case "1":
+			y = 0;
+			break;
+		case "2":
+			y = 1;
+			break;
+		case "3":
+			y = 2;
+			break;
+		case "4":
+			y = 3;
+			break;
+		case "5":
+			y = 4;
+			break;
+		} stelleComboBox.setSelectedIndex(y);
+		
+		warn();
 	}
 
 	public String[] getPIvaOrdered() {

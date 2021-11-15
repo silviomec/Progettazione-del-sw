@@ -1,13 +1,11 @@
 package Facade;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import Repository.DAOFactory;
 import StruttureTuristiche.Controller.StrutturaTuristicaController;
 import StruttureTuristiche.Model.*;
 import StruttureTuristiche.View.*;
-import Utenti.Model.Persona;
 
 public class StrutturaTuristicaFacade {
 	private StrutturaTuristicaController strutturaTuristicaController;
@@ -80,11 +78,7 @@ public class StrutturaTuristicaFacade {
 		StruttureTuristicheUI.display();
 	}
 
-	public void showModificaStruttura() {
-		ModificaStruttura.display();
-	}
-
-	public void showUpdateStruttura(int operazione) {
-		UpdateStruttura.display(operazione);
+	public void showUpdateStruttura(int operazione, String pIvaModificabile) {
+		UpdateStruttura.display(operazione, pIvaModificabile);
 	}
 }

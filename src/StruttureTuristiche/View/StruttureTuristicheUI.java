@@ -40,6 +40,7 @@ public class StruttureTuristicheUI extends JFrame {
 	private JTextField cercaTextField;
 	private JButton btnCerca;
 	private JButton rimuoviStrutturaButton;
+	private JButton modificaStrutturaButton;
 	private JTable table;
 	private static DefaultListModel<StrutturaTuristica> listmodel;
 	DefaultTableModel dtm = new DefaultTableModel() {
@@ -70,7 +71,7 @@ public class StruttureTuristicheUI extends JFrame {
 	 */
 	public StruttureTuristicheUI() {
 		StruttureTuristicheUI thisStruttureTuristicheUI = this;
-		
+
 		setTitle("Strutture Turistiche");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 650);
@@ -78,33 +79,35 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		cercaTextField = new JTextField();
 		cercaTextField.setBounds(27, 26, 716, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
-		
+
 		btnCerca = new JButton("Cerca");
 		btnCerca.setEnabled(false);
 		btnCerca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca(cercaTextField.getText());
+				rimuoviStrutturaButton.setEnabled(false);
+				modificaStrutturaButton.setEnabled(false);
 			}
 		});
 		btnCerca.setBounds(753, 26, 85, 21);
 		contentPane.add(btnCerca);
-	
+
 		JButton inserisciStrutturaButton = new JButton("Inserisci Struttura");
 		inserisciStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stf.showUpdateStruttura(UpdateStruttura.AGGIUNGI);
+				stf.showUpdateStruttura(UpdateStruttura.AGGIUNGI, null);
 				//thisStruttureTuristicheUI.dispose();
 			}
 		});
 		inserisciStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
 		inserisciStrutturaButton.setBounds(27, 100, 193, 97);
 		contentPane.add(inserisciStrutturaButton);
-		
+
 		DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
 
 		rimuoviStrutturaButton = new JButton("Rimuovi Struttura");
@@ -123,19 +126,19 @@ public class StruttureTuristicheUI extends JFrame {
 		rimuoviStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
 		rimuoviStrutturaButton.setBounds(27, 217, 193, 97);
 		contentPane.add(rimuoviStrutturaButton);
-		
-		JButton modificaStrutturaButton = new JButton("Modifica Struttura");
+
+		modificaStrutturaButton = new JButton("Modifica Struttura");
 		modificaStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stf.showUpdateStruttura(UpdateStruttura.MODIFICA);
-				//thisStruttureTuristicheUI.dispose();
+				String pIvaModificabile = struttureTuristiche.get(table.getSelectedRow()).getPIva();
+				stf.showUpdateStruttura(UpdateStruttura.MODIFICA, pIvaModificabile);
 			}
 		});
-		modificaStrutturaButton.setEnabled(true);
+		modificaStrutturaButton.setEnabled(false);
 		modificaStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
 		modificaStrutturaButton.setBounds(27, 336, 193, 97);
 		contentPane.add(modificaStrutturaButton);
-		
+
 		JButton gestisciCanoneButton = new JButton("Gestisci Canone");
 		gestisciCanoneButton.setEnabled(false);
 		gestisciCanoneButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -145,17 +148,17 @@ public class StruttureTuristicheUI extends JFrame {
 		});
 		gestisciCanoneButton.setBounds(54, 524, 166, 35);
 		contentPane.add(gestisciCanoneButton);
-		
+
 		JList list = new JList();
 		list.setBounds(230, 559, 706, -458);
 		contentPane.add(list);
-		
+
 		listmodel = new DefaultListModel<StrutturaTuristica>();
 
 		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista"});
 
 		cerca("");
-		
+
 		table = new JTable();
 		table.setBounds(344, 322, 314, -206);
 		table.setModel(dtm);
@@ -164,11 +167,13 @@ public class StruttureTuristicheUI extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(252, 82, 674, 521);
 		contentPane.add(scrollPane);
-		
+
 		JButton btnRipristina = new JButton("Ripristina");
 		btnRipristina.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca("");
+				rimuoviStrutturaButton.setEnabled(false);
+				modificaStrutturaButton.setEnabled(false);
 				cercaTextField.setText("");
 			}
 		});
@@ -183,9 +188,11 @@ public class StruttureTuristicheUI extends JFrame {
 			btnCerca.setEnabled(true);
 		else
 			btnCerca.setEnabled(false);
-		
-		if(table.isRowSelected(table.getSelectedRow()))
+
+		if(table.isRowSelected(table.getSelectedRow())) {
 			rimuoviStrutturaButton.setEnabled(true);
+			modificaStrutturaButton.setEnabled(true);
+		}
 	}
 
 	private void createEvents() {
@@ -200,7 +207,7 @@ public class StruttureTuristicheUI extends JFrame {
 				warn();
 			}
 		});
-		
+
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -208,7 +215,7 @@ public class StruttureTuristicheUI extends JFrame {
 			}
 		});
 	}
-	
+
 	public void cerca(String target) {
 		int i, j;
 
