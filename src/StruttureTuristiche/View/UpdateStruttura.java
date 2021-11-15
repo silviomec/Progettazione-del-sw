@@ -1,8 +1,5 @@
 package StruttureTuristiche.View;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,10 +12,8 @@ import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 import Repository.DAOFactory;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
-import Repository.Utenti.DAOPersona;
 import Repository.Utenti.DAOPersonaImpl;
 import StruttureTuristiche.Model.StrutturaTuristica;
-import Utenti.Controller.PersonaController;
 import Utenti.Model.Persona;
 
 import javax.swing.JTextField;
@@ -27,7 +22,9 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -48,6 +45,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 	private JButton confermaButton;
 
 	private int operazione;
+	private ArrayList<String> cfInserzionistiArrayList;
 
 	UtenteFacade uf = UtenteFacade.getInstance();
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
@@ -157,9 +155,9 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		contentPanel.add(hotelComboBox);
 
 		cfInserzionistaComboBox = new JComboBox();
-		cfInserzionistaComboBox.setEditable(true);
 		cfInserzionistaComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
-		cfInserzionistaComboBox.setModel(new DefaultComboBoxModel(getCfInserzionistiOrdered()));
+		cfInserzionistiArrayList = getCfInserzionistiOrdered();
+		cfInserzionistaComboBox.setModel(new DefaultComboBoxModel(cfInserzionistiArrayList.toArray()));
 		cfInserzionistaComboBox.setBounds(526, 348, 235, 35);
 		cfInserzionistaComboBox.setSelectedItem(null);
 		contentPanel.add(cfInserzionistaComboBox);
@@ -254,8 +252,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
 					nomeTextField.setText(s.getNome());
 					indirizzoTextField.setText(s.getIndirizzo());
-					final JTextComponent cfInserzionistaTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
-					cfInserzionistaTC.setText(s.getInserzionista());
+					cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
 					switch(s.getTipologia()) {
 					case "Hotel":
 						x = 0;
@@ -294,8 +291,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
 					nomeTextField.setText(s.getNome());
 					indirizzoTextField.setText(s.getIndirizzo());
-					final JTextComponent cfInserzionistaTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
-					cfInserzionistaTC.setText(s.getInserzionista());
+					cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
 					switch(s.getTipologia()) {
 					case "Hotel":
 						x = 0;
@@ -334,8 +330,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					s = daoStrutturaTuristica.doRetrieveByPartitaIva(pIvaComboBox.getEditor().getItem().toString());
 					nomeTextField.setText(s.getNome());
 					indirizzoTextField.setText(s.getIndirizzo());
-					final JTextComponent cfInserzionistaTC = (JTextComponent) cfInserzionistaComboBox.getEditor().getEditorComponent();
-					cfInserzionistaTC.setText(s.getInserzionista());
+					cfInserzionistaComboBox.setSelectedIndex(cfInserzionistiArrayList.indexOf(s.getInserzionista()));
 					switch(s.getTipologia()) {
 					case "Hotel":
 						x = 0;
@@ -398,8 +393,6 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 				warn();
 			}
 		});
-
-		// Andrebbe aggiunto un DocumentListener (?) ai due JComboBox
 	}
 
 	public String[] getPIvaOrdered() {
@@ -418,19 +411,17 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		return lista;
 	}
 
-	public String[] getCfInserzionistiOrdered() {
+	public ArrayList<String> getCfInserzionistiOrdered() {
 		HashMap<String, Persona> inserzionisti = new HashMap<String, Persona>(); 
 		inserzionisti = DAOFactory.getDAOPersona().doRetrieveAll(DAOPersonaImpl.INSERZIONISTA);
 
-		String[] lista = new String[inserzionisti.size()];
-		int i = 0;
+		ArrayList<String> lista = new ArrayList<String>();
 
 		for(Persona p : inserzionisti.values()) {
-			lista[i] = p.getCodiceFiscale();
-			i++;
+			lista.add(p.getCodiceFiscale());
 		}
 
-		Arrays.sort(lista);
+		Collections.sort(lista);
 		return lista;
 	}
 
@@ -470,7 +461,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 					break;
 				case MODIFICA:
-					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, stelle, hotel, indirizzo, cfInserzionista));
+					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica modificata con successo!");
 					JOptionPane.showMessageDialog(this, "Modifica avvenuta con successo!", "Messaggio", 1);
 					nomeTextField.setText("");
@@ -486,7 +477,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 			else {
 				switch(operazione) {
 				case AGGIUNGI:
-					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, stelle, hotel, indirizzo, cfInserzionista));
+					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica registrata con successo!");
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 					nomeTextField.setText("");
