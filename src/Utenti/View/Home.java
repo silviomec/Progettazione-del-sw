@@ -1,26 +1,30 @@
 package Utenti.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Facade.*;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.JTextPane;
+import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class Home extends JFrame {
+	UtenteFacade uf = UtenteFacade.getInstance();
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -37,6 +41,8 @@ public class Home extends JFrame {
 	 * Create the frame.
 	 */
 	public Home() {
+		Home thisHome = this;
+		
 		setTitle("Home");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -45,14 +51,16 @@ public class Home extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Strutture");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnStrutture = new JButton("Strutture");
+		btnStrutture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				stf.showStruttureTuristicheUI();
+				thisHome.dispose();
 			}
 		});
-		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnNewButton.setBounds(37, 140, 261, 97);
-		contentPane.add(btnNewButton);
+		btnStrutture.setFont(new Font("Dialog", Font.BOLD, 18));
+		btnStrutture.setBounds(37, 140, 261, 97);
+		contentPane.add(btnStrutture);
 		
 		JButton btnInserzioni = new JButton("Inserzioni");
 		btnInserzioni.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -64,27 +72,38 @@ public class Home extends JFrame {
 		btnPrenotazioni.setBounds(37, 315, 261, 97);
 		contentPane.add(btnPrenotazioni);
 		
-		JButton btnClienti = new JButton("Utenti");
-		btnClienti.addActionListener(new ActionListener() {
+		JButton btnUtenti = new JButton("Utenti");
+		btnUtenti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				uf.showGestioneUtenti();
+				thisHome.dispose();
 			}
 		});
-		btnClienti.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnClienti.setBounds(333, 395, 261, 97);
-		contentPane.add(btnClienti);
+		btnUtenti.setFont(new Font("Dialog", Font.BOLD, 18));
+		btnUtenti.setBounds(333, 395, 261, 97);
+		contentPane.add(btnUtenti);
 		
-		JButton btnNewButton_1 = new JButton("LOGOUT");
-		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnLogout = new JButton("LOGOUT");
+		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Login.main(null);
+				thisHome.dispose();
 			}
 		});
-		btnNewButton_1.setBounds(645, 31, 102, 30);
-		contentPane.add(btnNewButton_1);
+		btnLogout.setBounds(645, 96, 102, 30);
+		contentPane.add(btnLogout);
 		
 		JButton btnPagamenti = new JButton("Pagamento \r\nPrenotazioni");
 		btnPagamenti.setFont(new Font("Dialog", Font.BOLD, 18));
 		btnPagamenti.setBounds(333, 62, 261, 97);
 		contentPane.add(btnPagamenti);
+		
+		JLabel utenteLabel = new JLabel("" + uf.getDipendenteController().getDipendenteAttivo().getNome() + " " + uf.getDipendenteController().getDipendenteAttivo().getCognome());
+		utenteLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		utenteLabel.setBounds(645, 62, 102, 30);
+		contentPane.add(utenteLabel);
+		
+		this.setVisible(true);
 	}
 }

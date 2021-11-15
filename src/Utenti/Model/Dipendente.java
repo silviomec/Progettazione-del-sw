@@ -1,6 +1,4 @@
-package Utenti.model;
-
-
+package Utenti.Model;
 
 public class Dipendente extends Persona {
 	public Dipendente(String codiceFiscale, String nome, String cognome, String telefono, String email, String username, String password) {

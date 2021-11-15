@@ -2,9 +2,8 @@ package Repository.Pagamenti;
 
 import java.util.HashMap;
 
-import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
-import Util.NewDate;
+import Pagamenti.Model.Canone;
 
 public class DAOCanoneTester {
 	public static void main(String[] args) {
@@ -15,7 +14,7 @@ public class DAOCanoneTester {
 			for (Canone c : canoni.values())
 				System.out.println(c.getImportoAnnuale());
 		
-		Canone c1 = new Canone(1, 2, 2, 4.5, (new NewDate(2021, 12, 31).getSqlDate()), false);
-		df.getDAOCanone().updateCanone(c1);
+		//Canone c1 = new Canone(1, 2, 2, 4.5, (new Data(2021, 12, 31).getSqlDate()), false);
+		//df.getDAOCanone().updateCanone(c1);
 	}
 }

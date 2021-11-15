@@ -6,7 +6,7 @@ import StruttureTuristiche.Model.StrutturaTuristica;
 
 public interface DAOStrutturaTuristica {
 	public HashMap<String, StrutturaTuristica> doRetrieveAll();
-	public StrutturaTuristica doRetrieveByIdStrutturaTuristica(int idStruttura);
-	public void delete(int id);
-	public int updateStrutturaTuristica(StrutturaTuristica s);
+	public StrutturaTuristica doRetrieveByPartitaIva(String pIva);
+	public void delete(String pIva);
+	public StrutturaTuristica updateStrutturaTuristica(StrutturaTuristica s);
 }
