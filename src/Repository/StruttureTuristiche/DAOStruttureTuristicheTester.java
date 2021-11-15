@@ -12,7 +12,7 @@ public class DAOStruttureTuristicheTester {
 
 		if (!struttureTuristiche.isEmpty())
 			for (StrutturaTuristica s : struttureTuristiche.values())
-				System.out.println(s.getIdStruttura());
+				System.out.println(s.getPIva());
 		
 		//StrutturaTuristica s1 = new StrutturaTuristica(5, "Rituccia", "5", "B&B", "Benevento", 15);
 		//Cliente c2 = df.getDAOCliente().doRetrieveByIdCliente(1);

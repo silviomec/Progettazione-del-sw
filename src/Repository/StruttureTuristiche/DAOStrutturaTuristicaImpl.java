@@ -60,7 +60,7 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 				String tipologia = result.getString("tipologia");
 				String indirizzo = result.getString("indirizzo");
 				String inserzionista = result.getString("inserzionista");
-				 s = new  StrutturaTuristica(partitaIva, nome, stelle, tipologia, indirizzo, inserzionista);
+				s = new  StrutturaTuristica(partitaIva, nome, stelle, tipologia, indirizzo, inserzionista);
 			}
 
 		} catch (SQLException e) {
@@ -74,7 +74,7 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 		try {
 			System.out.println(string);
 			Statement statement = connection.getConnection().createStatement();
-			int result = statement.executeUpdate("DELETE FROM STRUTTURETURISTICHE WHERE idstrutturaTuristica=\"" + string + "\"");
+			int result = statement.executeUpdate("DELETE FROM STRUTTURETURISTICHE WHERE partitaIva=\"" + string + "\"");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -83,7 +83,7 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 	}
 
 	@Override
-	public int updateStrutturaTuristica(StrutturaTuristica s) {
+	public StrutturaTuristica updateStrutturaTuristica(StrutturaTuristica s) {
 		try {
 			delete(s.getPIva());
 			
@@ -96,11 +96,13 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 			preparedStmt.setString(4, s.getTipologia());
 			preparedStmt.setString(5, s.getIndirizzo());
 			preparedStmt.setString(6, s.getInserzionista());
-		
-			return preparedStmt.executeUpdate();
+			preparedStmt.executeUpdate();
+			
+			return s;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return null;
 	}
+	
 } 

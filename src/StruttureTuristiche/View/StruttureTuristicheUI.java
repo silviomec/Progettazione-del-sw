@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.JTextPane;
 
 public class StruttureTuristicheUI extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
 
@@ -57,39 +59,40 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.setLayout(null);
 	
 		
-		JButton btnNewButton = new JButton("Inserisci Struttura");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton inserisciStrutturaButton = new JButton("Inserisci Struttura");
+		inserisciStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showNuovaStruttura();
-				thisStruttureTuristicheUI.dispose();
+				stf.showUpdateStruttura(UpdateStruttura.AGGIUNGI);
+				//thisStruttureTuristicheUI.dispose();
 			}
 		});
-		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnNewButton.setBounds(27, 100, 193, 97);
-		contentPane.add(btnNewButton);
+		inserisciStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
+		inserisciStrutturaButton.setBounds(27, 100, 193, 97);
+		contentPane.add(inserisciStrutturaButton);
 		
-		JButton btnNewButton_1 = new JButton("Rimuovi Struttura");
-		btnNewButton_1.setEnabled(false);
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton rimuoviStrutturaButton = new JButton("Rimuovi Struttura");
+		rimuoviStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showModificaStruttura();
-				thisStruttureTuristicheUI.dispose();
+				stf.showModificaStruttura();
+				//thisStruttureTuristicheUI.dispose();
 			}
 		});
-		btnNewButton_1.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnNewButton_1.setBounds(27, 217, 193, 97);
-		contentPane.add(btnNewButton_1);
+		rimuoviStrutturaButton.setEnabled(false);
+		rimuoviStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
+		rimuoviStrutturaButton.setBounds(27, 217, 193, 97);
+		contentPane.add(rimuoviStrutturaButton);
 		
-		JButton btnNewButton_2 = new JButton("Modifica Struttura");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton modificaStrutturaButton = new JButton("Modifica Struttura");
+		modificaStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				stf.showUpdateStruttura(UpdateStruttura.MODIFICA);
+				//thisStruttureTuristicheUI.dispose();
 			}
 		});
-		btnNewButton_2.setEnabled(false);
-		btnNewButton_2.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnNewButton_2.setBounds(27, 336, 193, 97);
-		contentPane.add(btnNewButton_2);
+		modificaStrutturaButton.setEnabled(true);
+		modificaStrutturaButton.setFont(new Font("Dialog", Font.BOLD, 18));
+		modificaStrutturaButton.setBounds(27, 336, 193, 97);
+		contentPane.add(modificaStrutturaButton);
 		
 		JList list = new JList();
 		list.setBounds(293, 559, 585, -424);
