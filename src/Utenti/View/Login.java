@@ -197,10 +197,8 @@ public class Login extends JFrame implements ActionListener {
 			if(passMatch)
 				this.dispose();
 		} catch (DipendenteNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
