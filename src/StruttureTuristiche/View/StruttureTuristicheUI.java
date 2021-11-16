@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 import Repository.DAOFactory;
+import Repository.Pagamenti.DAOCanoneImpl;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import StruttureTuristiche.Model.StrutturaTuristica;
 
@@ -155,7 +156,7 @@ public class StruttureTuristicheUI extends JFrame {
 
 		listmodel = new DefaultListModel<StrutturaTuristica>();
 
-		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista"});
+		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista", "Scadenza canone"});
 
 		cerca("");
 
@@ -227,7 +228,7 @@ public class StruttureTuristicheUI extends JFrame {
 			struttureTuristiche.add(s);
 		}
 		for(StrutturaTuristica s : struttureTuristiche) {
-			dtm.addRow(new Object[]{s.getPIva(), s.getNome(),  s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista()});
+			dtm.addRow(new Object[]{s.getPIva(), s.getNome(),  s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista(), DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, s.getPIva())});
 		}
 	}
 }
