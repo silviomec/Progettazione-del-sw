@@ -1,9 +1,10 @@
 package Pagamenti.Model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Canone {
-	public Canone(int idCanone, int idInserzionista, int idStrutturaTuristica, double importoAnnuale, Date scadenza, boolean saldato) {
+	public Canone(int idCanone, int idInserzionista, int idStrutturaTuristica, double importoAnnuale, LocalDate scadenza, boolean saldato) {
 		this.idCanone = idCanone;
 		this.idInserzionista = idInserzionista;
 		this.idStrutturaTuristica = idStrutturaTuristica;
@@ -20,8 +21,8 @@ public class Canone {
 	public void setIdStrutturaTuristica(int idStrutturaTuristica) { this.idStrutturaTuristica = idStrutturaTuristica; }
 	public double getImportoAnnuale() { return importoAnnuale; }
 	public void setImportoAnnuale(double importoAnnuale) { this.importoAnnuale = importoAnnuale; }
-	public Date getScadenza() { return scadenza; }
-	public void setScadenza(Date scadenza) { this.scadenza = scadenza; }
+	public LocalDate getScadenza() { return scadenza; }
+	public void setScadenza(LocalDate scadenza) { this.scadenza = scadenza; }
 	public boolean isSaldato() { return saldato; }
 	public void setSaldato(boolean saldato) { this.saldato = saldato; }
 	
@@ -29,6 +30,6 @@ public class Canone {
 	private int idInserzionista;
 	private int idStrutturaTuristica;
 	private double importoAnnuale;
-	private Date scadenza;
+	private LocalDate scadenza;
 	private boolean saldato;
 }

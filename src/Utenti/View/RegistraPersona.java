@@ -11,6 +11,7 @@ import javax.swing.event.DocumentListener;
 import Facade.UtenteFacade;
 import Repository.DAOFactory;
 import Repository.Utenti.DAOPersona;
+import Repository.Utenti.DAOPersonaImpl;
 import Utenti.Controller.PersonaController;
 import Utenti.Model.Dipendente;
 import Utenti.Model.Persona;
@@ -37,19 +38,18 @@ public class RegistraPersona extends JFrame implements ActionListener {
 	private JLabel lblTelefono;
 	private JLabel lblCf;
 	private JLabel lblEmail;
-	private int tipologiaPersona;
-	private String tabella = "";
+	private String tabella;
 
 	UtenteFacade uf = UtenteFacade.getInstance();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void display(int tipologiaPersona) {
+	public static void display(String tabella) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistraPersona frame = new RegistraPersona(tipologiaPersona);
+					RegistraPersona frame = new RegistraPersona(tabella);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,20 +61,9 @@ public class RegistraPersona extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public RegistraPersona(int tipologiaPersona) {
-		this.tipologiaPersona = tipologiaPersona;
-		
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "Cliente";
-			break;
-		case INSERZIONISTA:
-			tabella = "Inserzionista";
-			break;
-		//default:
-		//	return null;
-		}
-		
+	public RegistraPersona(String tabella) {
+		this.tabella = tabella;
+
 		setTitle("Registra " + tabella);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -260,19 +249,19 @@ public class RegistraPersona extends JFrame implements ActionListener {
 		String msg = "";
 		
 		target = cfTextField.getText().toString().toUpperCase();
-		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.CODICE_FISCALE, target) == true) {
+		if(uf.getPersonaController().contains(tabella, DAOPersonaImpl.CODICE_FISCALE, target) == true) {
 			System.out.println("Codice fiscale " + target + " già registrato.");
 			msg = "Codice fiscale già registrato.\n";
 		}
 
 		target = telefonoTextField.getText().toString();
-		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.TELEFONO, target) == true) {
+		if(uf.getPersonaController().contains(tabella, DAOPersonaImpl.TELEFONO, target) == true) {
 			System.out.println("Numero di telefono " + target + " già registrato.");
 			msg += "Numero di telefono già registrato.\n";
 		}
 		
 		target = emailTextField.getText().toString();
-		if(uf.getPersonaController().contains(tipologiaPersona, PersonaController.EMAIL, target) == true) {
+		if(uf.getPersonaController().contains(tabella, DAOPersonaImpl.EMAIL, target) == true) {
 			System.out.println("Indirizzo email " + target + " già registrato.");
 			msg += "Indirizzo email già registrato.";
 		}
@@ -305,7 +294,7 @@ public class RegistraPersona extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 			}
 			else {
-				daoPersona.updatePersona(tipologiaPersona, new Persona(cf, nome, cognome, telefono, email));
+				daoPersona.updatePersona(tabella, new Persona(cf, nome, cognome, telefono, email));
 				System.out.println(tabella + " registrato con successo!");
 				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 				nomeTextField.setText("");
@@ -316,7 +305,4 @@ public class RegistraPersona extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
-	public static final int CLIENTE = 0;
-	public static final int INSERZIONISTA = 1;
 }
