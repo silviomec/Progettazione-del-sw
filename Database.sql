@@ -284,9 +284,9 @@ DROP TABLE IF EXISTS `struttureturistiche`;
 CREATE TABLE `struttureturistiche` (
   `PartitaIva` varchar(11) NOT NULL,
   `nome` varchar(45) NOT NULL,
-  `stelle` enum('1','2','3','4','5') NOT NULL,
-  `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
   `indirizzo` varchar(100) NOT NULL,
+  `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
+  `stelle` enum('1','2','3','4','5') NOT NULL,
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`PartitaIva`),
   KEY `struttureturistiche_INSERZIONISTA_idx` (`INSERZIONISTA`),
@@ -300,7 +300,7 @@ CREATE TABLE `struttureturistiche` (
 
 LOCK TABLES `struttureturistiche` WRITE;
 /*!40000 ALTER TABLE `struttureturistiche` DISABLE KEYS */;
-INSERT INTO `struttureturistiche` VALUES (47654387986,'Rituccia','5','B&B','Benevento','LMPRTI99B65A783J'),(69745223097,'Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn','LMPRTI99B65A783J');
+INSERT INTO `struttureturistiche` VALUES (47654387986,'Rituccia','Benevento','B&B','5','LMPRTI99B65A783J'),(69745223097,'Hotel Rabona','Via dei mariuoli 5 bn','Hotel','4','LMPRTI99B65A783J');
 /*!40000 ALTER TABLE `struttureturistiche` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

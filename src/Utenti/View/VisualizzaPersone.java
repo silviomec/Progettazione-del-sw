@@ -89,9 +89,9 @@ public class VisualizzaPersone extends JFrame {
 		contentPane.setLayout(null);
 
 		cercaTextField = new JTextField();
+		cercaTextField.setEnabled(false);
 		cercaTextField.setBounds(10, 30, 776, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
-		cercaTextField.setText("Cerca");
 		contentPane.add(cercaTextField);
 
 		JList list = new JList();
@@ -132,6 +132,7 @@ public class VisualizzaPersone extends JFrame {
 		btnRipristina.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca("");
+				cercaTextField.setText("");
 			}
 		});
 		btnRipristina.setBounds(144, 65, 85, 21);
