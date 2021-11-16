@@ -73,7 +73,7 @@ public class GestioneUtentiUI extends JFrame {
 		btnIndietro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Home.display();
-				//thisGestioneUtentiUI.dispose();
+				thisGestioneUtentiUI.dispose();
 			}
 		});
 		btnIndietro.setBounds(10, 30, 102, 21);

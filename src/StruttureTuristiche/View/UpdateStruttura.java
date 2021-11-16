@@ -10,6 +10,7 @@ import javax.swing.text.JTextComponent;
 
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
+import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import Repository.Utenti.DAOPersonaImpl;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 
 public class UpdateStruttura extends JFrame implements ActionListener {
@@ -370,6 +372,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica registrata con successo!");
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
+					DAOFactory.getDAOCanone().updateCanone(new Canone(cfInserzionista, pIva, 125.00, LocalDate.now().plusYears(1), false));
 					nomeTextField.setText("");
 					pIvaTextField.setText("");
 					indirizzoTextField.setText("");

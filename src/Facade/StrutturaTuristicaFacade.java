@@ -78,7 +78,11 @@ public class StrutturaTuristicaFacade {
 		StruttureTuristicheUI.display();
 	}
 
-	public void showUpdateStruttura(int operazione, String pIvaModificabile) {
-		UpdateStruttura.display(operazione, pIvaModificabile);
+	public void showUpdateStruttura(int operazione, String pIva) {
+		UpdateStruttura.display(operazione, pIva);
+	}
+	
+	public void showGestisciCanone() {
+		GestisciCanone.display();
 	}
 }
