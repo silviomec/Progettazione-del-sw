@@ -94,10 +94,10 @@ public class Home extends JFrame {
 		btnLogout.setBounds(645, 96, 102, 30);
 		contentPane.add(btnLogout);
 		
-		JButton btnPagamenti = new JButton("Pagamento \r\nPrenotazioni");
-		btnPagamenti.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnPagamenti.setBounds(333, 62, 261, 97);
-		contentPane.add(btnPagamenti);
+		JButton btnRicevutePagamenti = new JButton("Ricevute pagamenti");
+		btnRicevutePagamenti.setFont(new Font("Dialog", Font.BOLD, 18));
+		btnRicevutePagamenti.setBounds(333, 62, 261, 97);
+		contentPane.add(btnRicevutePagamenti);
 		
 		JLabel utenteLabel = new JLabel("" + uf.getDipendenteController().getDipendenteAttivo().getNome() + " " + uf.getDipendenteController().getDipendenteAttivo().getCognome());
 		utenteLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));

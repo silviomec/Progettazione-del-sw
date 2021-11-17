@@ -372,7 +372,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica registrata con successo!");
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
-					DAOFactory.getDAOCanone().updateCanone(new Canone(cfInserzionista, pIva, 125.00, LocalDate.now().plusYears(1), false));
+					DAOFactory.getDAOCanone().updateCanone(new Canone(cfInserzionista, pIva, 125.00, LocalDate.now().plusYears(1), true));
 					nomeTextField.setText("");
 					pIvaTextField.setText("");
 					indirizzoTextField.setText("");

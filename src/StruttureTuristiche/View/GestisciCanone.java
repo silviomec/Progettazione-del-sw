@@ -5,21 +5,22 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class GestisciCanone extends JDialog {
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
-	private final JPanel contentPanel = new JPanel();
+import Pagamenti.Model.Canone;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void display() {
+public class GestisciCanone {
+
+	public static void display(Canone canone) {
 		try {
-			GestisciCanone dialog = new GestisciCanone();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			GestisciCanone gestisciCanone = new GestisciCanone(canone);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -28,28 +29,22 @@ public class GestisciCanone extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public GestisciCanone() {
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
+	public GestisciCanone(Canone canone) {
+		long giorni = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), canone.getScadenza());
+		String label;
+		JButton pagaButton = new JButton("Paga");
+		pagaButton.setEnabled(false);
+		JButton storicoButton = new JButton("Storico pagamenti");
+		
+		JLabel jLabel;
+		if(giorni > 0)
+			jLabel = new JLabel("<html><center>Il canone scadrà il " + canone.getScadenza().toString() + ".<br/>(tra " + giorni + " giorn" + (giorni==1 ? "o" : "i") + ")</center></html>");
+		else {
+			jLabel = new JLabel("<html><center>Il canone è scaduto il " + canone.getScadenza().toString() + ".<br/>(" + (giorni*-1) + " giorn" + (giorni==1 ? "o" : "i") + " fa)</center></html>");
+			pagaButton.setEnabled(true);
 		}
+		jLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		Object[] options = {pagaButton, storicoButton};
+		JOptionPane.showOptionDialog(null, jLabel, "Gestisci canone", JOptionPane.YES_NO_OPTION, (giorni>0 ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE), null, options, options[0]);
 	}
-
 }

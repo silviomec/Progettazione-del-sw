@@ -3,6 +3,7 @@ package StruttureTuristiche.View;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
@@ -10,9 +11,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
+import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
 import Repository.Pagamenti.DAOCanoneImpl;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
@@ -21,16 +24,21 @@ import Utenti.View.Home;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+
+import java.awt.Component;
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -148,7 +156,8 @@ public class StruttureTuristicheUI extends JFrame {
 		gestisciCanoneButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		gestisciCanoneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stf.showGestisciCanone();
+				Canone canone = DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, struttureTuristiche.get(table.getSelectedRow()).getPIva());
+				stf.showGestisciCanone(canone);
 			}
 		});
 		gestisciCanoneButton.setBounds(54, 524, 166, 35);
@@ -164,7 +173,22 @@ public class StruttureTuristicheUI extends JFrame {
 
 		cerca("");
 
-		table = new JTable();
+		table = new JTable() {
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+				Component comp = super.prepareRenderer(renderer, row, col);
+				LocalDate data = (LocalDate) getModel().getValueAt(row, 6);
+				//if (getSelectedRow() == row) {
+					if (data.isBefore(LocalDate.now())) {
+						comp.setBackground(Color.red);
+					}
+				//}
+				else {
+					comp.setBackground(Color.white);
+				}
+				return comp;
+			}
+		};
 		table.setBounds(344, 322, 314, -206);
 		table.setModel(dtm);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -185,7 +209,7 @@ public class StruttureTuristicheUI extends JFrame {
 		});
 		btnRipristina.setBounds(841, 47, 85, 21);
 		contentPane.add(btnRipristina);
-		
+
 		JButton btnIndietro = new JButton("Indietro");
 		btnIndietro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
