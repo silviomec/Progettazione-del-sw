@@ -35,9 +35,9 @@ public class DAOCanoneImpl implements DAOCanone {
 				double importoAnnuale = result.getDouble("importoAnnuale");
 				LocalDate scadenza = LocalDate.parse(result.getDate("scadenza").toString());
 				boolean saldato = result.getBoolean("saldato");
-				int idInserzionista = result.getInt("inserzionista");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				Canone c = new Canone(idCanone, idInserzionista, idStrutturaTuristica, importoAnnuale, scadenza, saldato);
+				String cfInserzionista = result.getString("inserzionista");
+				String pIva = result.getString("strutturaTuristica");
+				Canone c = new Canone(idCanone, cfInserzionista, pIva, importoAnnuale, scadenza, saldato);
 				canoniCollection.put(Integer.toString(idCanone), c);
 			}
 
@@ -60,9 +60,9 @@ public class DAOCanoneImpl implements DAOCanone {
 				double importoAnnuale = result.getDouble("importoAnnuale");
 				LocalDate scadenza = LocalDate.parse(result.getDate("scadenza").toString());
 				boolean saldato = result.getBoolean("saldato");
-				int idInserzionista = result.getInt("inserzionista");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				c = new Canone(idCanone, idInserzionista, idStrutturaTuristica, importoAnnuale, scadenza, saldato);
+				String cfInserzionista = result.getString("inserzionista");
+				String pIva = result.getString("strutturaTuristica");
+				c = new Canone(idCanone, cfInserzionista, pIva, importoAnnuale, scadenza, saldato);
 			}
 
 		} catch (SQLException e) {
@@ -96,8 +96,8 @@ public class DAOCanoneImpl implements DAOCanone {
 			preparedStmt.setDouble(2, c.getImportoAnnuale());
 			preparedStmt.setDate(3, Date.valueOf(c.getScadenza()));
 			preparedStmt.setBoolean(4, c.isSaldato());
-			preparedStmt.setInt(5, c.getIdInserzionista());
-			preparedStmt.setInt(6, c.getIdStrutturaTuristica());
+			preparedStmt.setString(5, c.getCfInserzionista());
+			preparedStmt.setString(6, c.getPIva());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {

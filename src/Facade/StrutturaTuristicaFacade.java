@@ -2,6 +2,7 @@ package Facade;
 
 import java.time.LocalDate;
 
+import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
 import StruttureTuristiche.Controller.StrutturaTuristicaController;
 import StruttureTuristiche.Model.*;
@@ -78,7 +79,11 @@ public class StrutturaTuristicaFacade {
 		StruttureTuristicheUI.display();
 	}
 
-	public void showUpdateStruttura(int operazione, String pIvaModificabile) {
-		UpdateStruttura.display(operazione, pIvaModificabile);
+	public void showUpdateStruttura(int operazione, String pIva) {
+		UpdateStruttura.display(operazione, pIva);
+	}
+	
+	public void showGestisciCanone(Canone canone) {
+		GestisciCanone.display(canone);
 	}
 }

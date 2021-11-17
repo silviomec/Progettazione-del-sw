@@ -3,6 +3,7 @@ package StruttureTuristiche.View;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
@@ -10,25 +11,34 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
+import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
 import Repository.Pagamenti.DAOCanoneImpl;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import StruttureTuristiche.Model.StrutturaTuristica;
+import Utenti.View.Home;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+
+import java.awt.Component;
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -42,6 +52,7 @@ public class StruttureTuristicheUI extends JFrame {
 	private JButton btnCerca;
 	private JButton rimuoviStrutturaButton;
 	private JButton modificaStrutturaButton;
+	private JButton gestisciCanoneButton;
 	private JTable table;
 	private static DefaultListModel<StrutturaTuristica> listmodel;
 	DefaultTableModel dtm = new DefaultTableModel() {
@@ -82,7 +93,7 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.setLayout(null);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setBounds(27, 26, 716, 25);
+		cercaTextField.setBounds(27, 47, 716, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
 
@@ -95,7 +106,7 @@ public class StruttureTuristicheUI extends JFrame {
 				modificaStrutturaButton.setEnabled(false);
 			}
 		});
-		btnCerca.setBounds(753, 26, 85, 21);
+		btnCerca.setBounds(753, 47, 85, 21);
 		contentPane.add(btnCerca);
 
 		JButton inserisciStrutturaButton = new JButton("Inserisci Struttura");
@@ -131,8 +142,8 @@ public class StruttureTuristicheUI extends JFrame {
 		modificaStrutturaButton = new JButton("Modifica Struttura");
 		modificaStrutturaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String pIvaModificabile = struttureTuristiche.get(table.getSelectedRow()).getPIva();
-				stf.showUpdateStruttura(UpdateStruttura.MODIFICA, pIvaModificabile);
+				String pIva = struttureTuristiche.get(table.getSelectedRow()).getPIva();
+				stf.showUpdateStruttura(UpdateStruttura.MODIFICA, pIva);
 			}
 		});
 		modificaStrutturaButton.setEnabled(false);
@@ -140,11 +151,13 @@ public class StruttureTuristicheUI extends JFrame {
 		modificaStrutturaButton.setBounds(27, 336, 193, 97);
 		contentPane.add(modificaStrutturaButton);
 
-		JButton gestisciCanoneButton = new JButton("Gestisci Canone");
+		gestisciCanoneButton = new JButton("Gestisci Canone");
 		gestisciCanoneButton.setEnabled(false);
 		gestisciCanoneButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		gestisciCanoneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Canone canone = DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, struttureTuristiche.get(table.getSelectedRow()).getPIva());
+				stf.showGestisciCanone(canone);
 			}
 		});
 		gestisciCanoneButton.setBounds(54, 524, 166, 35);
@@ -160,7 +173,22 @@ public class StruttureTuristicheUI extends JFrame {
 
 		cerca("");
 
-		table = new JTable();
+		table = new JTable() {
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+				Component comp = super.prepareRenderer(renderer, row, col);
+				LocalDate data = (LocalDate) getModel().getValueAt(row, 6);
+				//if (getSelectedRow() == row) {
+					if (data.isBefore(LocalDate.now())) {
+						comp.setBackground(Color.red);
+					}
+				//}
+				else {
+					comp.setBackground(Color.white);
+				}
+				return comp;
+			}
+		};
 		table.setBounds(344, 322, 314, -206);
 		table.setModel(dtm);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -175,11 +203,22 @@ public class StruttureTuristicheUI extends JFrame {
 				cerca("");
 				rimuoviStrutturaButton.setEnabled(false);
 				modificaStrutturaButton.setEnabled(false);
+				gestisciCanoneButton.setEnabled(false);
 				cercaTextField.setText("");
 			}
 		});
-		btnRipristina.setBounds(841, 26, 85, 21);
+		btnRipristina.setBounds(841, 47, 85, 21);
 		contentPane.add(btnRipristina);
+
+		JButton btnIndietro = new JButton("Indietro");
+		btnIndietro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Home.display();
+				thisStruttureTuristicheUI.dispose();
+			}
+		});
+		btnIndietro.setBounds(10, 10, 85, 21);
+		contentPane.add(btnIndietro);
 
 		createEvents();
 	}
@@ -193,6 +232,7 @@ public class StruttureTuristicheUI extends JFrame {
 		if(table.isRowSelected(table.getSelectedRow())) {
 			rimuoviStrutturaButton.setEnabled(true);
 			modificaStrutturaButton.setEnabled(true);
+			gestisciCanoneButton.setEnabled(true);
 		}
 	}
 
@@ -227,8 +267,9 @@ public class StruttureTuristicheUI extends JFrame {
 		for (StrutturaTuristica s : DAOFactory.getDAOStrutturaTuristica().doRetrieveAllFiltered(target).values()) {
 			struttureTuristiche.add(s);
 		}
+		Collections.sort(struttureTuristiche);
 		for(StrutturaTuristica s : struttureTuristiche) {
-			dtm.addRow(new Object[]{s.getPIva(), s.getNome(),  s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista(), DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, s.getPIva())});
+			dtm.addRow(new Object[]{s.getPIva(), s.getNome(),  s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista(), DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, s.getPIva()).getScadenza()});
 		}
 	}
 }

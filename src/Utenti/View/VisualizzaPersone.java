@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -77,7 +78,6 @@ public class VisualizzaPersone extends JFrame {
 		contentPane.setLayout(null);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setEnabled(false);
 		cercaTextField.setBounds(10, 30, 776, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
@@ -108,6 +108,7 @@ public class VisualizzaPersone extends JFrame {
 		contentPane.add(scrollPane);
 
 		btnCerca = new JButton("Cerca");
+		btnCerca.setEnabled(false);
 		btnCerca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca(cercaTextField.getText());
@@ -160,6 +161,7 @@ public class VisualizzaPersone extends JFrame {
 		for (Persona p : DAOFactory.getDAOPersona().doRetrieveAllFiltered(tabella, target).values()) {
 			persone.add(p);
 		}
+		Collections.sort(persone);
 		for(Persona p : persone) {
 			dtm.addRow(new Object[]{p.getCodiceFiscale(), p.getNome(),  p.getCognome(), p.getTelefono(), p.getEmail()});
 		}

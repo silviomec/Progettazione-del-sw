@@ -18,9 +18,7 @@
 --
 -- Table structure for table `canoni`
 --
-DROP DATABASE IF EXISTS db_pds;
-CREATE DATABASE db_pds;
-USE DB_PDS;
+
 DROP TABLE IF EXISTS `canoni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -107,7 +105,7 @@ CREATE TABLE `dipendenti` (
 
 LOCK TABLES `dipendenti` WRITE;
 /*!40000 ALTER TABLE `dipendenti` DISABLE KEYS */;
-INSERT INTO `dipendenti` VALUES ('ricchan','buba','LMPRTI99','Rita','Lampa','777347','ritalamp@email.it');
+INSERT INTO `dipendenti` VALUES ('ricchan','buba','LMPRTI99B65A783J','Rita','Lampa','777347','ritalamp@email.it');
 /*!40000 ALTER TABLE `dipendenti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +143,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona','Camera Matrimoniale',0070.00,2,'2021-08-08','2021-08-20',NULL,NULL),(15,'marta','ampia camera',0060.00,3,'2021-10-19','2021-10-26',5,NULL);
+INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona','Camera Matrimoniale',0070.00,2,'2021-08-08','2021-08-20',NULL,NULL),(15,'marta','ampia camera',0060.00,3,'2021-10-19','2021-10-26','5',NULL);
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,14 +282,14 @@ DROP TABLE IF EXISTS `struttureturistiche`;
 CREATE TABLE `struttureturistiche` (
   `PartitaIva` varchar(11) NOT NULL,
   `nome` varchar(45) NOT NULL,
-  `indirizzo` varchar(100) NOT NULL,
-  `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
   `stelle` enum('1','2','3','4','5') NOT NULL,
+  `tipologia` enum('Hotel','B&B','Residence','Ostello') NOT NULL,
+  `indirizzo` varchar(100) NOT NULL,
   `INSERZIONISTA` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`PartitaIva`),
   KEY `struttureturistiche_INSERZIONISTA_idx` (`INSERZIONISTA`),
   CONSTRAINT `struttureturistiche_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +298,7 @@ CREATE TABLE `struttureturistiche` (
 
 LOCK TABLES `struttureturistiche` WRITE;
 /*!40000 ALTER TABLE `struttureturistiche` DISABLE KEYS */;
-INSERT INTO `struttureturistiche` VALUES (47654387986,'Rituccia','Benevento','B&B','5','LMPRTI99B65A783J'),(69745223097,'Hotel Rabona','Via dei mariuoli 5 bn','Hotel','4','LMPRTI99B65A783J');
+INSERT INTO `struttureturistiche` VALUES ('12345678911','Cremlino','5','Hotel','Moscow , Putin Plaza 1','MCCSLV98M11A783F'),('47654387986','Rituccia','5','B&B','Benevento','LMPRTI99B65A783J'),('69745223097','Hotel Rabona','4','Hotel','Via dei mariuoli 5 bn','LMPRTI99B65A783J');
 /*!40000 ALTER TABLE `struttureturistiche` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -313,4 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-09 16:02:50
+-- Dump completed on 2021-11-16 18:30:29
