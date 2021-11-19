@@ -86,4 +86,6 @@ public class StrutturaTuristicaFacade {
 	public void showGestisciCanone(Canone canone) {
 		GestisciCanone.display(canone);
 	}
+	
+	
 }

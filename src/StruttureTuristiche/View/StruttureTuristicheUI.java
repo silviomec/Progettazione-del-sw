@@ -158,7 +158,8 @@ public class StruttureTuristicheUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Canone canone = DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, struttureTuristiche.get(table.getSelectedRow()).getPIva());
 				stf.showGestisciCanone(canone);
-			}
+				cerca("");
+			} 
 		});
 		gestisciCanoneButton.setBounds(54, 524, 166, 35);
 		contentPane.add(gestisciCanoneButton);
@@ -174,14 +175,16 @@ public class StruttureTuristicheUI extends JFrame {
 		cerca("");
 
 		table = new JTable() {
+			Color rosso = new Color(247 , 127, 127);
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
 				Component comp = super.prepareRenderer(renderer, row, col);
 				LocalDate data = (LocalDate) getModel().getValueAt(row, 6);
 				//if (getSelectedRow() == row) {
-					if (data.isBefore(LocalDate.now())) {
-						comp.setBackground(Color.red);
-					}
+				if (data.isBefore(LocalDate.now())) {
+
+					comp.setBackground(rosso);
+				}
 				//}
 				else {
 					comp.setBackground(Color.white);
