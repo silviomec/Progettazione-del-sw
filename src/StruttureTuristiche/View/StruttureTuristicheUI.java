@@ -3,7 +3,6 @@ package StruttureTuristiche.View;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -47,24 +45,21 @@ public class StruttureTuristicheUI extends JFrame {
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	private JPanel contentPane;
-	private ArrayList<StrutturaTuristica> struttureTuristiche = new ArrayList<StrutturaTuristica>();
+	private static ArrayList<StrutturaTuristica> struttureTuristiche = new ArrayList<StrutturaTuristica>();
 	private JTextField cercaTextField;
 	private JButton btnCerca;
-	private JButton rimuoviStrutturaButton;
-	private JButton modificaStrutturaButton;
-	private JButton gestisciCanoneButton;
+	private static JButton rimuoviStrutturaButton;
+	private static JButton modificaStrutturaButton;
+	private static JButton gestisciCanoneButton;
 	private JTable table;
 	private static DefaultListModel<StrutturaTuristica> listmodel;
-	DefaultTableModel dtm = new DefaultTableModel() {
+	private static DefaultTableModel dtm = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
 			return false;
 		}
 	};
 
-	/**
-	 * Launch the application.
-	 */
 	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -78,9 +73,6 @@ public class StruttureTuristicheUI extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public StruttureTuristicheUI() {
 		StruttureTuristicheUI thisStruttureTuristicheUI = this;
 
@@ -158,17 +150,10 @@ public class StruttureTuristicheUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Canone canone = DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, struttureTuristiche.get(table.getSelectedRow()).getPIva());
 				stf.showGestisciCanone(canone);
-				cerca("");
 			} 
 		});
 		gestisciCanoneButton.setBounds(54, 524, 166, 35);
 		contentPane.add(gestisciCanoneButton);
-
-		JList list = new JList();
-		list.setBounds(230, 559, 706, -458);
-		contentPane.add(list);
-
-		listmodel = new DefaultListModel<StrutturaTuristica>();
 
 		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista", "Scadenza canone"});
 
@@ -180,22 +165,23 @@ public class StruttureTuristicheUI extends JFrame {
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
 				Component comp = super.prepareRenderer(renderer, row, col);
 				LocalDate data = (LocalDate) getModel().getValueAt(row, 6);
-				//if (getSelectedRow() == row) {
-				if (data.isBefore(LocalDate.now())) {
-
+				
+				if(data.isBefore(LocalDate.now())) {
 					comp.setBackground(rosso);
-				}
-				//}
-				else {
+				} else {
 					comp.setBackground(Color.white);
+					comp.setForeground(Color.black);
 				}
+				
+				if(this.isRowSelected(row))
+					comp.setBackground(new Color(184, 207, 229));
+				
 				return comp;
 			}
 		};
 		table.setBounds(344, 322, 314, -206);
 		table.setModel(dtm);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//table.getSelectionModel().addListSelectionListener(this);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(252, 82, 674, 521);
 		contentPane.add(scrollPane);
@@ -260,11 +246,19 @@ public class StruttureTuristicheUI extends JFrame {
 		});
 	}
 
-	public void cerca(String target) {
+	public static DefaultTableModel getDtm() {
+		return dtm;
+	}
+
+	public void setDtm(DefaultTableModel dtm) {
+		StruttureTuristicheUI.dtm = dtm;
+	}
+
+	public static void cerca(String target) {
 		int i, j;
 
-		for(i = 0, j = dtm.getRowCount(); i < j; i++)
-			dtm.removeRow(0);
+		for(i = 0, j = getDtm().getRowCount(); i < j; i++)
+			getDtm().removeRow(0);
 
 		struttureTuristiche = new ArrayList<StrutturaTuristica>();
 		for (StrutturaTuristica s : DAOFactory.getDAOStrutturaTuristica().doRetrieveAllFiltered(target).values()) {
@@ -272,7 +266,11 @@ public class StruttureTuristicheUI extends JFrame {
 		}
 		Collections.sort(struttureTuristiche);
 		for(StrutturaTuristica s : struttureTuristiche) {
-			dtm.addRow(new Object[]{s.getPIva(), s.getNome(),  s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista(), DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, s.getPIva()).getScadenza()});
+			getDtm().addRow(new Object[]{s.getPIva(), s.getNome(), s.getIndirizzo(), s.getTipologia(), s.getStelle(), s.getInserzionista(), DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, s.getPIva()).getScadenza()});
 		}
+		
+		rimuoviStrutturaButton.setEnabled(false);
+		modificaStrutturaButton.setEnabled(false);
+		gestisciCanoneButton.setEnabled(false);
 	}
 }
