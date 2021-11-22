@@ -5,7 +5,8 @@ import java.util.HashMap;
 import Pagamenti.Model.RicevutaPagamentoCanone;
 
 public interface DAORicevutaPagamentoCanone {
-	public HashMap<String, RicevutaPagamentoCanone> doRetrieveAll();
+	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAll();
+	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAllFiltered(String target);
 	public RicevutaPagamentoCanone doRetrieveByIdPagamentoCanone(int id);
 	public void delete(int id);
 	public int updateRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc);

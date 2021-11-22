@@ -46,6 +46,7 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 		return StrutturaTuristicaCollection;
 	}
 
+	@Override
 	public HashMap<String, StrutturaTuristica> doRetrieveAllFiltered(String target) {
 		HashMap<String, StrutturaTuristica> struttureTuristiche = new HashMap<String, StrutturaTuristica>();
 		Statement statement = null;
