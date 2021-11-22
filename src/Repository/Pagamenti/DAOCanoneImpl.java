@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
@@ -32,11 +33,11 @@ public class DAOCanoneImpl implements DAOCanone {
 			while (result.next()) {
 				int idCanone = result.getInt("idcanone");
 				double importoAnnuale = result.getDouble("importoAnnuale");
-				Date scadenza = result.getDate("scadenza");
+				LocalDate scadenza = LocalDate.parse(result.getDate("scadenza").toString());
 				boolean saldato = result.getBoolean("saldato");
-				int idInserzionista = result.getInt("inserzionista");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				Canone c = new Canone(idCanone, idInserzionista, idStrutturaTuristica, importoAnnuale, scadenza, saldato);
+				String cfInserzionista = result.getString("inserzionista");
+				String pIva = result.getString("strutturaTuristica");
+				Canone c = new Canone(idCanone, cfInserzionista, pIva, importoAnnuale, scadenza, saldato);
 				canoniCollection.put(Integer.toString(idCanone), c);
 			}
 
@@ -47,21 +48,21 @@ public class DAOCanoneImpl implements DAOCanone {
 	}
 
 	@Override
-	public Canone doRetrieveByIdCanone(int id) {
+	public Canone doRetrieve(String colonna, String target) {
 		Canone c = null;
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM CANONI WHERE idcanone=\"" + id + "\"");
+			ResultSet result = statement.executeQuery("SELECT * FROM CANONI WHERE " + colonna + "=\"" + target + "\"");
 
 			while (result.next()) {
 				int idCanone = result.getInt("idcanone");
 				double importoAnnuale = result.getDouble("importoAnnuale");
-				Date scadenza = result.getDate("scadenza");
+				LocalDate scadenza = LocalDate.parse(result.getDate("scadenza").toString());
 				boolean saldato = result.getBoolean("saldato");
-				int idInserzionista = result.getInt("inserzionista");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				c = new Canone(idCanone, idInserzionista, idStrutturaTuristica, importoAnnuale, scadenza, saldato);
+				String cfInserzionista = result.getString("inserzionista");
+				String pIva = result.getString("strutturaTuristica");
+				c = new Canone(idCanone, cfInserzionista, pIva, importoAnnuale, scadenza, saldato);
 			}
 
 		} catch (SQLException e) {
@@ -93,10 +94,10 @@ public class DAOCanoneImpl implements DAOCanone {
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, c.getIdCanone());
 			preparedStmt.setDouble(2, c.getImportoAnnuale());
-			preparedStmt.setDate(3, c.getScadenza());
+			preparedStmt.setDate(3, Date.valueOf(c.getScadenza()));
 			preparedStmt.setBoolean(4, c.isSaldato());
-			preparedStmt.setInt(5, c.getIdInserzionista());
-			preparedStmt.setInt(6, c.getIdStrutturaTuristica());
+			preparedStmt.setString(5, c.getCfInserzionista());
+			preparedStmt.setString(6, c.getPIva());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -104,4 +105,7 @@ public class DAOCanoneImpl implements DAOCanone {
 		}
 		return 0;
 	}
+	
+	public static final String ID_CANONE = "idCanone";
+	public static final String STRUTTURA_TURISTICA = "STRUTTURATURISTICA";
 }
