@@ -3,7 +3,7 @@ package StruttureTuristiche.Model;
 import java.sql.Date;
 import java.time.LocalDate;
 
-public class Prenotazione {
+public class Prenotazione implements Comparable<Prenotazione> {
 	public Prenotazione(LocalDate dataArrivo, LocalDate dataPartenza, double prezzoTot, String cfCliente, int idInserzione, String pIva) {
 		this.dataArrivo = dataArrivo;
 		this.dataPartenza = dataPartenza;
@@ -38,6 +38,11 @@ public class Prenotazione {
 	public double getPrezzoTot() { return prezzoTot; }
 	public void setPrezzoTot(double prezzoTot) { this.prezzoTot = prezzoTot; }
 
+	@Override
+	public int compareTo(Prenotazione p) {
+		return Integer.toString(getIdPrenotazione()).compareTo(Integer.toString(p.getIdPrenotazione()));
+	}
+	
 	private int idPrenotazione;
 	private String cfCliente;
 	private int idInserzione;

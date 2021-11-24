@@ -23,20 +23,7 @@ public class DAOPersonaImpl implements DAOPersona {
 	}
 
 	@Override
-	public HashMap<String, Persona> doRetrieveAll(int tipologiaPersona) {
-		String tabella = "";
-
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "clienti";
-			break;
-		case INSERZIONISTA:
-			tabella = "inserzionisti";
-			break;
-			//default:
-			//	return null;
-		}
-
+	public HashMap<String, Persona> doRetrieveAll(String tabella) {
 		HashMap<String, Persona> persone = new HashMap<String, Persona>();
 		Statement statement = null;
 		try {
@@ -58,20 +45,7 @@ public class DAOPersonaImpl implements DAOPersona {
 		return persone;
 	}
 
-	public HashMap<String, Persona> doRetrieveAllFiltered(int tipologiaPersona, String target) {
-		String tabella = "";
-
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "clienti";
-			break;
-		case INSERZIONISTA:
-			tabella = "inserzionisti";
-			break;
-			//default:
-			//	return null;
-		}
-
+	public HashMap<String, Persona> doRetrieveAllFiltered(String tabella, String target) {
 		HashMap<String, Persona> persone = new HashMap<String, Persona>();
 		Statement statement = null;
 		try {
@@ -100,40 +74,12 @@ public class DAOPersonaImpl implements DAOPersona {
 	}
 
 	@Override
-	public Persona doRetrieve(int tipologiaPersona, int colonna, String target) {
+	public Persona doRetrieve(String tabella, String colonna, String target) {
 		Persona pers = null;
 		Statement statement = null;
-		String filtro = "";
-		String tabella = "";
-
-		switch(colonna) {
-		case CODICE_FISCALE:
-			filtro = "codiceFiscale";
-			break;
-		case TELEFONO:
-			filtro = "telefono";
-			break;
-		case EMAIL:
-			filtro = "email";
-			break;
-			//default:
-			//	return null;
-		}
-
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "clienti";
-			break;
-		case INSERZIONISTA:
-			tabella = "inserzionisti";
-			break;
-			//default:
-			//	return null;
-		}
-
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM " + tabella + " WHERE " + filtro + "=\"" + target + "\"");
+			ResultSet result = statement.executeQuery("SELECT * FROM " + tabella + " WHERE " + colonna + "=\"" + target + "\"");
 
 			while (result.next()) {
 				String codf = result.getString("codiceFiscale");
@@ -152,19 +98,7 @@ public class DAOPersonaImpl implements DAOPersona {
 	}
 
 	@Override
-	public void delete(int tipologiaPersona, String cf) {
-		String tabella = "";
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "clienti";
-			break;
-		case INSERZIONISTA:
-			tabella = "inserzionisti";
-			break;
-			//default:
-			//	return null;
-		}
-
+	public void delete(String tabella, String cf) {
 		try {
 			System.out.println(cf);
 			Statement statement = connection.getConnection().createStatement();
@@ -175,23 +109,9 @@ public class DAOPersonaImpl implements DAOPersona {
 	}
 
 	@Override
-	public int updatePersona(int tipologiaPersona, Persona pers) {
-		String tabella = "";
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "clienti";
-			break;
-		case INSERZIONISTA:
-			tabella = "inserzionisti";
-			break;
-			//default:
-			//	return null;
-		}
-
+	public int insertPersona(String tabella, Persona pers) {
 		try {
-			delete(tipologiaPersona, pers.getCodiceFiscale());
-
-			String query = " INSERT INTO " + tabella + "(CodiceFiscale, Nome, Cognome, Telefono, Email)"
+			String query = "INSERT INTO " + tabella + "(CodiceFiscale, Nome, Cognome, Telefono, Email)"
 					+ " values (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setString(1, pers.getCodiceFiscale());
@@ -206,11 +126,30 @@ public class DAOPersonaImpl implements DAOPersona {
 		}
 		return 0;
 	}
+	
+	@Override
+	public int updatePersona(String tabella, Persona pers) {
+		try {
+			String query = "UPDATE " + tabella + " SET CodiceFiscale = ?, Nome = ?, Cognome = ?, Telefono = ?, Email = ? WHERE CodiceFiscale = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setString(1, pers.getCodiceFiscale());
+			preparedStmt.setString(2, pers.getNome());
+			preparedStmt.setString(3, pers.getCognome());
+			preparedStmt.setString(4, pers.getTelefono());
+			preparedStmt.setString(5, pers.getEmail());
+			preparedStmt.setString(6, pers.getCodiceFiscale());
 
-	public static final int CODICE_FISCALE = 0;
-	public static final int TELEFONO = 1;
-	public static final int EMAIL = 2;
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 
-	public static final int CLIENTE = 0;
-	public static final int INSERZIONISTA = 1;
+	public static final String CODICE_FISCALE = "codiceFiscale";
+	public static final String TELEFONO = "telefono";
+	public static final String EMAIL = "email";
+
+	public static final String CLIENTE = "clienti";
+	public static final String INSERZIONISTA = "inserzionisti";
 }

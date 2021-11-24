@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Facade.*;
+import Pagamenti.View.StoricoPagamentiUI;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -18,12 +19,10 @@ import javax.swing.JLabel;
 public class Home extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
+	PagamentoFacade pf = PagamentoFacade.getInstance();
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -37,9 +36,6 @@ public class Home extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Home() {
 		Home thisHome = this;
 		
@@ -94,10 +90,16 @@ public class Home extends JFrame {
 		btnLogout.setBounds(645, 96, 102, 30);
 		contentPane.add(btnLogout);
 		
-		JButton btnPagamenti = new JButton("Pagamento \r\nPrenotazioni");
-		btnPagamenti.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnPagamenti.setBounds(333, 62, 261, 97);
-		contentPane.add(btnPagamenti);
+		JButton btnRicevutePagamenti = new JButton("Ricevute pagamenti");
+		btnRicevutePagamenti.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pf.showStoricoPagamentiUI(StoricoPagamentiUI.CANONI_PRENOTAZIONI, "");
+				thisHome.dispose();
+			}
+		});
+		btnRicevutePagamenti.setFont(new Font("Dialog", Font.BOLD, 18));
+		btnRicevutePagamenti.setBounds(333, 62, 261, 97);
+		contentPane.add(btnRicevutePagamenti);
 		
 		JLabel utenteLabel = new JLabel("" + uf.getDipendenteController().getDipendenteAttivo().getNome() + " " + uf.getDipendenteController().getDipendenteAttivo().getCognome());
 		utenteLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));

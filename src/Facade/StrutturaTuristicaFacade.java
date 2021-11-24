@@ -1,20 +1,19 @@
 package Facade;
 
 import java.time.LocalDate;
-import java.util.Date;
 
+import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
 import StruttureTuristiche.Controller.StrutturaTuristicaController;
 import StruttureTuristiche.Model.*;
 import StruttureTuristiche.View.*;
-import Utenti.Model.Persona;
 
 public class StrutturaTuristicaFacade {
 	private StrutturaTuristicaController strutturaTuristicaController;
 	private static StrutturaTuristicaFacade instance;
 
 	public static StrutturaTuristicaFacade getInstance() {
-		if (instance == null) {
+		if(instance == null) {
 			instance = new StrutturaTuristicaFacade();
 			instance.setStrutturaTuristicaController(new StrutturaTuristicaController(instance));
 		}
@@ -80,15 +79,13 @@ public class StrutturaTuristicaFacade {
 		StruttureTuristicheUI.display();
 	}
 
-	public void showNuovaStruttura() {
-		NuovaStruttura.display();
+	public void showUpdateStruttura(int operazione, String pIva) {
+		UpdateStruttura.display(operazione, pIva);
 	}
-
-	public void showModificaStruttura() {
-		ModificaStruttura.display();
+	
+	public void showGestisciCanone(Canone canone) {
+		GestisciCanone.display(canone);
 	}
-
-	public void showUpdateStruttura(int operazione) {
-		UpdateStruttura.display(operazione);
-	}
+	
+	
 }
