@@ -56,9 +56,9 @@ public class GestisciCanone {
 
 		JLabel jLabel;
 		if(giorni > 0)
-			jLabel = new JLabel("<html><center>Il canone scadr‡ il " + canone.getScadenza().toString() + ".<br/>(tra " + giorni + " giorn" + (giorni==1 ? "o" : "i") + ")</center></html>");
+			jLabel = new JLabel("<html><center>Il canone scadr√† il " + canone.getScadenza().toString() + ".<br/>(tra " + giorni + " giorn" + (giorni==1 ? "o" : "i") + ")</center></html>");
 		else {
-			jLabel = new JLabel("<html><center>Il canone Ë scaduto il " + canone.getScadenza().toString() + ".<br/>(" + (giorni*-1) + " giorn" + (giorni==1 ? "o" : "i") + " fa)</center></html>");
+			jLabel = new JLabel("<html><center>Il canone √® scaduto il " + canone.getScadenza().toString() + ".<br/>(" + (giorni*-1) + " giorn" + (giorni==1 ? "o" : "i") + " fa)</center></html>");
 			pagaButton.setEnabled(true);
 		}
 		jLabel.setHorizontalAlignment(SwingConstants.CENTER);

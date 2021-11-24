@@ -37,7 +37,7 @@ import java.util.Collections;
 import javax.swing.JList;
 
 public class StoricoPagamentiUI extends JFrame {
-	private int modalit‡ = 0;
+	private int modalit√† = 0;
 
 	private JPanel contentPane;
 	private JTextField cercaTextField;
@@ -59,11 +59,11 @@ public class StoricoPagamentiUI extends JFrame {
 	private static ArrayList<RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioni = new ArrayList<RicevutaPagamentoPrenotazione>();
 	private static ArrayList<RicevutaPagamentoCanone> ricevutePagamentoCanoni = new ArrayList<RicevutaPagamentoCanone>();
 
-	public static void display(int modalit‡, String cerca) {
+	public static void display(int modalit√†, String cerca) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					StoricoPagamentiUI frame = new StoricoPagamentiUI(modalit‡, cerca);
+					StoricoPagamentiUI frame = new StoricoPagamentiUI(modalit√†, cerca);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -72,11 +72,11 @@ public class StoricoPagamentiUI extends JFrame {
 		});
 	}
 
-	public StoricoPagamentiUI(int modalit‡, String cerca) {
+	public StoricoPagamentiUI(int modalit√†, String cerca) {
 		StoricoPagamentiUI thisStoricoPagamentiUI = this;
-		this.modalit‡ = modalit‡;
+		this.modalit√† = modalit√†;
 
-		switch(modalit‡) {
+		switch(modalit√†) {
 		case 0:
 			setTitle("Storico dei pagamenti");
 			break;
@@ -144,7 +144,7 @@ public class StoricoPagamentiUI extends JFrame {
 		JScrollPane scrollPanePrenotazioni = new JScrollPane(tablePrenotazioni);
 		contentPane.add(scrollPanePrenotazioni);
 
-		switch(modalit‡) {
+		switch(modalit√†) {
 		case 0:
 			scrollPaneCanoni.setBounds(27, 83, 886, 250);
 			scrollPanePrenotazioni.setBounds(27, 343, 886, 250);

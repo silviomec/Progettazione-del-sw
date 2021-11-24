@@ -24,7 +24,7 @@ public class NuovaInserzione extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display() {
 		try {
 			NuovaInserzione dialog = new NuovaInserzione();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -135,18 +135,6 @@ public class NuovaInserzione extends JDialog {
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
-		}
-		{
-			JLabel lblNewLabel_5 = new JLabel("Id Inserzione");
-			lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblNewLabel_5.setBounds(582, 412, 134, 29);
-			contentPanel.add(lblNewLabel_5);
-		}
-		{
-			JLabel lblIDStruttura = new JLabel("*****");
-			lblIDStruttura.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblIDStruttura.setBounds(582, 448, 45, 13);
-			contentPanel.add(lblIDStruttura);
 		}
 	}
 }

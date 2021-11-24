@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Facade.StrutturaTuristicaFacade;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JList;
@@ -16,11 +19,12 @@ import java.awt.event.ActionEvent;
 public class InserzioniUI extends JFrame {
 
 	private JPanel contentPane;
+	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -54,6 +58,7 @@ public class InserzioniUI extends JFrame {
 		JButton btnInserisciInserzione = new JButton("Inserisci Inserzione");
 		btnInserisciInserzione.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				stf.showNuovaInserzione();
 			}
 		});
 		btnInserisciInserzione.setFont(new Font("Dialog", Font.BOLD, 18));
