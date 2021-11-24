@@ -21,6 +21,7 @@ import Repository.DAOFactory;
 import Repository.Pagamenti.DAOCanoneImpl;
 import StruttureTuristiche.Model.*;
 import StruttureTuristiche.View.StruttureTuristicheUI;
+import Utenti.Model.Persona;
 import Utenti.View.Home;
 
 import javax.swing.JTextPane;
@@ -36,22 +37,33 @@ import java.util.Collections;
 import javax.swing.JList;
 
 public class StoricoPagamentiUI extends JFrame {
+	private int modalità = 0;
 
 	private JPanel contentPane;
 	private JTextField cercaTextField;
 	private JButton btnCerca;
 	private JTable tablePrenotazioni;
 	private JTable tableCanoni;
-	private static DefaultTableModel dtmRicevutePagamentoPrenotazioni = new DefaultTableModel();
-	private static DefaultTableModel dtmRicevutePagamentoCanoni = new DefaultTableModel();
+	private static DefaultTableModel dtmRicevutePagamentoPrenotazioni = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+	private static DefaultTableModel dtmRicevutePagamentoCanoni = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 	private static ArrayList<RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioni = new ArrayList<RicevutaPagamentoPrenotazione>();
 	private static ArrayList<RicevutaPagamentoCanone> ricevutePagamentoCanoni = new ArrayList<RicevutaPagamentoCanone>();
 
-	public static void display() {
+	public static void display(int modalità, String cerca) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					StoricoPagamentiUI frame = new StoricoPagamentiUI();
+					StoricoPagamentiUI frame = new StoricoPagamentiUI(modalità, cerca);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,10 +72,18 @@ public class StoricoPagamentiUI extends JFrame {
 		});
 	}
 
-	public StoricoPagamentiUI() {
+	public StoricoPagamentiUI(int modalità, String cerca) {
 		StoricoPagamentiUI thisStoricoPagamentiUI = this;
+		this.modalità = modalità;
 
-		setTitle("Storico dei pagamenti");
+		switch(modalità) {
+		case 0:
+			setTitle("Storico dei pagamenti");
+			break;
+		case 1:
+			setTitle("Storico dei pagamenti dei canoni");
+			break;
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 650);
 		contentPane = new JPanel();
@@ -85,9 +105,11 @@ public class StoricoPagamentiUI extends JFrame {
 		cercaTextField.setBounds(27, 47, 716, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
+		cercaTextField.setText(cerca);
 
 		btnCerca = new JButton("Cerca");
-		btnCerca.setEnabled(false);
+		if(cercaTextField.getText().equals(""))
+			btnCerca.setEnabled(false);
 		btnCerca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca(cercaTextField.getText());
@@ -105,29 +127,39 @@ public class StoricoPagamentiUI extends JFrame {
 		});
 		btnRipristina.setBounds(841, 47, 85, 21);
 		contentPane.add(btnRipristina);
-		
-		dtmRicevutePagamentoCanoni.setColumnIdentifiers(new String[]{"Inserzionista", "Importo", "Data pagamento", "Struttura turistica", "ID pagamento"});
+
+		dtmRicevutePagamentoCanoni.setColumnIdentifiers(new String[]{"Inserzionista", "Importo", "Data pagamento", "Struttura turistica", "Partita IVA", "ID pagamento"});
 		tableCanoni = new JTable();
 		tableCanoni.setBounds(344, 322, 314, -206);
 		tableCanoni.setModel(dtmRicevutePagamentoCanoni);
 		tableCanoni.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPaneCanoni = new JScrollPane(tableCanoni);
-		scrollPaneCanoni.setBounds(27, 83, 443, 521);
 		contentPane.add(scrollPaneCanoni);
-		
-		dtmRicevutePagamentoPrenotazioni.setColumnIdentifiers(new String[]{"Cliente", "Importo", "Data pagamento", "Struttura Turistica", "ID pagamento"});
+
+		dtmRicevutePagamentoPrenotazioni.setColumnIdentifiers(new String[]{"Cliente", "Importo", "Data pagamento", "Struttura Turistica", "Partita IVA", "ID pagamento"});
 		tablePrenotazioni = new JTable();
 		tablePrenotazioni.setBounds(344, 322, 314, -206);
 		tablePrenotazioni.setModel(dtmRicevutePagamentoPrenotazioni);
 		tablePrenotazioni.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPanePrenotazioni = new JScrollPane(tablePrenotazioni);
-		scrollPanePrenotazioni.setBounds(483, 83, 443, 521);
 		contentPane.add(scrollPanePrenotazioni);
 
-		cerca("");
+		switch(modalità) {
+		case 0:
+			scrollPaneCanoni.setBounds(27, 83, 886, 250);
+			scrollPanePrenotazioni.setBounds(27, 343, 886, 250);
+			break;
+		case 1:
+			scrollPaneCanoni.setBounds(27, 83, 886, 521);
+			//scrollPanePrenotazioni.setBounds(483, 83, 443, 521);
+			scrollPanePrenotazioni.setVisible(false);
+			break;
+		}
+
+		cerca(cercaTextField.getText());
 		createEvents();
 	}
-	
+
 	private void createEvents() {
 		cercaTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -141,7 +173,7 @@ public class StoricoPagamentiUI extends JFrame {
 			}
 		});
 	}
-	
+
 	public void warn() {
 		if(!cercaTextField.getText().equals(""))
 			btnCerca.setEnabled(true);
@@ -165,35 +197,44 @@ public class StoricoPagamentiUI extends JFrame {
 		StoricoPagamentiUI.dtmRicevutePagamentoCanoni = dtm;
 	}
 
-	public static void cerca(String target) {
+	public void cerca(String target) {
+		cercaRicevutePagamentoCanoni(target);
+		cercaRicevutePagamentoPrenotazioni(target);
+	}
+
+	public void cercaRicevutePagamentoCanoni(String target) {
 		int i, j;
-		
-		{
-			for(i = 0, j = getDtmRicevutePagamentoCanoni().getRowCount(); i < j; i++)
-				getDtmRicevutePagamentoCanoni().removeRow(0);
 
-			ricevutePagamentoCanoni = new ArrayList<RicevutaPagamentoCanone>();
-			for (RicevutaPagamentoCanone rpc : DAOFactory.getDAORicevutaPagamentoCanone().doRetrieveAllFiltered(target).values()) {
-				ricevutePagamentoCanoni.add(rpc);
-			}
-			Collections.sort(ricevutePagamentoCanoni);
-			for(RicevutaPagamentoCanone rpc : ricevutePagamentoCanoni) {
-				getDtmRicevutePagamentoCanoni().addRow(new Object[]{rpc.getCfInserzionista(), rpc.getImporto(), rpc.getDataPagamento(), DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(rpc.getPIva()).getNome(), rpc.getIdPagamento()});
-			}
+		for(i = 0, j = getDtmRicevutePagamentoCanoni().getRowCount(); i < j; i++)
+			getDtmRicevutePagamentoCanoni().removeRow(0);
+
+		ricevutePagamentoCanoni = new ArrayList<RicevutaPagamentoCanone>();
+		for (RicevutaPagamentoCanone rpc : DAOFactory.getDAORicevutaPagamentoCanone().doRetrieveAllFiltered(target).values()) {
+			ricevutePagamentoCanoni.add(rpc);
 		}
-		
-		{
-			for(i = 0, j = getDtmRicevutePagamentoPrenotazioni().getRowCount(); i < j; i++)
-				getDtmRicevutePagamentoPrenotazioni().removeRow(0);
+		Collections.sort(ricevutePagamentoCanoni);
 
-			ricevutePagamentoPrenotazioni = new ArrayList<RicevutaPagamentoPrenotazione>();
-			for (RicevutaPagamentoPrenotazione rpp : DAOFactory.getDAORicevutaPagamentoPrenotazione().doRetrieveAllFiltered(target).values()) {
-				ricevutePagamentoPrenotazioni.add(rpp);
-			}
-			Collections.sort(ricevutePagamentoPrenotazioni);
-			for(RicevutaPagamentoPrenotazione rpp : ricevutePagamentoPrenotazioni) {
-				getDtmRicevutePagamentoPrenotazioni().addRow(new Object[]{rpp.getCfCliente(), rpp.getImporto(), rpp.getDataPagamento(), DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(rpp.getPIva()).getNome(), rpp.getIdPagamento()});
-			}
+		for(RicevutaPagamentoCanone rpc : ricevutePagamentoCanoni) {
+			getDtmRicevutePagamentoCanoni().addRow(new Object[]{rpc.getCfInserzionista(), rpc.getImporto(), rpc.getDataPagamento(), DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(rpc.getPIva()).getNome(), rpc.getPIva(), rpc.getIdPagamento()});
 		}
 	}
+
+	public void cercaRicevutePagamentoPrenotazioni(String target) {
+		int i, j;
+
+		for(i = 0, j = getDtmRicevutePagamentoPrenotazioni().getRowCount(); i < j; i++)
+			getDtmRicevutePagamentoPrenotazioni().removeRow(0);
+
+		ricevutePagamentoPrenotazioni = new ArrayList<RicevutaPagamentoPrenotazione>();
+		for (RicevutaPagamentoPrenotazione rpp : DAOFactory.getDAORicevutaPagamentoPrenotazione().doRetrieveAllFiltered(target).values()) {
+			ricevutePagamentoPrenotazioni.add(rpp);
+		}
+		Collections.sort(ricevutePagamentoPrenotazioni);
+		for(RicevutaPagamentoPrenotazione rpp : ricevutePagamentoPrenotazioni) {
+			getDtmRicevutePagamentoPrenotazioni().addRow(new Object[]{rpp.getCfCliente(), rpp.getImporto(), rpp.getDataPagamento(), DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(rpp.getPIva()).getNome(), rpp.getPIva(), rpp.getIdPagamento()});
+		}
+	}
+
+	public static int CANONI_PRENOTAZIONI = 0;
+	public static int SOLO_CANONI = 1;
 }
