@@ -41,6 +41,4 @@ public class DAOFactory {
 	public static DAOPrenotazioneImpl getDAOPrenotazione() {
 		return new DAOPrenotazioneImpl();
 	}
-	
-	
 }

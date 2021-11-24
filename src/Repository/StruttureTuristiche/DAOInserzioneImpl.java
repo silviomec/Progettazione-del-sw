@@ -89,11 +89,9 @@ public class DAOInserzioneImpl implements DAOInserzione {
 	}
 
 	@Override
-	public Inserzione updateInserzione(Inserzione in) {
+	public Inserzione insertInserzione(Inserzione in) {
 		try {
-			delete(in.getIdInserzione());
-
-			String query = " insert into inserzioni (idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista)"
+			String query = "INSERT INTO inserzioni (idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista)"
 					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, in.getIdInserzione());
@@ -105,6 +103,32 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			preparedStmt.setDate(7, Date.valueOf(in.getDataFine()));
 			preparedStmt.setString(8, in.getStrutturaTuristica());
 			preparedStmt.setString(9, in.getInserzionista());
+			
+			preparedStmt.executeUpdate();
+
+			return in;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public Inserzione updateInserzione(Inserzione in) {
+		try {
+			String query = "UPDATE inserzioni SET idInserzione = ?, titolo = ?, descrizione = ?, prezzoPerNotte = ?, numeroPersone = ?, dataInizio = ?, dataFine = ?, strutturaTuristica = ?, inserzionista = ? WHERE idInserzione = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setInt(1, in.getIdInserzione());
+			preparedStmt.setString(2, in.getTitolo());
+			preparedStmt.setString(3, in.getDescrizione());
+			preparedStmt.setDouble(4, in.getPrezzoPerNotte());
+			preparedStmt.setInt(5, in.getNumeroPersone());
+			preparedStmt.setDate(6, Date.valueOf(in.getDataInizio()));
+			preparedStmt.setDate(7, Date.valueOf(in.getDataFine()));
+			preparedStmt.setString(8, in.getStrutturaTuristica());
+			preparedStmt.setString(9, in.getInserzionista());
+			preparedStmt.setInt(10, in.getIdInserzione());
+			
 			preparedStmt.executeUpdate();
 
 			return in;

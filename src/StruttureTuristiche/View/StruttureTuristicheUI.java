@@ -170,7 +170,7 @@ public class StruttureTuristicheUI extends JFrame {
 					comp.setBackground(rosso);
 				} else {
 					comp.setBackground(Color.white);
-					comp.setForeground(Color.black);
+					comp.setForeground(new Color(51, 51, 51));
 				}
 				
 				if(this.isRowSelected(row))

@@ -9,5 +9,6 @@ public interface DAOPersona {
 	public HashMap<String, Persona> doRetrieveAllFiltered(String tabella, String target);
 	public Persona doRetrieve(String tabella, String colonna, String target);
 	public void delete(String tabella, String cf);
+	public int insertPersona(String tabella, Persona pers);
 	public int updatePersona(String tabella, Persona pers);
 }
