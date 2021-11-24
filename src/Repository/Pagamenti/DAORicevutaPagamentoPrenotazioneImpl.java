@@ -60,9 +60,10 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 					+ "OR importo LIKE '%" + target + "%' "
 					+ "OR dataPagamento LIKE '%" + target + "%' "
 					+ "OR PRENOTAZIONE LIKE '%" + target + "%'"
-					+ "OR CLIENTE LIKE '%" + target + "%') "
-					//+ "OR STRUTTURATURISTICA LIKE '%" + target + "%') "
-					+ "OR nome LIKE '%" + target + "%')");
+					+ "OR CLIENTE LIKE '%" + target + "%' "
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
+					+ "OR nome LIKE '%" + target + "%' "
+					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
 
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
@@ -70,7 +71,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
 				int idPrenotazione = result.getInt("PRENOTAZIONE");
 				String cfCliente = result.getString("CLIENTE");
-				String pIva = DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(result.getString("PartitaIva"));
+				String pIva = result.getString("STRUTTURATURISTICA");
 				RicevutaPagamentoPrenotazione rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione, cfCliente, pIva);
 				ricevutePagamentoPrenotazioneCollection.put(idPagamentoPrenotazione, rpp);
 			}
