@@ -18,12 +18,10 @@ import javax.swing.JLabel;
 public class Home extends JFrame {
 	UtenteFacade uf = UtenteFacade.getInstance();
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
+	PagamentoFacade pf = PagamentoFacade.getInstance();
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void display() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -37,9 +35,6 @@ public class Home extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Home() {
 		Home thisHome = this;
 		
@@ -95,6 +90,12 @@ public class Home extends JFrame {
 		contentPane.add(btnLogout);
 		
 		JButton btnRicevutePagamenti = new JButton("Ricevute pagamenti");
+		btnRicevutePagamenti.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pf.showStoricoPagamentiUI();
+				thisHome.dispose();
+			}
+		});
 		btnRicevutePagamenti.setFont(new Font("Dialog", Font.BOLD, 18));
 		btnRicevutePagamenti.setBounds(333, 62, 261, 97);
 		contentPane.add(btnRicevutePagamenti);

@@ -12,6 +12,7 @@ import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
+import Repository.Pagamenti.DAOCanoneImpl;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import Repository.Utenti.DAOPersonaImpl;
 import StruttureTuristiche.Model.StrutturaTuristica;
@@ -328,6 +329,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		UpdateStruttura thisUpdateStruttura = this;
 		String msg;
 
 		msg = checkPIvaTextField();
@@ -337,12 +339,13 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, msg, "Errore", 0);
 		}
 		else {	// La partita IVA e il codice fiscale dell'inserzionista rispettano il pattern giusto
-			String nome = nomeTextField.getText().toString();
-			String pIva = pIvaTextField.getText().toString();
-			String indirizzo = indirizzoTextField.getText().toString();
+			String nome = nomeTextField.getText();//.toString();
+			String pIva = pIvaTextField.getText();//.toString();
+			String indirizzo = indirizzoTextField.getText();//.toString();
 			String hotel = hotelComboBox.getEditor().getItem().toString();
 			String cfInserzionista = cfInserzionistaComboBox.getEditor().getItem().toString().toUpperCase();
 			String stelle = stelleComboBox.getEditor().getItem().toString();
+			System.out.println(nome + ", " + pIva + ", " + indirizzo + ", " + hotel + ", " + cfInserzionista + ", " + stelle);
 
 			DAOStrutturaTuristica daoStrutturaTuristica = DAOFactory.getDAOStrutturaTuristica();
 
@@ -357,22 +360,19 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica modificata con successo!");
 					JOptionPane.showMessageDialog(this, "Modifica avvenuta con successo!", "Messaggio", 1);
-					nomeTextField.setText("");
-					pIvaTextField.setText("");
-					indirizzoTextField.setText("");
-					hotelComboBox.setSelectedIndex(0);;
-					cfInserzionistaComboBox.setSelectedIndex(-1);
-					stelleComboBox.setSelectedIndex(0);
+					StruttureTuristicheUI.cerca("");
+					thisUpdateStruttura.dispose();
 					break;
 				}
 			}
 			else {
 				switch(operazione) {
 				case AGGIUNGI:
-					daoStrutturaTuristica.updateStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
+					daoStrutturaTuristica.insertStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica registrata con successo!");
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 					DAOFactory.getDAOCanone().updateCanone(new Canone(cfInserzionista, pIva, 125.00, LocalDate.now().plusYears(1), true));
+					StruttureTuristicheUI.cerca("");
 					nomeTextField.setText("");
 					pIvaTextField.setText("");
 					indirizzoTextField.setText("");

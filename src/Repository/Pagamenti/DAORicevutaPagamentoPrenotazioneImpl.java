@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
+import StruttureTuristiche.Model.StrutturaTuristica;
 import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 
 public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagamentoPrenotazione {
@@ -22,8 +24,8 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 	}
 	
 	@Override
-	public HashMap<String, RicevutaPagamentoPrenotazione> doRetrieveAll() {
-		HashMap<String, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioneCollection = new HashMap<String, RicevutaPagamentoPrenotazione>();
+	public HashMap<Integer, RicevutaPagamentoPrenotazione> doRetrieveAll() {
+		HashMap<Integer, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioneCollection = new HashMap<Integer, RicevutaPagamentoPrenotazione>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -32,15 +34,42 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
 				int idPrenotazione = result.getInt("prenotazione");
 				RicevutaPagamentoPrenotazione rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione);
-				ricevutePagamentoPrenotazioneCollection.put(Integer.toString(idPagamentoPrenotazione), rpp);
+				ricevutePagamentoPrenotazioneCollection.put(idPagamentoPrenotazione, rpp);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return ricevutePagamentoPrenotazioneCollection;
+	}
+	
+	@Override
+	public HashMap<Integer, RicevutaPagamentoPrenotazione> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioneCollection = new HashMap<Integer, RicevutaPagamentoPrenotazione>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM ricevutePagamentoPrenotazioni "
+					+ "WHERE idPagamentoPrenotazione LIKE '%" + target + "%' "
+					+ "OR importo LIKE '%" + target + "%' "
+					+ "OR dataPagamento LIKE '%" + target + "%' "
+					+ "OR PRENOTAZIONE LIKE '%" + target + "%'");
+
+			while (result.next()) {
+				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
+				double importo = result.getDouble("importo");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int prenotazione = result.getInt("PRENOTAZIONE");
+				RicevutaPagamentoPrenotazione rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, prenotazione);
+				ricevutePagamentoPrenotazioneCollection.put(idPagamentoPrenotazione, rpp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return ricevutePagamentoPrenotazioneCollection;
 	}
 
@@ -55,7 +84,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
 				int idPrenotazione = result.getInt("prenotazione");
 				rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione);
 			}
@@ -89,7 +118,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, rpp.getIdPagamento());
 			preparedStmt.setDouble(2, rpp.getImporto());
-			preparedStmt.setDate(3, rpp.getDataPagamento());
+			preparedStmt.setDate(3, Date.valueOf(rpp.getDataPagamento()));
 			preparedStmt.setInt(4, rpp.getIdPrenotazione());
 		
 			return preparedStmt.executeUpdate();

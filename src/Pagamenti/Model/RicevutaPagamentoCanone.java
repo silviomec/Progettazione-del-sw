@@ -1,11 +1,16 @@
 package Pagamenti.Model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
-public class RicevutaPagamentoCanone extends RicevutaPagamento {
-	public RicevutaPagamentoCanone(int idPagamento, double importo, Date dataPagamento, int idCanone) {
+public class RicevutaPagamentoCanone extends RicevutaPagamento implements Comparable<RicevutaPagamentoCanone> {
+	public RicevutaPagamentoCanone(int idPagamento, double importo, LocalDate dataPagamento, int idCanone) {
 		super(idPagamento, importo, dataPagamento);
 		this.idCanone = idCanone;
+	}
+	
+	@Override
+	public int compareTo(RicevutaPagamentoCanone rpc) {
+		return Integer.toString(getIdPagamento()).compareTo(Integer.toString(rpc.getIdPagamento()));
 	}
 	
 	public int getIdCanone() { return idCanone; }

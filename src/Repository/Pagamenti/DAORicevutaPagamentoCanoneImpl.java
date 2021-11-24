@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
 import Pagamenti.Model.RicevutaPagamentoCanone;
+import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 
 public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanone {
 	private MySQLConnection connection;
@@ -22,8 +24,8 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 	}
 	
 	@Override
-	public HashMap<String, RicevutaPagamentoCanone> doRetrieveAll() {
-		HashMap<String, RicevutaPagamentoCanone> ricevutePagamentoCanoneCollection = new HashMap<String, RicevutaPagamentoCanone>();
+	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAll() {
+		HashMap<Integer, RicevutaPagamentoCanone> ricevutePagamentoCanoneCollection = new HashMap<Integer, RicevutaPagamentoCanone>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -32,15 +34,42 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
-				int idCanone = result.getInt("canone");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int idCanone = result.getInt("CANONE");
 				RicevutaPagamentoCanone rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone);
-				ricevutePagamentoCanoneCollection.put(Integer.toString(idPagamentoCanone), rpc);
+				ricevutePagamentoCanoneCollection.put(idPagamentoCanone, rpc);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return ricevutePagamentoCanoneCollection;
+	}
+	
+	@Override
+	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, RicevutaPagamentoCanone> ricevutePagamentoCanoneCollection = new HashMap<Integer, RicevutaPagamentoCanone>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM ricevutePagamentoCanoni "
+					+ "WHERE idPagamentoCanone LIKE '%" + target + "%' "
+					+ "OR importo LIKE '%" + target + "%' "
+					+ "OR dataPagamento LIKE '%" + target + "%' "
+					+ "OR CANONE LIKE '%" + target + "%'");
+
+			while (result.next()) {
+				int idPagamentoCanone = result.getInt("idPagamentoCanone");
+				double importo = result.getDouble("importo");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int canone = result.getInt("CANONE");
+				RicevutaPagamentoCanone rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, canone);
+				ricevutePagamentoCanoneCollection.put(idPagamentoCanone, rpc);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return ricevutePagamentoCanoneCollection;
 	}
 
@@ -55,7 +84,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
 				int idCanone = result.getInt("canone");
 				rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone);
 			}
@@ -89,7 +118,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, rpc.getIdPagamento());
 			preparedStmt.setDouble(2, rpc.getImporto());
-			preparedStmt.setDate(3, rpc.getDataPagamento());
+			preparedStmt.setDate(3, Date.valueOf(rpc.getDataPagamento()));
 			preparedStmt.setInt(4, rpc.getIdCanone());
 		
 			return preparedStmt.executeUpdate();

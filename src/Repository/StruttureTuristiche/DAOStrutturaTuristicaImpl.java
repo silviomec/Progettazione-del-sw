@@ -20,7 +20,7 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 		super();
 		this.connection = connection;
 	}
-	
+
 	@Override
 	public HashMap<String, StrutturaTuristica> doRetrieveAll() {
 		HashMap<String, StrutturaTuristica> StrutturaTuristicaCollection = new HashMap<String, StrutturaTuristica>();
@@ -45,7 +45,8 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 		}
 		return StrutturaTuristicaCollection;
 	}
-	
+
+	@Override
 	public HashMap<String, StrutturaTuristica> doRetrieveAllFiltered(String target) {
 		HashMap<String, StrutturaTuristica> struttureTuristiche = new HashMap<String, StrutturaTuristica>();
 		Statement statement = null;
@@ -113,10 +114,8 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 	}
 
 	@Override
-	public StrutturaTuristica updateStrutturaTuristica(StrutturaTuristica s) {
+	public StrutturaTuristica insertStrutturaTuristica(StrutturaTuristica s) {
 		try {
-			delete(s.getPIva());
-			
 			String query = "INSERT INTO struttureturistiche (PartitaIva, Nome, Indirizzo, Tipologia, Stelle, inserzionista)"
 					+ " values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
@@ -127,7 +126,28 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 			preparedStmt.setString(5, s.getStelle());
 			preparedStmt.setString(6, s.getInserzionista());
 			preparedStmt.executeUpdate();
-			
+
+			return s;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public StrutturaTuristica updateStrutturaTuristica(StrutturaTuristica s) {
+		try {
+			String query = "UPDATE struttureturistiche SET PartitaIva = ?, Nome = ?, Indirizzo = ?, Tipologia = ?, Stelle = ?, inserzionista = ? WHERE PartitaIva = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setString(1, s.getPIva());
+			preparedStmt.setString(2, s.getNome());
+			preparedStmt.setString(3, s.getIndirizzo());
+			preparedStmt.setString(4, s.getTipologia());
+			preparedStmt.setString(5, s.getStelle());
+			preparedStmt.setString(6, s.getInserzionista());
+			preparedStmt.setString(7, s.getPIva());
+			preparedStmt.executeUpdate();
+
 			return s;
 		} catch (SQLException e) {
 			e.printStackTrace();
