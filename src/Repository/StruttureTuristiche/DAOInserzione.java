@@ -9,6 +9,7 @@ public interface DAOInserzione {
 	public HashMap<String, Inserzione> doRetrieveAll();
 	public Inserzione doRetrieveByIdInserzione(int idInserzione);
 	public void delete(int idInserzione);
+	public Inserzione insertInserzione(Inserzione in);
 	public Inserzione updateInserzione(Inserzione in);
 }
 

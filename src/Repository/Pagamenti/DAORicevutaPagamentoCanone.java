@@ -9,5 +9,6 @@ public interface DAORicevutaPagamentoCanone {
 	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAllFiltered(String target);
 	public RicevutaPagamentoCanone doRetrieveByIdPagamentoCanone(int id);
 	public void delete(int id);
+	public int insertRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc);
 	public int updateRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc);
 }

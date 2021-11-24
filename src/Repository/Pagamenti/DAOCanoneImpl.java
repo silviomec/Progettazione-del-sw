@@ -85,11 +85,9 @@ public class DAOCanoneImpl implements DAOCanone {
 	}
 
 	@Override
-	public int updateCanone(Canone c) {
+	public int insertCanone(Canone c) {
 		try {
-			delete(c.getIdCanone());
-			
-			String query = " insert into canoni (idCanone, importoAnnuale, scadenza, saldato, inserzionista, strutturaTuristica)"
+			String query = "INSERT INTO canoni (idCanone, importoAnnuale, scadenza, saldato, inserzionista, strutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, c.getIdCanone());
@@ -98,6 +96,27 @@ public class DAOCanoneImpl implements DAOCanone {
 			preparedStmt.setBoolean(4, c.isSaldato());
 			preparedStmt.setString(5, c.getCfInserzionista());
 			preparedStmt.setString(6, c.getPIva());
+		
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public int updateCanone(Canone c) {
+		try {
+			String query = "UPDATE canoni SET idCanone = ?, importoAnnuale = ?, scadenza = ?, saldato = ?, inserzionista = ?, strutturaTuristica = ? WHERE idCanone = ?"
+					+ " values (?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setInt(1, c.getIdCanone());
+			preparedStmt.setDouble(2, c.getImportoAnnuale());
+			preparedStmt.setDate(3, Date.valueOf(c.getScadenza()));
+			preparedStmt.setBoolean(4, c.isSaldato());
+			preparedStmt.setString(5, c.getCfInserzionista());
+			preparedStmt.setString(6, c.getPIva());
+			preparedStmt.setInt(7, c.getIdCanone());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {

@@ -12,7 +12,6 @@ import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
-import Repository.Pagamenti.DAOCanoneImpl;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import Repository.Utenti.DAOPersonaImpl;
 import StruttureTuristiche.Model.StrutturaTuristica;
@@ -371,7 +370,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					daoStrutturaTuristica.insertStrutturaTuristica(new StrutturaTuristica(pIva, nome, indirizzo, hotel, stelle, cfInserzionista));
 					System.out.println("Struttura turistica registrata con successo!");
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
-					DAOFactory.getDAOCanone().updateCanone(new Canone(cfInserzionista, pIva, 125.00, LocalDate.now().plusYears(1), true));
+					DAOFactory.getDAOCanone().insertCanone(new Canone(cfInserzionista, pIva, 125.00, LocalDate.now().plusYears(1), true));
 					StruttureTuristicheUI.cerca("");
 					nomeTextField.setText("");
 					pIvaTextField.setText("");

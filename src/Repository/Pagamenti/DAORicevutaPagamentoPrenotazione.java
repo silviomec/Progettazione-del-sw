@@ -9,5 +9,6 @@ public interface DAORicevutaPagamentoPrenotazione {
 	public HashMap<Integer, RicevutaPagamentoPrenotazione> doRetrieveAllFiltered(String target);
 	public RicevutaPagamentoPrenotazione doRetrieveByIdPagamentoPrenotazione(int id);
 	public void delete(int id);
+	public int insertRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp);
 	public int updateRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp);
 }
