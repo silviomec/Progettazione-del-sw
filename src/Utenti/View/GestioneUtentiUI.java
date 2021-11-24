@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Facade.UtenteFacade;
+import Repository.Utenti.DAOPersonaImpl;
 import Utenti.Model.Dipendente;
 
 import javax.swing.JButton;
@@ -60,7 +61,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnVisualizzaClienti = new JButton("Visualizza Clienti");
 		btnVisualizzaClienti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showVisualizzaPersone(RegistraPersona.CLIENTE);
+				uf.showVisualizzaPersone(DAOPersonaImpl.CLIENTE);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});
@@ -72,7 +73,7 @@ public class GestioneUtentiUI extends JFrame {
 		btnIndietro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Home.display();
-				//thisGestioneUtentiUI.dispose();
+				thisGestioneUtentiUI.dispose();
 			}
 		});
 		btnIndietro.setBounds(10, 30, 102, 21);
@@ -81,7 +82,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnRegistraInserzionista = new JButton("Registra Inserzionisti");
 		btnRegistraInserzionista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showRegistraPersona(RegistraPersona.INSERZIONISTA);
+				uf.showRegistraPersona(DAOPersonaImpl.INSERZIONISTA);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});
@@ -92,7 +93,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnVisualizzaInserzionisti = new JButton("Visualizza Inserzionisti");
 		btnVisualizzaInserzionisti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showVisualizzaPersone(RegistraPersona.INSERZIONISTA);
+				uf.showVisualizzaPersone(DAOPersonaImpl.INSERZIONISTA);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});
@@ -103,7 +104,7 @@ public class GestioneUtentiUI extends JFrame {
 		JButton btnRegistraClienti = new JButton("Registra Clienti");
 		btnRegistraClienti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uf.showRegistraPersona(RegistraPersona.CLIENTE);
+				uf.showRegistraPersona(DAOPersonaImpl.CLIENTE);
 				//thisGestioneUtentiUI.dispose();
 			}
 		});

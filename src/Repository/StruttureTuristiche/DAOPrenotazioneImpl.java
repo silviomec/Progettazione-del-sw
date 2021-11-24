@@ -115,11 +115,9 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public Prenotazione updatePrenotazione(Prenotazione p) {
+	public Prenotazione insertPrenotazione(Prenotazione p) {
 		try {
-			delete(p.getIdPrenotazione());
-
-			String query = " insert into PRENOTAZIONI (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
+			String query = "INSERT INTO prenotazioni (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setString(1, null); //vediamo se è così che si passano i valori per l'autoincrement
@@ -129,6 +127,29 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			preparedStmt.setString(5, p.getCfCliente());
 			preparedStmt.setInt(6, p.getIdInserzione());
 			preparedStmt.setString(7, p.getPIva());
+			preparedStmt.executeUpdate();
+
+			return p;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public Prenotazione updatePrenotazione(Prenotazione p) {
+		try {
+			String query = "UPDATE prenotazioni SET idPrenotazione = ?, dataArrivo = ?, dataPartenza = ?, prezzoTotale = ?, Cliente = ?, Inserzione = ?, StrutturaTuristica = ? WHERE idPrenotazione = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setInt(1, p.getIdPrenotazione());
+			preparedStmt.setDate(2, Date.valueOf(p.getDataArrivo()));
+			preparedStmt.setDate(3, Date.valueOf(p.getDataPartenza()));
+			preparedStmt.setDouble(4, p.getPrezzoTot());
+			preparedStmt.setString(5, p.getCfCliente());
+			preparedStmt.setInt(6, p.getIdInserzione());
+			preparedStmt.setString(7, p.getPIva());
+			preparedStmt.setInt(7, p.getIdPrenotazione());
+			
 			preparedStmt.executeUpdate();
 
 			return p;

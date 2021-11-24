@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 
+import Repository.DAOFactory;
 import Repository.MySQLConnection;
+import StruttureTuristiche.Model.StrutturaTuristica;
 import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 
 public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagamentoPrenotazione {
@@ -22,8 +25,8 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 	}
 	
 	@Override
-	public HashMap<String, RicevutaPagamentoPrenotazione> doRetrieveAll() {
-		HashMap<String, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioneCollection = new HashMap<String, RicevutaPagamentoPrenotazione>();
+	public HashMap<Integer, RicevutaPagamentoPrenotazione> doRetrieveAll() {
+		HashMap<Integer, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioneCollection = new HashMap<Integer, RicevutaPagamentoPrenotazione>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -32,15 +35,50 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
-				int idPrenotazione = result.getInt("prenotazione");
-				RicevutaPagamentoPrenotazione rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione);
-				ricevutePagamentoPrenotazioneCollection.put(Integer.toString(idPagamentoPrenotazione), rpp);
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int idPrenotazione = result.getInt("PRENOTAZIONE");
+				String cfCliente = result.getString("CLIENTE");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				RicevutaPagamentoPrenotazione rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione, cfCliente, pIva);
+				ricevutePagamentoPrenotazioneCollection.put(idPagamentoPrenotazione, rpp);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return ricevutePagamentoPrenotazioneCollection;
+	}
+	
+	@Override
+	public HashMap<Integer, RicevutaPagamentoPrenotazione> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazioneCollection = new HashMap<Integer, RicevutaPagamentoPrenotazione>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM ricevutePagamentoPrenotazioni, struttureTuristiche "
+					+ "WHERE idPagamentoPrenotazione LIKE '%" + target + "%' "
+					+ "OR importo LIKE '%" + target + "%' "
+					+ "OR dataPagamento LIKE '%" + target + "%' "
+					+ "OR PRENOTAZIONE LIKE '%" + target + "%'"
+					+ "OR CLIENTE LIKE '%" + target + "%' "
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
+					+ "OR nome LIKE '%" + target + "%' "
+					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
+
+			while (result.next()) {
+				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
+				double importo = result.getDouble("importo");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int idPrenotazione = result.getInt("PRENOTAZIONE");
+				String cfCliente = result.getString("CLIENTE");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				RicevutaPagamentoPrenotazione rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione, cfCliente, pIva);
+				ricevutePagamentoPrenotazioneCollection.put(idPagamentoPrenotazione, rpp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return ricevutePagamentoPrenotazioneCollection;
 	}
 
@@ -55,9 +93,11 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
 				int idPrenotazione = result.getInt("prenotazione");
-				rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione);
+				String cfCliente = result.getString("CLIENTE");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				rpp = new RicevutaPagamentoPrenotazione(idPagamentoPrenotazione, importo, dataPagamento, idPrenotazione, cfCliente, pIva);
 			}
 
 		} catch (SQLException e) {
@@ -80,17 +120,37 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 	}
 
 	@Override
-	public int updateRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp) {
+	public int insertRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp) {
 		try {
-			delete(rpp.getIdPagamento());
-			
-			String query = " insert into ricevutepagamentoprenotazione (idPagamentoPrenotazione, importo, dataPagamento, prenotazione)"
-					+ " values (?, ?, ?, ?)";
+			String query = "INSERT INTO ricevutepagamentoprenotazione (idPagamentoPrenotazione, importo, dataPagamento, PRENOTAZIONE, CLIENTE, STRUTTURATURISTICA)"
+					+ " values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, rpp.getIdPagamento());
 			preparedStmt.setDouble(2, rpp.getImporto());
-			preparedStmt.setDate(3, rpp.getDataPagamento());
+			preparedStmt.setDate(3, Date.valueOf(rpp.getDataPagamento()));
 			preparedStmt.setInt(4, rpp.getIdPrenotazione());
+			preparedStmt.setString(5, rpp.getCfCliente());
+			preparedStmt.setString(6, rpp.getPIva());
+		
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public int updateRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp) {
+		try {
+			String query = "UPDATE ricevutepagamentoprenotazione SET idPagamentoPrenotazione = ?, importo = ?, dataPagamento = ?, PRENOTAZIONE = ?, CLIENTE = ?, STRUTTURATURISTICA = ? WHERE idPagamentoPrenotazione = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setInt(1, rpp.getIdPagamento());
+			preparedStmt.setDouble(2, rpp.getImporto());
+			preparedStmt.setDate(3, Date.valueOf(rpp.getDataPagamento()));
+			preparedStmt.setInt(4, rpp.getIdPrenotazione());
+			preparedStmt.setString(5, rpp.getCfCliente());
+			preparedStmt.setString(6, rpp.getPIva());
+			preparedStmt.setInt(7, rpp.getIdPagamento());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {

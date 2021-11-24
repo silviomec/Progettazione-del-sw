@@ -1,9 +1,9 @@
 package Pagamenti.Model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class RicevutaPagamento {
-	public RicevutaPagamento(int idPagamento, double importo, Date dataPagamento) {
+	public RicevutaPagamento(int idPagamento, double importo, LocalDate dataPagamento) {
 		this.idPagamento = idPagamento;
 		this.importo = importo;
 		this.dataPagamento = dataPagamento;
@@ -18,10 +18,10 @@ public class RicevutaPagamento {
 	public void setIdPagamento(int idPagamento) { this.idPagamento = idPagamento; }
 	public double getImporto() { return importo; }
 	public void setImporto(double importo) { this.importo = importo; }
-	public Date getDataPagamento() { return dataPagamento; }
-	public void setDataPagamento(Date dataPagamento) { this.dataPagamento = dataPagamento; }
+	public LocalDate getDataPagamento() { return dataPagamento; }
+	public void setDataPagamento(LocalDate dataPagamento) { this.dataPagamento = dataPagamento; }
 
 	private int idPagamento;
 	private double importo;
-	private Date dataPagamento;
+	private LocalDate dataPagamento;
 }
