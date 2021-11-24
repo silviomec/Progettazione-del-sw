@@ -27,12 +27,12 @@ public class UtenteFacade {
 		GestioneUtentiUI.display();
 	}
 	
-	public void showVisualizzaPersone(int tipologia) {
-		VisualizzaPersone.display(tipologia);
+	public void showVisualizzaPersone(String tabella) {
+		VisualizzaPersone.display(tabella);
 	}
 	
-	public void showRegistraPersona(int tipologia) {
-		RegistraPersona.display(tipologia);
+	public void showRegistraPersona(String tabella) {
+		RegistraPersona.display(tabella);
 	}
 	
 	public DipendenteController getDipendenteController() {
@@ -49,17 +49,5 @@ public class UtenteFacade {
 	
 	public void setPersonaController(PersonaController personaController) {
 		this.personaController = personaController;
-	}
-	
-	public void showStruttureTuristicheUI() {
-		StruttureTuristicheUI.display();
-	}
-	
-	public void showNuovaStruttura() {
-		NuovaStruttura.display();
-	}
-	
-	public void showModificaStruttura() {
-		ModificaStruttura.display();
 	}
 }

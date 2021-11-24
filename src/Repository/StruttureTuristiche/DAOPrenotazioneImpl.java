@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import StruttureTuristiche.Model.*;
+import Repository.DAOFactory;
 import Repository.MySQLConnection;
 
 public class DAOPrenotazioneImpl implements DAOPrenotazione {
@@ -20,10 +23,10 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		super();
 		this.connection = connection;
 	}
-	
+
 	@Override
 	public HashMap<String, Prenotazione> doRetrieveAll() {
-		HashMap<String, Prenotazione> prenotazioniCollection = new HashMap<String, Prenotazione>();
+		HashMap<String, Prenotazione> prenotazioni = new HashMap<String, Prenotazione>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -31,20 +34,47 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 
 			while (result.next()) {
 				int idPrenotazione = result.getInt("idprenotazione");
-				Date dataArrivo = result.getDate("dataArrivo");
-				Date dataPartenza = result.getDate("dataPartenza");
+				LocalDate dataArrivo = LocalDate.parse(result.getDate("dataArrivo").toString());
+				LocalDate dataPartenza = LocalDate.parse(result.getDate("dataPartenza").toString());
 				double prezzoTot = result.getDouble("prezzoTotale");
-				int idCliente = result.getInt("cliente");
+				String cfCliente = result.getString("cliente");
 				int idInserzione = result.getInt("inserzione");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				Prenotazione p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, idCliente, idInserzione, idStrutturaTuristica);
-				prenotazioniCollection.put(Integer.toString(idPrenotazione), p);
+				String pIva = result.getString("strutturaTuristica");
+				Prenotazione p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
+				prenotazioni.put(Integer.toString(idPrenotazione), p);
 			}     
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return prenotazioniCollection;
+		return prenotazioni;
+	}
+	
+	@Override
+	public HashMap<String, Prenotazione> doRetrieveAllByIdInserzione(int id) {
+		HashMap<String, Prenotazione> prenotazioni = new HashMap<String, Prenotazione>();
+		Prenotazione p = null;
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM PRENOTAZIONI WHERE INSERZIONE=\"" + id + "\"");
+
+			while (result.next()) {
+				int idPrenotazione = result.getInt("idprenotazione");
+				LocalDate dataArrivo = LocalDate.parse(result.getDate("dataArrivo").toString());
+				LocalDate dataPartenza = LocalDate.parse(result.getDate("dataPartenza").toString());
+				double prezzoTot = result.getDouble("prezzoTotale");
+				String cfCliente = result.getString("cliente");
+				int idInserzione = result.getInt("inserzione");
+				String pIva = result.getString("strutturaTuristica");
+				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
+				prenotazioni.put(Integer.toString(idPrenotazione), p);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return prenotazioni;
 	}
 
 	@Override
@@ -57,13 +87,13 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 
 			while (result.next()) {
 				int idPrenotazione = result.getInt("idprenotazione");
-				Date dataArrivo = result.getDate("dataArrivo");
-				Date dataPartenza = result.getDate("dataPartenza");
+				LocalDate dataArrivo = LocalDate.parse(result.getDate("dataArrivo").toString());
+				LocalDate dataPartenza = LocalDate.parse(result.getDate("dataPartenza").toString());
 				double prezzoTot = result.getDouble("prezzoTotale");
-				int idCliente = result.getInt("cliente");
+				String cfCliente = result.getString("cliente");
 				int idInserzione = result.getInt("inserzione");
-				int idStrutturaTuristica = result.getInt("strutturaTuristica");
-				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, idCliente, idInserzione, idStrutturaTuristica);
+				String pIva = result.getString("strutturaTuristica");
+				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
 			}
 
 		} catch (SQLException e) {
@@ -82,29 +112,68 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
-	public int updatePrenotazione(Prenotazione p) {
+	public Prenotazione insertPrenotazione(Prenotazione p) {
 		try {
-			delete(p.getIdPrenotazione());
-			
-			String query = " insert into PRENOTAZIONI (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
+			String query = "INSERT INTO prenotazioni (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setInt(1, p.getIdPrenotazione());
-			preparedStmt.setDate(2, p.getDataArrivo());
-			preparedStmt.setDate(3, p.getDataPartenza());
+			preparedStmt.setString(1, null); //vediamo se è così che si passano i valori per l'autoincrement
+			preparedStmt.setDate(2, Date.valueOf(p.getDataArrivo()));
+			preparedStmt.setDate(3, Date.valueOf(p.getDataPartenza()));
 			preparedStmt.setDouble(4, p.getPrezzoTot());
-			preparedStmt.setInt(5, p.getIdCliente());
+			preparedStmt.setString(5, p.getCfCliente());
 			preparedStmt.setInt(6, p.getIdInserzione());
-			preparedStmt.setInt(7, p.getIdStrutturaTuristica());
-		
-			return preparedStmt.executeUpdate();
+			preparedStmt.setString(7, p.getPIva());
+			preparedStmt.executeUpdate();
+
+			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return null;
+	}
+	
+	@Override
+	public Prenotazione updatePrenotazione(Prenotazione p) {
+		try {
+			String query = "UPDATE prenotazioni SET idPrenotazione = ?, dataArrivo = ?, dataPartenza = ?, prezzoTotale = ?, Cliente = ?, Inserzione = ?, StrutturaTuristica = ? WHERE idPrenotazione = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setInt(1, p.getIdPrenotazione());
+			preparedStmt.setDate(2, Date.valueOf(p.getDataArrivo()));
+			preparedStmt.setDate(3, Date.valueOf(p.getDataPartenza()));
+			preparedStmt.setDouble(4, p.getPrezzoTot());
+			preparedStmt.setString(5, p.getCfCliente());
+			preparedStmt.setInt(6, p.getIdInserzione());
+			preparedStmt.setString(7, p.getPIva());
+			preparedStmt.setInt(7, p.getIdPrenotazione());
+			
+			preparedStmt.executeUpdate();
+
+			return p;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
+		boolean disponibilità = false;
+		LocalDate dataInizio = in.getDataInizio();
+		LocalDate dataFine = in.getDataFine();
+		
+		if (dataInizio.isBefore(dataArrivo) && dataFine.isAfter(dataPartenza)) {
+			ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); 
+			for(Prenotazione p : DAOFactory.getDAOPrenotazione().doRetrieveAllByIdInserzione(in.getIdInserzione()).values()) {
+				if(dataArrivo.isAfter(p.getDataPartenza()) || dataPartenza.isBefore(p.getDataArrivo()));
+				else return disponibilità;
+			};
+		}
+
+		disponibilità = true;
+		return disponibilità;
 	}
 }

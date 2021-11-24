@@ -88,11 +88,9 @@ public class DAODipendenteImpl implements DAODipendente {
 	}
 
 	@Override
-	public int updateDipendente(Dipendente dip) {
+	public int insertDipendente(Dipendente dip) {
 		try {
-			delete(dip.getUsername());
-			
-			String query = " insert into DIPENDENTI (Username, Password, CodiceFiscale, Nome, Cognome, Telefono, Email)"
+			String query = "INSERT INTO dipendenti (Username, Password, CodiceFiscale, Nome, Cognome, Telefono, Email)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setString(1, dip.getUsername());
@@ -102,6 +100,27 @@ public class DAODipendenteImpl implements DAODipendente {
 			preparedStmt.setString(5, dip.getCognome());
 			preparedStmt.setString(6, dip.getTelefono());
 			preparedStmt.setString(7, dip.getEmail());
+		
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public int updateDipendente(Dipendente dip) {
+		try {
+			String query = "UPDATE dipendenti SET Username = ?, Password = ?, CodiceFiscale = ?, Nome = ?, Cognome = ?, Telefono = ?, Email = ? WHERE Username = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setString(1, dip.getUsername());
+			preparedStmt.setString(2, dip.getPassword());
+			preparedStmt.setString(3, dip.getCodiceFiscale());
+			preparedStmt.setString(4, dip.getNome());
+			preparedStmt.setString(5, dip.getCognome());
+			preparedStmt.setString(6, dip.getTelefono());
+			preparedStmt.setString(7, dip.getEmail());
+			preparedStmt.setString(8, dip.getUsername());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {

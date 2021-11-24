@@ -1,12 +1,12 @@
 package StruttureTuristiche.Model;
 
-public class StrutturaTuristica {
-	public StrutturaTuristica(String pIva, String nome, String stelle, String tipologia, String indirizzo, String inserzionista) {
+public class StrutturaTuristica implements Comparable<StrutturaTuristica> {
+	public StrutturaTuristica(String pIva, String nome, String indirizzo, String tipologia, String stelle, String inserzionista) {
 		this.pIva = pIva;
 		this.nome = nome;
-		this.stelle = stelle;
-		this.tipologia = tipologia;
 		this.indirizzo = indirizzo;
+		this.tipologia = tipologia;
+		this.stelle = stelle;
 		this.inserzionista = inserzionista;
 	}
 	
@@ -23,12 +23,15 @@ public class StrutturaTuristica {
 	public String getIndirizzo() { return indirizzo; }
 	public void setIndirizzo(String indirizzo) { this.indirizzo = indirizzo; }
 	
+	@Override
+	public int compareTo(StrutturaTuristica s) {
+		return getInserzionista().compareTo(s.getInserzionista());
+	}
 
 	private String pIva;
 	private String nome;
-	private String stelle;
-	private String tipologia;
 	private String indirizzo;
+	private String tipologia;
+	private String stelle;
 	private String inserzionista;
-	
 }

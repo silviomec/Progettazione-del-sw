@@ -1,11 +1,9 @@
 package Repository.StruttureTuristiche;
 
-
 import java.util.HashMap;
 
 import StruttureTuristiche.Model.*;
 import Repository.DAOFactory;
-import Util.NewDate;
 
 public class DAOPrenotazioneTester {
 	public static void main(String[] args) {
