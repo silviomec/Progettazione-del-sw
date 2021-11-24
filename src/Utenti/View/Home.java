@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Facade.*;
+import Pagamenti.View.StoricoPagamentiUI;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -92,7 +93,7 @@ public class Home extends JFrame {
 		JButton btnRicevutePagamenti = new JButton("Ricevute pagamenti");
 		btnRicevutePagamenti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pf.showStoricoPagamentiUI();
+				pf.showStoricoPagamentiUI(StoricoPagamentiUI.CANONI_PRENOTAZIONI, "");
 				thisHome.dispose();
 			}
 		});

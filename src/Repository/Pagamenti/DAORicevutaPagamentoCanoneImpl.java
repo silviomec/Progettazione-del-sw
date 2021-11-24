@@ -54,13 +54,15 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM ricevutePagamentoCanoni "
+			ResultSet result = statement.executeQuery("SELECT * FROM ricevutePagamentoCanoni, struttureTuristiche "
 					+ "WHERE idPagamentoCanone LIKE '%" + target + "%' "
 					+ "OR importo LIKE '%" + target + "%' "
 					+ "OR dataPagamento LIKE '%" + target + "%' "
 					+ "OR CANONE LIKE '%" + target + "%' "
-					+ "OR INSERZIONISTA LIKE '%" + target + "%' "
-					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%'");
+					+ "OR ricevutePagamentoCanoni.INSERZIONISTA LIKE '%" + target + "%' "
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
+					+ "OR nome LIKE '%" + target + "%' "
+					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
 
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
