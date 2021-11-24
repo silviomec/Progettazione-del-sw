@@ -9,5 +9,6 @@ public interface DAODipendente {
 	public HashMap<String, Dipendente> doRetrieveAll();
 	public Dipendente doRetrieveByUsername(String username) throws DipendenteNotFoundException;
 	public void delete(String username);
+	public int insertDipendente(Dipendente dip);
 	public int updateDipendente(Dipendente dip);
 }

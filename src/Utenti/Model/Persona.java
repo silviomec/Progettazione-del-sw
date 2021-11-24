@@ -1,6 +1,8 @@
 package Utenti.Model;
 
-public class Persona {
+import StruttureTuristiche.Model.StrutturaTuristica;
+
+public class Persona implements Comparable<Persona> {
 	public Persona(String codiceFiscale, String nome, String cognome, String telefono, String email) {
 		this.codiceFiscale = codiceFiscale;
 		this.nome = nome;
@@ -21,6 +23,11 @@ public class Persona {
 	public String getEmail() { return email; }
 	public void setEmail(String email) { this.email = email; }
 
+	@Override
+	public int compareTo(Persona p) {
+		return getCognome().compareTo(p.getCognome());
+	}
+	
 	protected String codiceFiscale;
 	protected String nome;
 	protected String cognome;

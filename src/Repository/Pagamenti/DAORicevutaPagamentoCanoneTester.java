@@ -8,7 +8,7 @@ import Pagamenti.Model.RicevutaPagamentoCanone;
 public class DAORicevutaPagamentoCanoneTester {
 	public static void main(String[] args) {
 		DAOFactory df = new DAOFactory();
-		HashMap<String, RicevutaPagamentoCanone> ricevutePagamentoCanone = df.getDAORicevutaPagamentoCanone().doRetrieveAll();
+		HashMap<Integer, RicevutaPagamentoCanone> ricevutePagamentoCanone = df.getDAORicevutaPagamentoCanone().doRetrieveAll();
 
 		if (!ricevutePagamentoCanone.isEmpty())
 			for (RicevutaPagamentoCanone rpc : ricevutePagamentoCanone.values())

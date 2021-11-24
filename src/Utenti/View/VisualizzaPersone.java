@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class VisualizzaPersone extends JFrame {
-	private int tipologiaPersona;
+	private String tabella;
 	private ArrayList<Persona> persone = new ArrayList<Persona>();
 	private JTable table;
 	private static DefaultListModel<Persona> listmodel;
@@ -49,11 +50,11 @@ public class VisualizzaPersone extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void display(int tipologia) {
+	public static void display(String tabella) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VisualizzaPersone frame = new VisualizzaPersone(tipologia);
+					VisualizzaPersone frame = new VisualizzaPersone(tabella);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,21 +66,9 @@ public class VisualizzaPersone extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VisualizzaPersone(int tipologia) {
-		tipologiaPersona = tipologia;
-		String tabella = "";
-
-		switch(tipologiaPersona) {
-		case CLIENTE:
-			tabella = "Cliente";
-			break;
-		case INSERZIONISTA:
-			tabella = "Inserzionista";
-			break;
-			//default:
-			//	return null;
-		}
-
+	public VisualizzaPersone(String tabella) {
+		this.tabella = tabella;
+		
 		setTitle("Visualizza " + tabella);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -89,7 +78,6 @@ public class VisualizzaPersone extends JFrame {
 		contentPane.setLayout(null);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setEnabled(false);
 		cercaTextField.setBounds(10, 30, 776, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
@@ -103,7 +91,7 @@ public class VisualizzaPersone extends JFrame {
 		dtm.setColumnIdentifiers(new String[]{"CF", "Nome", "Cognome", "Telefono", "Email"});
 
 		persone = new ArrayList<Persona>();
-		for (Persona p : DAOFactory.getDAOPersona().doRetrieveAll(tipologiaPersona).values()) {
+		for (Persona p : DAOFactory.getDAOPersona().doRetrieveAll(tabella).values()) {
 			persone.add(p);
 		}
 		for(Persona p : persone) {
@@ -120,6 +108,7 @@ public class VisualizzaPersone extends JFrame {
 		contentPane.add(scrollPane);
 
 		btnCerca = new JButton("Cerca");
+		btnCerca.setEnabled(false);
 		btnCerca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca(cercaTextField.getText());
@@ -169,9 +158,10 @@ public class VisualizzaPersone extends JFrame {
 			dtm.removeRow(0);
 
 		persone = new ArrayList<Persona>();
-		for (Persona p : DAOFactory.getDAOPersona().doRetrieveAllFiltered(tipologiaPersona, target).values()) {
+		for (Persona p : DAOFactory.getDAOPersona().doRetrieveAllFiltered(tabella, target).values()) {
 			persone.add(p);
 		}
+		Collections.sort(persone);
 		for(Persona p : persone) {
 			dtm.addRow(new Object[]{p.getCodiceFiscale(), p.getNome(),  p.getCognome(), p.getTelefono(), p.getEmail()});
 		}
