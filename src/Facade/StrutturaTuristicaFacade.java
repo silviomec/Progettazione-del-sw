@@ -13,7 +13,7 @@ public class StrutturaTuristicaFacade {
 	private static StrutturaTuristicaFacade instance;
 
 	public static StrutturaTuristicaFacade getInstance() {
-		if (instance == null) {
+		if(instance == null) {
 			instance = new StrutturaTuristicaFacade();
 			instance.setStrutturaTuristicaController(new StrutturaTuristicaController(instance));
 		}

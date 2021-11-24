@@ -109,11 +109,9 @@ public class DAOPersonaImpl implements DAOPersona {
 	}
 
 	@Override
-	public int updatePersona(String tabella, Persona pers) {
+	public int insertPersona(String tabella, Persona pers) {
 		try {
-			delete(tabella, pers.getCodiceFiscale());
-
-			String query = " INSERT INTO " + tabella + "(CodiceFiscale, Nome, Cognome, Telefono, Email)"
+			String query = "INSERT INTO " + tabella + "(CodiceFiscale, Nome, Cognome, Telefono, Email)"
 					+ " values (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setString(1, pers.getCodiceFiscale());
@@ -121,6 +119,25 @@ public class DAOPersonaImpl implements DAOPersona {
 			preparedStmt.setString(3, pers.getCognome());
 			preparedStmt.setString(4, pers.getTelefono());
 			preparedStmt.setString(5, pers.getEmail());
+
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public int updatePersona(String tabella, Persona pers) {
+		try {
+			String query = "UPDATE " + tabella + " SET CodiceFiscale = ?, Nome = ?, Cognome = ?, Telefono = ?, Email = ? WHERE CodiceFiscale = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setString(1, pers.getCodiceFiscale());
+			preparedStmt.setString(2, pers.getNome());
+			preparedStmt.setString(3, pers.getCognome());
+			preparedStmt.setString(4, pers.getTelefono());
+			preparedStmt.setString(5, pers.getEmail());
+			preparedStmt.setString(6, pers.getCodiceFiscale());
 
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {

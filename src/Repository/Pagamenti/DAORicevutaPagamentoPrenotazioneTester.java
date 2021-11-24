@@ -8,7 +8,7 @@ import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 public class DAORicevutaPagamentoPrenotazioneTester {
 	public static void main(String[] args) {
 		DAOFactory df = new DAOFactory();
-		HashMap<String, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazione = df.getDAORicevutaPagamentoPrenotazione().doRetrieveAll();
+		HashMap<Integer, RicevutaPagamentoPrenotazione> ricevutePagamentoPrenotazione = df.getDAORicevutaPagamentoPrenotazione().doRetrieveAll();
 
 		if (!ricevutePagamentoPrenotazione.isEmpty())
 			for (RicevutaPagamentoPrenotazione rpp : ricevutePagamentoPrenotazione.values())

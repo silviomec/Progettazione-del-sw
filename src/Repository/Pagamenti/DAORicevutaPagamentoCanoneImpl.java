@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import Repository.MySQLConnection;
 import Pagamenti.Model.RicevutaPagamentoCanone;
+import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 
 public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanone {
 	private MySQLConnection connection;
@@ -22,8 +24,8 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 	}
 	
 	@Override
-	public HashMap<String, RicevutaPagamentoCanone> doRetrieveAll() {
-		HashMap<String, RicevutaPagamentoCanone> ricevutePagamentoCanoneCollection = new HashMap<String, RicevutaPagamentoCanone>();
+	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAll() {
+		HashMap<Integer, RicevutaPagamentoCanone> ricevutePagamentoCanoneCollection = new HashMap<Integer, RicevutaPagamentoCanone>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -32,15 +34,50 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
-				int idCanone = result.getInt("canone");
-				RicevutaPagamentoCanone rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone);
-				ricevutePagamentoCanoneCollection.put(Integer.toString(idPagamentoCanone), rpc);
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int idCanone = result.getInt("CANONE");
+				String cfInserzionista = result.getString("INSERZIONISTA");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				RicevutaPagamentoCanone rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone, cfInserzionista, pIva);
+				ricevutePagamentoCanoneCollection.put(idPagamentoCanone, rpc);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return ricevutePagamentoCanoneCollection;
+	}
+	
+	@Override
+	public HashMap<Integer, RicevutaPagamentoCanone> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, RicevutaPagamentoCanone> ricevutePagamentoCanoneCollection = new HashMap<Integer, RicevutaPagamentoCanone>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM ricevutePagamentoCanoni, struttureTuristiche "
+					+ "WHERE idPagamentoCanone LIKE '%" + target + "%' "
+					+ "OR importo LIKE '%" + target + "%' "
+					+ "OR dataPagamento LIKE '%" + target + "%' "
+					+ "OR CANONE LIKE '%" + target + "%' "
+					+ "OR ricevutePagamentoCanoni.INSERZIONISTA LIKE '%" + target + "%' "
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
+					+ "OR nome LIKE '%" + target + "%' "
+					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
+
+			while (result.next()) {
+				int idPagamentoCanone = result.getInt("idPagamentoCanone");
+				double importo = result.getDouble("importo");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
+				int idCanone = result.getInt("CANONE");
+				String cfInserzionista = result.getString("INSERZIONISTA");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				RicevutaPagamentoCanone rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone, cfInserzionista, pIva);
+				ricevutePagamentoCanoneCollection.put(idPagamentoCanone, rpc);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return ricevutePagamentoCanoneCollection;
 	}
 
@@ -55,9 +92,11 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
 				double importo = result.getDouble("importo");
-				Date dataPagamento = result.getDate("dataPagamento");
+				LocalDate dataPagamento = LocalDate.parse(result.getDate("dataPagamento").toString());
 				int idCanone = result.getInt("canone");
-				rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone);
+				String cfInserzionista = result.getString("INSERZIONISTA");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				rpc = new RicevutaPagamentoCanone(idPagamentoCanone, importo, dataPagamento, idCanone, cfInserzionista, pIva);
 			}
 
 		} catch (SQLException e) {
@@ -80,17 +119,37 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 	}
 
 	@Override
-	public int updateRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc) {
+	public int insertRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc) {
 		try {
-			delete(rpc.getIdPagamento());
-			
-			String query = " insert into ricevutepagamentocanone (idPagamentoCanone, importo, dataPagamento, canone)"
-					+ " values (?, ?, ?, ?)";
+			String query = "INSERT INTO ricevutepagamentocanone (idPagamentoCanone, importo, dataPagamento, CANONE, INSERZIONISTA, STRUTTURATURISTICA)"
+					+ " values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, rpc.getIdPagamento());
 			preparedStmt.setDouble(2, rpc.getImporto());
-			preparedStmt.setDate(3, rpc.getDataPagamento());
+			preparedStmt.setDate(3, Date.valueOf(rpc.getDataPagamento()));
 			preparedStmt.setInt(4, rpc.getIdCanone());
+			preparedStmt.setString(5, rpc.getCfInserzionista());
+			preparedStmt.setString(6, rpc.getPIva());
+		
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public int updateRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc) {
+		try {
+			String query = "UPDATE ricevutepagamentocanone SET idPagamentoCanone = ?, importo = ?, dataPagamento = ?, CANONE = ?, INSERZIONISTA = ?, STUTTURATURISTICA = ? WHERE idPagamentoCanone = ?";
+			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
+			preparedStmt.setInt(1, rpc.getIdPagamento());
+			preparedStmt.setDouble(2, rpc.getImporto());
+			preparedStmt.setDate(3, Date.valueOf(rpc.getDataPagamento()));
+			preparedStmt.setInt(4, rpc.getIdCanone());
+			preparedStmt.setString(5, rpc.getCfInserzionista());
+			preparedStmt.setString(6, rpc.getPIva());
+			preparedStmt.setInt(7, rpc.getIdPagamento());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
