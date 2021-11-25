@@ -61,7 +61,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 					+ "OR CANONE LIKE '%" + target + "%' "
 					+ "OR ricevutePagamentoCanoni.INSERZIONISTA LIKE '%" + target + "%' "
 					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
-					+ "OR nome LIKE '%" + target + "%' "
+					+ "OR struttureTuristiche.nome LIKE '%" + target + "%' "
 					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
 
 			while (result.next()) {
