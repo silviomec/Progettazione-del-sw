@@ -160,8 +160,8 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
-		boolean disponibilità = false;
+	public boolean controlloDisponibilita(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
+		boolean disponibilita = false;
 		LocalDate dataInizio = in.getDataInizio();
 		LocalDate dataFine = in.getDataFine();
 		
@@ -169,11 +169,11 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); 
 			for(Prenotazione p : DAOFactory.getDAOPrenotazione().doRetrieveAllByIdInserzione(in.getIdInserzione()).values()) {
 				if(dataArrivo.isAfter(p.getDataPartenza()) || dataPartenza.isBefore(p.getDataArrivo()));
-				else return disponibilità;
+				else return disponibilita;
 			};
 		}
 
-		disponibilità = true;
-		return disponibilità;
+		disponibilita = true;
+		return disponibilita;
 	}
 }
