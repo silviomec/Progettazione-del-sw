@@ -62,11 +62,23 @@ public class Home extends JFrame {
 		btnInserzioni.setFont(new Font("Dialog", Font.BOLD, 18));
 		btnInserzioni.setBounds(333, 229, 261, 97);
 		contentPane.add(btnInserzioni);
+		btnInserzioni.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stf.showInserzioniUI();
+				thisHome.dispose();
+			}
+		});
 		
 		JButton btnPrenotazioni = new JButton("Prenotazioni");
 		btnPrenotazioni.setFont(new Font("Dialog", Font.BOLD, 18));
 		btnPrenotazioni.setBounds(37, 315, 261, 97);
 		contentPane.add(btnPrenotazioni);
+		btnPrenotazioni.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stf.showPrenotazioneUI();
+				thisHome.dispose();
+			}
+		});
 		
 		JButton btnUtenti = new JButton("Utenti");
 		btnUtenti.addActionListener(new ActionListener() {

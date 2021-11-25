@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import Repository.MySQLConnection;
 import StruttureTuristiche.Model.Inserzione;
+import StruttureTuristiche.Model.StrutturaTuristica;
 
 public class DAOInserzioneImpl implements DAOInserzione {
 	private MySQLConnection connection;
@@ -23,8 +24,8 @@ public class DAOInserzioneImpl implements DAOInserzione {
 	}
 
 	@Override
-	public HashMap<String, Inserzione> doRetrieveAll() {
-		HashMap<String, Inserzione> InserzioneCollection = new HashMap<String, Inserzione>();
+	public HashMap<Integer , Inserzione> doRetrieveAll() {
+		HashMap<Integer, Inserzione> InserzioneCollection = new HashMap<Integer, Inserzione>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -41,7 +42,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 				String strutturaTuristica = result.getString("strutturaTuristica");
 				String inserzionista = result.getString("inserzionista");
 				Inserzione in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
-				InserzioneCollection.put(Integer.toString(idInserzione), in);
+				InserzioneCollection.put(idInserzione, in);
 			}
 
 		} catch (SQLException e) {  					
@@ -76,6 +77,45 @@ public class DAOInserzioneImpl implements DAOInserzione {
 	}
 
 	@Override
+	public HashMap<Integer, Inserzione> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, Inserzione> Inserzioni = new HashMap<Integer, Inserzione>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM inserzioni "
+					+ "WHERE idInserzione LIKE '%" + target + "%' "
+					+ "OR titolo LIKE '%" + target + "%' "
+					+ "OR descrizione LIKE '%" + target + "%' "
+					+ "OR prezzoPerNotte LIKE '%" + target + "%' "
+					+ "OR numeroPersone LIKE '%" + target + "%' "
+					+ "OR dataInizio LIKE '%" + target + "%'"
+					+ "OR dataFine LIKE '%" + target + "%'"
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%'"
+					+ "OR INSERZIONISTA LIKE '%" + target + "%'"
+					);
+
+			while (result.next()) {
+				int idInserzione = Integer.parseInt(result.getString("idInserzione"));
+				String titolo = result.getString("titolo");
+				String descrizione = result.getString("descrizione");
+				Double prezzoPerNotte = Double.parseDouble(result.getString("prezzoPerNotte"));
+				int numeroPersone = Integer.parseInt(result.getString("numeroPersone"));
+				LocalDate dataInizio = LocalDate.parse(result.getDate("dataInizio").toString());
+				LocalDate dataFine = LocalDate.parse(result.getDate("dataFine").toString());
+				String strutturaTuristica = result.getString("STRUTTURATURISTICA");
+				String inserzionista = result.getString("INSERZIONISTA");
+
+				Inserzione i = new  Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
+				Inserzioni.put(idInserzione, i);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return Inserzioni;
+	}
+
+	@Override
 	public void delete(int idInserzione) {
 		try {
 			System.out.println(idInserzione);
@@ -103,7 +143,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			preparedStmt.setDate(7, Date.valueOf(in.getDataFine()));
 			preparedStmt.setString(8, in.getStrutturaTuristica());
 			preparedStmt.setString(9, in.getInserzionista());
-			
+
 			preparedStmt.executeUpdate();
 
 			return in;
@@ -112,7 +152,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Inserzione updateInserzione(Inserzione in) {
 		try {
@@ -128,7 +168,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			preparedStmt.setString(8, in.getStrutturaTuristica());
 			preparedStmt.setString(9, in.getInserzionista());
 			preparedStmt.setInt(10, in.getIdInserzione());
-			
+
 			preparedStmt.executeUpdate();
 
 			return in;
@@ -137,4 +177,5 @@ public class DAOInserzioneImpl implements DAOInserzione {
 		}
 		return null;
 	}
+	
 } 

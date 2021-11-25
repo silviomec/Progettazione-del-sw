@@ -120,7 +120,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			String query = "INSERT INTO prenotazioni (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setString(1, null); //vediamo se Ë cosÏ che si passano i valori per l'autoincrement
+			preparedStmt.setString(1, null); //vediamo se ÔøΩ cosÔøΩ che si passano i valori per l'autoincrement
 			preparedStmt.setDate(2, Date.valueOf(p.getDataArrivo()));
 			preparedStmt.setDate(3, Date.valueOf(p.getDataPartenza()));
 			preparedStmt.setDouble(4, p.getPrezzoTot());
@@ -160,8 +160,8 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public boolean controlloDisponibilit‡(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
-		boolean disponibilit‡ = false;
+	public boolean controlloDisponibilit√†(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
+		boolean disponibilit√† = false;
 		LocalDate dataInizio = in.getDataInizio();
 		LocalDate dataFine = in.getDataFine();
 		
@@ -169,11 +169,11 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); 
 			for(Prenotazione p : DAOFactory.getDAOPrenotazione().doRetrieveAllByIdInserzione(in.getIdInserzione()).values()) {
 				if(dataArrivo.isAfter(p.getDataPartenza()) || dataPartenza.isBefore(p.getDataArrivo()));
-				else return disponibilit‡;
+				else return disponibilit√†;
 			};
 		}
 
-		disponibilit‡ = true;
-		return disponibilit‡;
+		disponibilit√† = true;
+		return disponibilit√†;
 	}
 }

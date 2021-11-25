@@ -12,6 +12,6 @@ public interface DAOPrenotazione {
 	public void delete(int id);
 	public Prenotazione insertPrenotazione(Prenotazione p);
 	public Prenotazione updatePrenotazione(Prenotazione p);
-	public boolean controlloDisponibilit‡(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza);
+	public boolean controlloDisponibilit√†(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza);
 }
 
