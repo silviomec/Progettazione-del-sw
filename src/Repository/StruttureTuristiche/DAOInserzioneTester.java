@@ -8,7 +8,7 @@ import StruttureTuristiche.Model.Inserzione;
 public class DAOInserzioneTester {
 	public static void main(String[] args) {
 		DAOFactory df = new DAOFactory();
-		HashMap<String,Inserzione> inserzione = df.getDAOInserzione().doRetrieveAll();
+		HashMap<Integer,Inserzione> inserzione = df.getDAOInserzione().doRetrieveAll();
 
 		if (!inserzione.isEmpty())
 			for (Inserzione in : inserzione.values())

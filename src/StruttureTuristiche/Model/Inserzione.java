@@ -3,7 +3,7 @@ package StruttureTuristiche.Model;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Inserzione {
+public class Inserzione implements Comparable <Inserzione>{
 	public Inserzione(int idInserzione, String titolo, String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String strutturaTuristica, String inserzionista) {
 		this.idInserzione = idInserzione;
 		this.titolo = titolo;
@@ -45,6 +45,11 @@ public class Inserzione {
 	public void setDataInizio(LocalDate dataInizio) { this.dataInizio = dataInizio; }
 	public LocalDate getDataFine() {	return dataFine; }
 	public void setDataFine(LocalDate dataFine) { this.dataFine = dataFine; }
+	
+	public int compareTo(Inserzione ins) {
+		return getInserzionista().compareTo(ins.getInserzionista());
+	}
+
 
 	private int idInserzione;
 	private String strutturaTuristica;
