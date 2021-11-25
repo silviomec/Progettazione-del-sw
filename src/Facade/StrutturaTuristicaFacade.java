@@ -63,8 +63,8 @@ public class StrutturaTuristicaFacade {
 		DAOFactory.getDAOPrenotazione().delete(p.getIdPrenotazione());
 	}
 
-	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
-		return DAOFactory.getDAOPrenotazione().controlloDisponibilità(in, dataArrivo, dataPartenza);
+	public boolean controlloDisponibilita(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
+		return DAOFactory.getDAOPrenotazione().controlloDisponibilita(in, dataArrivo, dataPartenza);
 	}
 
 	public StrutturaTuristicaController getStrutturaTuristicaController() {

@@ -157,8 +157,6 @@ public class StruttureTuristicheUI extends JFrame {
 
 		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista", "Scadenza canone"});
 
-		cerca("");
-
 		table = new JTable() {
 			Color rosso = new Color(247 , 127, 127);
 			@Override
@@ -209,6 +207,7 @@ public class StruttureTuristicheUI extends JFrame {
 		btnIndietro.setBounds(10, 10, 85, 21);
 		contentPane.add(btnIndietro);
 
+		cerca("");
 		createEvents();
 	}
 
