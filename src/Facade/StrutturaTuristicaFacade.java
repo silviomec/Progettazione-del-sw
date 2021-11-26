@@ -86,15 +86,20 @@ public class StrutturaTuristicaFacade {
 	public void showGestisciCanone(Canone canone) {
 		GestisciCanone.display(canone);
 	}
+	
 	public void showPrenotazioneUI() {
 		PrenotazioniUI.display();
 	}
+	
 	public void showInserzioniUI() {
 		InserzioniUI.display();
 	}
+	
 	public void showNuovaInserzione() {
 		NuovaInserzione.display();
 	}
 
-	
+	public void showNuovaPrenotazioneUI(Inserzione inserzione) {
+		NuovaPrenotazioneUI.display(inserzione);
+	}
 }
