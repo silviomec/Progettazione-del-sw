@@ -25,8 +25,8 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public HashMap<String, Prenotazione> doRetrieveAll() {
-		HashMap<String, Prenotazione> prenotazioni = new HashMap<String, Prenotazione>();
+	public HashMap<Integer, Prenotazione> doRetrieveAll() {
+		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -41,7 +41,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 				int idInserzione = result.getInt("inserzione");
 				String pIva = result.getString("strutturaTuristica");
 				Prenotazione p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
-				prenotazioni.put(Integer.toString(idPrenotazione), p);
+				prenotazioni.put(idPrenotazione, p);
 			}     
 
 		} catch (SQLException e) {
@@ -51,8 +51,8 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 	
 	@Override
-	public HashMap<String, Prenotazione> doRetrieveAllByIdInserzione(int id) {
-		HashMap<String, Prenotazione> prenotazioni = new HashMap<String, Prenotazione>();
+	public HashMap<Integer, Prenotazione> doRetrieveAllByIdInserzione(int id) {
+		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
 		Prenotazione p = null;
 		Statement statement = null;
 		try {
@@ -68,7 +68,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 				int idInserzione = result.getInt("inserzione");
 				String pIva = result.getString("strutturaTuristica");
 				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
-				prenotazioni.put(Integer.toString(idPrenotazione), p);
+				prenotazioni.put(idPrenotazione, p);
 			}
 
 		} catch (SQLException e) {
@@ -77,6 +77,41 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		return prenotazioni;
 	}
 
+	@Override
+	public HashMap<Integer, Prenotazione> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM prenotazioni, struttureTuristiche "
+					+ "WHERE idPrenotazione LIKE '%" + target + "%' "
+					+ "OR dataArrivo LIKE '%" + target + "%' "
+					+ "OR dataPartenza LIKE '%" + target + "%' "
+					+ "OR prezzoTotale LIKE '%" + target + "%' "
+					+ "OR CLIENTE LIKE '%" + target + "%' "
+					+ "OR INSERZIONE LIKE '%" + target + "%'"
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%'"
+					+ "OR struttureTuristiche.nome LIKE '%" + target + "%' "
+					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
+
+			while (result.next()) {
+				int idPrenotazione = result.getInt("idprenotazione");
+				LocalDate dataArrivo = LocalDate.parse(result.getDate("dataArrivo").toString());
+				LocalDate dataPartenza = LocalDate.parse(result.getDate("dataPartenza").toString());
+				double prezzoTot = result.getDouble("prezzoTotale");
+				String cfCliente = result.getString("CLIENTE");
+				int idInserzione = result.getInt("INSERZIONE");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				Prenotazione p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
+				prenotazioni.put(idPrenotazione, p);
+			}     
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return prenotazioni;
+	}
+	
 	@Override
 	public Prenotazione doRetrieveByIdPrenotazione(int id) {
 		Prenotazione p = null;
@@ -120,7 +155,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			String query = "INSERT INTO prenotazioni (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setString(1, null); //vediamo se � cos� che si passano i valori per l'autoincrement
+			preparedStmt.setString(1, null);
 			preparedStmt.setDate(2, Date.valueOf(p.getDataArrivo()));
 			preparedStmt.setDate(3, Date.valueOf(p.getDataPartenza()));
 			preparedStmt.setDouble(4, p.getPrezzoTot());

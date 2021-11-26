@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Facade.StrutturaTuristicaFacade;
 import Repository.DAOFactory;
-import StruttureTuristiche.Model.Inserzione;
+import StruttureTuristiche.Model.Prenotazione;
 import Utenti.View.Home;
 
 import javax.swing.DefaultListModel;
@@ -31,16 +31,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
 
-public class InserzioniUI extends JFrame {
+public class PrenotazioniUI extends JFrame {
 	private JPanel contentPane;
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
-	private static ArrayList<Inserzione> inserzioni = new ArrayList<Inserzione>();
+	private static ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>();
 	private JButton btnCerca;
 	private JTextField cercaTextField;
 	private JTable table;
-	private static JButton rimuoviInserzioneButton;
-	private static JButton modificaInserzioneButton;
-	private static DefaultListModel<Inserzione> listmodel;
+	private static JButton rimuoviPrenotazioneButton;
+	private static DefaultListModel<Prenotazione> listmodel;
 	private static DefaultTableModel dtm = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
@@ -52,7 +51,7 @@ public class InserzioniUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InserzioniUI frame = new InserzioniUI();
+					PrenotazioniUI frame = new PrenotazioniUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,10 +60,10 @@ public class InserzioniUI extends JFrame {
 		});
 	}
 
-	public InserzioniUI() {
-		InserzioniUI thisInserzioniUI = this;
+	public PrenotazioniUI() {
+		PrenotazioniUI thisPrenotazioniUI = this;
 		
-		setTitle("Inserzioni");
+		setTitle("Prenotazioni");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 650);
 		contentPane = new JPanel();
@@ -72,7 +71,7 @@ public class InserzioniUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JButton btnInserisciInserzione = new JButton("Inserisci Inserzione");
+		JButton btnInserisciInserzione = new JButton("Nuova prenotazione");
 		btnInserisciInserzione.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				stf.showNuovaInserzione();
@@ -82,28 +81,22 @@ public class InserzioniUI extends JFrame {
 		btnInserisciInserzione.setBounds(27, 100, 207, 97);
 		contentPane.add(btnInserisciInserzione);
 
-		rimuoviInserzioneButton = new JButton("Rimuovi inserzione");
-		rimuoviInserzioneButton.addActionListener(new ActionListener() {
+		rimuoviPrenotazioneButton = new JButton("Rimuovi prenotazione");
+		rimuoviPrenotazioneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int scelta = JOptionPane.showConfirmDialog(thisInserzioniUI, "Vuoi rimuovere l'inserzione selezionata?", "Rimuovi inserzione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				int scelta = JOptionPane.showConfirmDialog(thisPrenotazioniUI, "Vuoi rimuovere la prenotazione selezionata?", "Rimuovi prenotazione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if(scelta == 0) {
-					DAOFactory.getDAOInserzione().delete(inserzioni.get(table.getSelectedRow()).getIdInserzione());
+					DAOFactory.getDAOInserzione().delete(prenotazioni.get(table.getSelectedRow()).getIdPrenotazione());
 					cerca(cercaTextField.getText());
-					JOptionPane.showMessageDialog(thisInserzioniUI, "Rimozione avvenuta con successo!", "Messaggio", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(thisPrenotazioniUI, "Rimozione avvenuta con successo!", "Messaggio", JOptionPane.INFORMATION_MESSAGE);
 				}
 				System.out.println(table.getSelectionModel().getLeadSelectionIndex());;
 			}
 		});
-		rimuoviInserzioneButton.setFont(new Font("Dialog", Font.BOLD, 18));
-		rimuoviInserzioneButton.setEnabled(false);
-		rimuoviInserzioneButton.setBounds(27, 217, 207, 97);
-		contentPane.add(rimuoviInserzioneButton);
-
-		modificaInserzioneButton = new JButton("Modifica inserzione");
-		modificaInserzioneButton.setFont(new Font("Dialog", Font.BOLD, 18));
-		modificaInserzioneButton.setEnabled(false);
-		modificaInserzioneButton.setBounds(27, 336, 207, 97);
-		contentPane.add(modificaInserzioneButton);
+		rimuoviPrenotazioneButton.setFont(new Font("Dialog", Font.BOLD, 18));
+		rimuoviPrenotazioneButton.setEnabled(false);
+		rimuoviPrenotazioneButton.setBounds(27, 217, 207, 97);
+		contentPane.add(rimuoviPrenotazioneButton);
 
 		table = new JTable();
 		table.setBounds(344, 322, 314, -206);
@@ -113,15 +106,14 @@ public class InserzioniUI extends JFrame {
 		scrollPane.setBounds(252, 82, 674, 521);
 		contentPane.add(scrollPane);
 		
-		dtm.setColumnIdentifiers(new String[]{"Inserzione", "Descrizione", "Prezzo per notte", "Numero persone", "Data inizio", "Data fine", "Struttura turistica", "Inserzionista"});
+		dtm.setColumnIdentifiers(new String[]{"ID", "Data arrivo", "Data partenza", "Prezzo totale", "Cliente", "Inserzione", "Struttura turistica", "Partita IVA"});
 
 		btnCerca = new JButton("Cerca");
 		btnCerca.setEnabled(false);
 		btnCerca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca(cercaTextField.getText());
-				rimuoviInserzioneButton.setEnabled(false);
-				modificaInserzioneButton.setEnabled(false);
+				rimuoviPrenotazioneButton.setEnabled(false);
 			}
 		});
 		btnCerca.setBounds(753, 47, 85, 21);
@@ -131,8 +123,7 @@ public class InserzioniUI extends JFrame {
 		btnRipristina.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerca("");
-				rimuoviInserzioneButton.setEnabled(false);
-				modificaInserzioneButton.setEnabled(false);
+				rimuoviPrenotazioneButton.setEnabled(false);
 				cercaTextField.setText("");
 			}
 		});
@@ -148,7 +139,7 @@ public class InserzioniUI extends JFrame {
 		btnIndietro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Home.display();
-				thisInserzioniUI.dispose();
+				thisPrenotazioniUI.dispose();
 			}
 		});
 		btnIndietro.setBounds(10, 10, 85, 21);
@@ -165,8 +156,7 @@ public class InserzioniUI extends JFrame {
 			btnCerca.setEnabled(false);
 
 		if(table.isRowSelected(table.getSelectedRow())) {
-			rimuoviInserzioneButton.setEnabled(true);
-			modificaInserzioneButton.setEnabled(true);
+			rimuoviPrenotazioneButton.setEnabled(true);
 		}
 	}
 
@@ -196,7 +186,7 @@ public class InserzioniUI extends JFrame {
 	}
 
 	public void setDtm(DefaultTableModel dtm) {
-		InserzioniUI.dtm = dtm;
+		PrenotazioniUI.dtm = dtm;
 	}
 
 	public static void cerca(String target) {
@@ -205,17 +195,15 @@ public class InserzioniUI extends JFrame {
 		for(i = 0, j = getDtm().getRowCount(); i < j; i++)
 			getDtm().removeRow(0);
 
-		inserzioni = new ArrayList<Inserzione>();
-		for (Inserzione ins : DAOFactory.getDAOInserzione().doRetrieveAllFiltered(target).values()) {
-			if(DAOFactory.getDAOCanone().doRetrieve("STRUTTURATURISTICA", ins.getStrutturaTuristica()).isSaldato())
-				inserzioni.add(ins);
+		prenotazioni = new ArrayList<Prenotazione>();
+		for (Prenotazione p : DAOFactory.getDAOPrenotazione().doRetrieveAllFiltered(target).values()) {
+			prenotazioni.add(p);
 		}
-		Collections.sort(inserzioni);
-		for(Inserzione ins : inserzioni) {
-			getDtm().addRow(new Object[]{ins.getIdInserzione(), ins.getDescrizione(), ins.getPrezzoPerNotte(),ins.getNumeroPersone(), ins.getDataInizio(), ins.getDataFine() , ins.getStrutturaTuristica(), ins.getInserzionista()});
+		Collections.sort(prenotazioni);
+		for(Prenotazione p : prenotazioni) {
+			getDtm().addRow(new Object[]{p.getIdPrenotazione(), p.getDataArrivo(), p.getDataPartenza(), p.getPrezzoTot(), p.getCfCliente(), p.getIdInserzione(), DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(p.getPIva()).getNome(), p.getPIva()});
 		}
 
-		rimuoviInserzioneButton.setEnabled(false);
-		modificaInserzioneButton.setEnabled(false);
+		rimuoviPrenotazioneButton.setEnabled(false);
 	}
 }

@@ -62,7 +62,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 					+ "OR PRENOTAZIONE LIKE '%" + target + "%'"
 					+ "OR CLIENTE LIKE '%" + target + "%' "
 					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
-					+ "OR nome LIKE '%" + target + "%' "
+					+ "OR struttureTuristiche.nome LIKE '%" + target + "%' "
 					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
 
 			while (result.next()) {
