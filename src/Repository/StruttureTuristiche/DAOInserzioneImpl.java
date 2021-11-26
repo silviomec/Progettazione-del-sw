@@ -33,7 +33,6 @@ public class DAOInserzioneImpl implements DAOInserzione {
 
 			while (result.next()) {
 				int idInserzione = result.getInt("idInserzione");
-				String titolo = result.getString("titolo");
 				String descrizione = result.getString("descrizione");
 				double prezzoPerNotte = result.getDouble("prezzoPerNotte");
 				int numeroPersone = result.getInt("numeroPersone");
@@ -41,7 +40,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 				LocalDate dataFine = LocalDate.parse(result.getDate("dataFine").toString());
 				String strutturaTuristica = result.getString("strutturaTuristica");
 				String inserzionista = result.getString("inserzionista");
-				Inserzione in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
+				Inserzione in = new Inserzione(idInserzione, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
 				InserzioneCollection.put(idInserzione, in);
 			}
 
@@ -60,7 +59,6 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			ResultSet result = statement.executeQuery("SELECT * FROM INSERZIONI WHERE idInserzione=\"" + idInserzione + "\"");
 
 			while (result.next()) {
-				String titolo = result.getString("titolo");
 				String descrizione = result.getString("descrizione");
 				double prezzoPerNotte = result.getDouble("prezzoPerNotte");
 				int numeroPersone = result.getInt("numeroPersone");
@@ -68,7 +66,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 				LocalDate dataFine = LocalDate.parse(result.getDate("dataFine").toString());
 				String strutturaTuristica = result.getString("strutturaTuristica");
 				String inserzionista = result.getString("inserzionista");
-				in = new Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
+				in = new Inserzione(idInserzione, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,19 +82,16 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			statement = connection.getConnection().createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM inserzioni "
 					+ "WHERE idInserzione LIKE '%" + target + "%' "
-					+ "OR titolo LIKE '%" + target + "%' "
 					+ "OR descrizione LIKE '%" + target + "%' "
 					+ "OR prezzoPerNotte LIKE '%" + target + "%' "
 					+ "OR numeroPersone LIKE '%" + target + "%' "
 					+ "OR dataInizio LIKE '%" + target + "%'"
 					+ "OR dataFine LIKE '%" + target + "%'"
 					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%'"
-					+ "OR INSERZIONISTA LIKE '%" + target + "%'"
-					);
+					+ "OR INSERZIONISTA LIKE '%" + target + "%'");
 
 			while (result.next()) {
 				int idInserzione = Integer.parseInt(result.getString("idInserzione"));
-				String titolo = result.getString("titolo");
 				String descrizione = result.getString("descrizione");
 				Double prezzoPerNotte = Double.parseDouble(result.getString("prezzoPerNotte"));
 				int numeroPersone = Integer.parseInt(result.getString("numeroPersone"));
@@ -105,7 +100,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 				String strutturaTuristica = result.getString("STRUTTURATURISTICA");
 				String inserzionista = result.getString("INSERZIONISTA");
 
-				Inserzione i = new  Inserzione(idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
+				Inserzione i = new  Inserzione(idInserzione, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista);
 				Inserzioni.put(idInserzione, i);
 			}
 		} catch (SQLException e) {
@@ -131,18 +126,17 @@ public class DAOInserzioneImpl implements DAOInserzione {
 	@Override
 	public Inserzione insertInserzione(Inserzione in) {
 		try {
-			String query = "INSERT INTO inserzioni (idInserzione, titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista)"
-					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO inserzioni (idInserzione, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, strutturaTuristica, inserzionista)"
+					+ " values (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, in.getIdInserzione());
-			preparedStmt.setString(2, in.getTitolo());
-			preparedStmt.setString(3, in.getDescrizione());
-			preparedStmt.setDouble(4, in.getPrezzoPerNotte());
-			preparedStmt.setInt(5, in.getNumeroPersone());
-			preparedStmt.setDate(6, Date.valueOf(in.getDataInizio()));
-			preparedStmt.setDate(7, Date.valueOf(in.getDataFine()));
-			preparedStmt.setString(8, in.getStrutturaTuristica());
-			preparedStmt.setString(9, in.getInserzionista());
+			preparedStmt.setString(2, in.getDescrizione());
+			preparedStmt.setDouble(3, in.getPrezzoPerNotte());
+			preparedStmt.setInt(4, in.getNumeroPersone());
+			preparedStmt.setDate(5, Date.valueOf(in.getDataInizio()));
+			preparedStmt.setDate(6, Date.valueOf(in.getDataFine()));
+			preparedStmt.setString(7, in.getStrutturaTuristica());
+			preparedStmt.setString(8, in.getInserzionista());
 
 			preparedStmt.executeUpdate();
 
@@ -156,18 +150,16 @@ public class DAOInserzioneImpl implements DAOInserzione {
 	@Override
 	public Inserzione updateInserzione(Inserzione in) {
 		try {
-			String query = "UPDATE inserzioni SET idInserzione = ?, titolo = ?, descrizione = ?, prezzoPerNotte = ?, numeroPersone = ?, dataInizio = ?, dataFine = ?, strutturaTuristica = ?, inserzionista = ? WHERE idInserzione = ?";
+			String query = "UPDATE inserzioni SET idInserzione = ?, descrizione = ?, prezzoPerNotte = ?, numeroPersone = ?, dataInizio = ?, dataFine = ?, strutturaTuristica = ?, inserzionista = ? WHERE idInserzione = ?";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, in.getIdInserzione());
-			preparedStmt.setString(2, in.getTitolo());
-			preparedStmt.setString(3, in.getDescrizione());
-			preparedStmt.setDouble(4, in.getPrezzoPerNotte());
-			preparedStmt.setInt(5, in.getNumeroPersone());
-			preparedStmt.setDate(6, Date.valueOf(in.getDataInizio()));
-			preparedStmt.setDate(7, Date.valueOf(in.getDataFine()));
-			preparedStmt.setString(8, in.getStrutturaTuristica());
-			preparedStmt.setString(9, in.getInserzionista());
-			preparedStmt.setInt(10, in.getIdInserzione());
+			preparedStmt.setString(2, in.getDescrizione());
+			preparedStmt.setDouble(3, in.getPrezzoPerNotte());
+			preparedStmt.setInt(4, in.getNumeroPersone());
+			preparedStmt.setDate(5, Date.valueOf(in.getDataInizio()));
+			preparedStmt.setDate(6, Date.valueOf(in.getDataFine()));
+			preparedStmt.setString(7, in.getStrutturaTuristica());
+			preparedStmt.setString(8, in.getInserzionista());
 
 			preparedStmt.executeUpdate();
 
@@ -177,5 +169,4 @@ public class DAOInserzioneImpl implements DAOInserzione {
 		}
 		return null;
 	}
-	
 } 

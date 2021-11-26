@@ -8,7 +8,7 @@ import Repository.DAOFactory;
 public class DAOPrenotazioneTester {
 	public static void main(String[] args) {
 		DAOFactory df = new DAOFactory();
-		HashMap<String, Prenotazione> prenotazioni = df.getDAOPrenotazione().doRetrieveAll();
+		HashMap<Integer, Prenotazione> prenotazioni = df.getDAOPrenotazione().doRetrieveAll();
 
 		if (!prenotazioni.isEmpty())
 			for (Prenotazione p : prenotazioni.values())

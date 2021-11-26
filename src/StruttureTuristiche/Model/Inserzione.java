@@ -4,9 +4,8 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Inserzione implements Comparable <Inserzione>{
-	public Inserzione(int idInserzione, String titolo, String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String strutturaTuristica, String inserzionista) {
+	public Inserzione(int idInserzione, String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String strutturaTuristica, String inserzionista) {
 		this.idInserzione = idInserzione;
-		this.titolo = titolo;
 		this.descrizione = descrizione;
 		this.prezzoPerNotte = prezzoPerNotte;
 		this.numeroPersone = numeroPersone;
@@ -16,8 +15,7 @@ public class Inserzione implements Comparable <Inserzione>{
 		this.inserzionista = inserzionista;
 	}
 	
-	public Inserzione(String titolo, String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String strutturaTuristica, String inserzionista) {
-		this.titolo = titolo;
+	public Inserzione(String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String strutturaTuristica, String inserzionista) {
 		this.descrizione = descrizione;
 		this.prezzoPerNotte = prezzoPerNotte;
 		this.numeroPersone = numeroPersone;
@@ -33,8 +31,6 @@ public class Inserzione implements Comparable <Inserzione>{
 	public void setStrutturaTuristica(String strutturaTuristica) { this.strutturaTuristica = strutturaTuristica; }
 	public String getInserzionista() { return inserzionista; }
 	public void setInserzionista(String inserzionista) { this.inserzionista = inserzionista; }
-	public String getTitolo() { return titolo; }
-	public void setTitolo(String titolo) { this.titolo = titolo; }
 	public String getDescrizione() { return descrizione; }
 	public void setDescrizione(String descrizione) { this.descrizione = descrizione; }
 	public double getPrezzoPerNotte() { return prezzoPerNotte; }
@@ -50,11 +46,9 @@ public class Inserzione implements Comparable <Inserzione>{
 		return getInserzionista().compareTo(ins.getInserzionista());
 	}
 
-
 	private int idInserzione;
 	private String strutturaTuristica;
 	private String inserzionista;
-	private String titolo;
 	private String descrizione;
 	private double prezzoPerNotte;
 	private int numeroPersone;
