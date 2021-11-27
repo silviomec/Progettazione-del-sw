@@ -5,6 +5,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner.DateEditor;
 import javax.swing.JScrollBar;
 import java.awt.Font;
 import java.time.LocalDate;
@@ -30,7 +31,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import Util.RangeEvaluator;
+
+import Util.*;
 
 public class NuovaPrenotazioneUI extends JDialog {
 	private Inserzione inserzione;
@@ -116,10 +118,10 @@ public class NuovaPrenotazioneUI extends JDialog {
 		dataArrivo.setBounds(10, 90, 133, 19);
 		configuraPrenotazionePanel.add(dataArrivo);
 
-		//dataPartenza = new JDateChooser(calendarioDisponibilita(), null, null, null);
+		dataPartenza = new JDateChooser(calendarioDisponibilita(), null, null, null);
 		dataPartenza = new JDateChooser();
 		dataPartenza.setBounds(171, 90, 133, 19);
-		//dataPartenza.setEnabled(false);
+		dataPartenza.setEnabled(false);
 		configuraPrenotazionePanel.add(dataPartenza);
 
 		JLabel dataArrivoLabel = new JLabel("Data arrivo");
@@ -157,13 +159,12 @@ public class NuovaPrenotazioneUI extends JDialog {
 	}
 
 	public void warn() {
-		//dataPartenza.setEnabled(true);
-		
+
 		if(dataArrivo.getDate() != null) {
-			JCalendar calendario = calendarioDisponibilita();
-			calendario.setMinSelectableDate(dataArrivo.getDate());
-			dataPartenza.cleanup();
-			dataPartenza = new JDateChooser(calendario, null, null, null);
+			DateToLocalDate dateToLocalDate = new DateToLocalDate();
+			LocalDateToDate localDateToDate = new LocalDateToDate();
+			dataPartenza.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getMinSelectableDate()).plusDays(2)));
+			dataPartenza.setDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getMinSelectableDate()).plusDays(2)));
 			dataPartenza.setEnabled(true);
 		}
 
