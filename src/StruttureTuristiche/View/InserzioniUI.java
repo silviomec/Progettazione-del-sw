@@ -40,6 +40,7 @@ public class InserzioniUI extends JFrame {
 	private JTable table;
 	private static JButton rimuoviInserzioneButton;
 	private static JButton modificaInserzioneButton;
+	private static JButton prenotaButton;
 	private static DefaultListModel<Inserzione> listmodel;
 	private static DefaultTableModel dtm = new DefaultTableModel() {
 		@Override
@@ -100,6 +101,13 @@ public class InserzioniUI extends JFrame {
 		contentPane.add(rimuoviInserzioneButton);
 
 		modificaInserzioneButton = new JButton("Modifica inserzione");
+		modificaInserzioneButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO: implementare correttamente il bottone
+				int idInserzione = inserzioni.get(table.getSelectedRow()).getIdInserzione();
+				stf.showNuovaInserzione();
+			}
+		});
 		modificaInserzioneButton.setFont(new Font("Dialog", Font.BOLD, 18));
 		modificaInserzioneButton.setEnabled(false);
 		modificaInserzioneButton.setBounds(27, 336, 207, 97);
@@ -122,6 +130,7 @@ public class InserzioniUI extends JFrame {
 				cerca(cercaTextField.getText());
 				rimuoviInserzioneButton.setEnabled(false);
 				modificaInserzioneButton.setEnabled(false);
+				prenotaButton.setEnabled(false);
 			}
 		});
 		btnCerca.setBounds(753, 47, 85, 21);
@@ -133,6 +142,7 @@ public class InserzioniUI extends JFrame {
 				cerca("");
 				rimuoviInserzioneButton.setEnabled(false);
 				modificaInserzioneButton.setEnabled(false);
+				prenotaButton.setEnabled(false);
 				cercaTextField.setText("");
 			}
 		});
@@ -153,6 +163,18 @@ public class InserzioniUI extends JFrame {
 		});
 		btnIndietro.setBounds(10, 10, 85, 21);
 		contentPane.add(btnIndietro);
+		
+		prenotaButton = new JButton("Prenota");
+		prenotaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idInserzione = inserzioni.get(table.getSelectedRow()).getIdInserzione();
+				stf.showNuovaPrenotazioneUI(DAOFactory.getDAOInserzione().doRetrieveByIdInserzione(idInserzione));
+			}
+		});
+		prenotaButton.setEnabled(false);
+		prenotaButton.setFont(new Font("Dialog", Font.BOLD, 18));
+		prenotaButton.setBounds(27, 506, 207, 97);
+		contentPane.add(prenotaButton);
 
 		cerca("");
 		createEvents();
@@ -167,6 +189,7 @@ public class InserzioniUI extends JFrame {
 		if(table.isRowSelected(table.getSelectedRow())) {
 			rimuoviInserzioneButton.setEnabled(true);
 			modificaInserzioneButton.setEnabled(true);
+			prenotaButton.setEnabled(true);
 		}
 	}
 
@@ -217,5 +240,6 @@ public class InserzioniUI extends JFrame {
 
 		rimuoviInserzioneButton.setEnabled(false);
 		modificaInserzioneButton.setEnabled(false);
+		prenotaButton.setEnabled(false);
 	}
 }

@@ -49,7 +49,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		}
 		return prenotazioni;
 	}
-	
+
 	@Override
 	public HashMap<Integer, Prenotazione> doRetrieveAllByIdInserzione(int id) {
 		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
@@ -111,7 +111,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		}
 		return prenotazioni;
 	}
-	
+
 	@Override
 	public Prenotazione doRetrieveByIdPrenotazione(int id) {
 		Prenotazione p = null;
@@ -170,7 +170,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Prenotazione updatePrenotazione(Prenotazione p) {
 		try {
@@ -184,7 +184,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			preparedStmt.setInt(6, p.getIdInserzione());
 			preparedStmt.setString(7, p.getPIva());
 			preparedStmt.setInt(7, p.getIdPrenotazione());
-			
+
 			preparedStmt.executeUpdate();
 
 			return p;
@@ -199,9 +199,8 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		boolean disponibilita = false;
 		LocalDate dataInizio = in.getDataInizio();
 		LocalDate dataFine = in.getDataFine();
-		
-		if (dataInizio.isBefore(dataArrivo) && dataFine.isAfter(dataPartenza)) {
-			ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); 
+
+		if(dataInizio.isBefore(dataArrivo) && dataFine.isAfter(dataPartenza)) {
 			for(Prenotazione p : DAOFactory.getDAOPrenotazione().doRetrieveAllByIdInserzione(in.getIdInserzione()).values()) {
 				if(dataArrivo.isAfter(p.getDataPartenza()) || dataPartenza.isBefore(p.getDataArrivo()));
 				else return disponibilita;
