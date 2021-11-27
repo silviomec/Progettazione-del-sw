@@ -163,8 +163,8 @@ public class NuovaPrenotazioneUI extends JDialog {
 		if(dataArrivo.getDate() != null) {
 			DateToLocalDate dateToLocalDate = new DateToLocalDate();
 			LocalDateToDate localDateToDate = new LocalDateToDate();
-			dataPartenza.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getMinSelectableDate()).plusDays(2)));
-			dataPartenza.setDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getMinSelectableDate()).plusDays(2)));
+			dataPartenza.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()).plusDays(1)));
+			dataPartenza.setDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()).plusDays(1)));
 			dataPartenza.setEnabled(true);
 		}
 
