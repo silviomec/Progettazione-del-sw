@@ -25,8 +25,8 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public HashMap<String, Prenotazione> doRetrieveAll() {
-		HashMap<String, Prenotazione> prenotazioni = new HashMap<String, Prenotazione>();
+	public HashMap<Integer, Prenotazione> doRetrieveAll() {
+		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
@@ -41,7 +41,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 				int idInserzione = result.getInt("inserzione");
 				String pIva = result.getString("strutturaTuristica");
 				Prenotazione p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
-				prenotazioni.put(Integer.toString(idPrenotazione), p);
+				prenotazioni.put(idPrenotazione, p);
 			}     
 
 		} catch (SQLException e) {
@@ -49,10 +49,10 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		}
 		return prenotazioni;
 	}
-	
+
 	@Override
-	public HashMap<String, Prenotazione> doRetrieveAllByIdInserzione(int id) {
-		HashMap<String, Prenotazione> prenotazioni = new HashMap<String, Prenotazione>();
+	public HashMap<Integer, Prenotazione> doRetrieveAllByIdInserzione(int id) {
+		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
 		Prenotazione p = null;
 		Statement statement = null;
 		try {
@@ -68,8 +68,43 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 				int idInserzione = result.getInt("inserzione");
 				String pIva = result.getString("strutturaTuristica");
 				p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
-				prenotazioni.put(Integer.toString(idPrenotazione), p);
+				prenotazioni.put(idPrenotazione, p);
 			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return prenotazioni;
+	}
+
+	@Override
+	public HashMap<Integer, Prenotazione> doRetrieveAllFiltered(String target) {
+		HashMap<Integer, Prenotazione> prenotazioni = new HashMap<Integer, Prenotazione>();
+		Statement statement = null;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM prenotazioni, struttureTuristiche "
+					+ "WHERE idPrenotazione LIKE '%" + target + "%' "
+					+ "OR dataArrivo LIKE '%" + target + "%' "
+					+ "OR dataPartenza LIKE '%" + target + "%' "
+					+ "OR prezzoTotale LIKE '%" + target + "%' "
+					+ "OR CLIENTE LIKE '%" + target + "%' "
+					+ "OR INSERZIONE LIKE '%" + target + "%'"
+					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%'"
+					+ "OR struttureTuristiche.nome LIKE '%" + target + "%' "
+					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
+
+			while (result.next()) {
+				int idPrenotazione = result.getInt("idprenotazione");
+				LocalDate dataArrivo = LocalDate.parse(result.getDate("dataArrivo").toString());
+				LocalDate dataPartenza = LocalDate.parse(result.getDate("dataPartenza").toString());
+				double prezzoTot = result.getDouble("prezzoTotale");
+				String cfCliente = result.getString("CLIENTE");
+				int idInserzione = result.getInt("INSERZIONE");
+				String pIva = result.getString("STRUTTURATURISTICA");
+				Prenotazione p = new Prenotazione(idPrenotazione, dataArrivo, dataPartenza, prezzoTot, cfCliente, idInserzione, pIva);
+				prenotazioni.put(idPrenotazione, p);
+			}     
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -120,7 +155,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			String query = "INSERT INTO prenotazioni (idPrenotazione, dataArrivo, dataPartenza, prezzoTotale, Cliente, Inserzione, StrutturaTuristica)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setString(1, null); //vediamo se è così che si passano i valori per l'autoincrement
+			preparedStmt.setString(1, null);
 			preparedStmt.setDate(2, Date.valueOf(p.getDataArrivo()));
 			preparedStmt.setDate(3, Date.valueOf(p.getDataPartenza()));
 			preparedStmt.setDouble(4, p.getPrezzoTot());
@@ -135,7 +170,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Prenotazione updatePrenotazione(Prenotazione p) {
 		try {
@@ -149,7 +184,7 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 			preparedStmt.setInt(6, p.getIdInserzione());
 			preparedStmt.setString(7, p.getPIva());
 			preparedStmt.setInt(7, p.getIdPrenotazione());
-			
+
 			preparedStmt.executeUpdate();
 
 			return p;
@@ -160,20 +195,38 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 	}
 
 	@Override
-	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
-		boolean disponibilità = false;
+	public boolean controlloDisponibilita(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
+		boolean disponibilita = false;
 		LocalDate dataInizio = in.getDataInizio();
 		LocalDate dataFine = in.getDataFine();
-		
-		if (dataInizio.isBefore(dataArrivo) && dataFine.isAfter(dataPartenza)) {
-			ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); 
+
+		if(dataInizio.isBefore(dataArrivo) && dataFine.isAfter(dataPartenza)) {
 			for(Prenotazione p : DAOFactory.getDAOPrenotazione().doRetrieveAllByIdInserzione(in.getIdInserzione()).values()) {
 				if(dataArrivo.isAfter(p.getDataPartenza()) || dataPartenza.isBefore(p.getDataArrivo()));
-				else return disponibilità;
+				else return disponibilita;
 			};
 		}
 
-		disponibilità = true;
-		return disponibilità;
+		disponibilita = true;
+		return disponibilita;
 	}
+	@Override
+	public int lastInsertId() {
+		Statement statement = null;
+		int idPrenotazione = 0;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT MAX(idprenotazione) AS id FROM db_pds.prenotazioni;");
+			while (result.next()) {
+			idPrenotazione = result.getInt("id");
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		return idPrenotazione;
+	}
+	
 }

@@ -30,7 +30,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOPRENOTAZIONE");
+			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOPRENOTAZIONI");
 
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
@@ -62,7 +62,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 					+ "OR PRENOTAZIONE LIKE '%" + target + "%'"
 					+ "OR CLIENTE LIKE '%" + target + "%' "
 					+ "OR STRUTTURATURISTICA LIKE '%" + target + "%' "
-					+ "OR nome LIKE '%" + target + "%' "
+					+ "OR struttureTuristiche.nome LIKE '%" + target + "%' "
 					+ "AND STRUTTURATURISTICA = struttureTuristiche.PartitaIva");
 
 			while (result.next()) {
@@ -88,7 +88,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOPRENOTAZIONE WHERE idpagamentoprenotazione=\"" + id + "\"");
+			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOPRENOTAZIONI WHERE idpagamentoprenotazione=\"" + id + "\"");
 
 			while (result.next()) {
 				int idPagamentoPrenotazione = result.getInt("idPagamentoPrenotazione");
@@ -111,7 +111,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 		try {
 			System.out.println(id);
 			Statement statement = connection.getConnection().createStatement();
-			int result = statement.executeUpdate("DELETE FROM RICEVUTEPAGAMENTOPRENOTAZIONE WHERE idpagamentoprenotazione=\"" + id + "\"");
+			int result = statement.executeUpdate("DELETE FROM RICEVUTEPAGAMENTOPRENOTAZIONI WHERE idpagamentoprenotazione=\"" + id + "\"");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -122,15 +122,14 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 	@Override
 	public int insertRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp) {
 		try {
-			String query = "INSERT INTO ricevutepagamentoprenotazione (idPagamentoPrenotazione, importo, dataPagamento, PRENOTAZIONE, CLIENTE, STRUTTURATURISTICA)"
-					+ " values (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO ricevutepagamentoprenotazioni (importo, dataPagamento, PRENOTAZIONE, CLIENTE, STRUTTURATURISTICA)"
+					+ " values (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setInt(1, rpp.getIdPagamento());
-			preparedStmt.setDouble(2, rpp.getImporto());
-			preparedStmt.setDate(3, Date.valueOf(rpp.getDataPagamento()));
-			preparedStmt.setInt(4, rpp.getIdPrenotazione());
-			preparedStmt.setString(5, rpp.getCfCliente());
-			preparedStmt.setString(6, rpp.getPIva());
+			preparedStmt.setDouble(1, rpp.getImporto());
+			preparedStmt.setDate(2, Date.valueOf(rpp.getDataPagamento()));
+			preparedStmt.setInt(3, rpp.getIdPrenotazione());
+			preparedStmt.setString(4, rpp.getCfCliente());
+			preparedStmt.setString(5, rpp.getPIva());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -142,7 +141,7 @@ public class DAORicevutaPagamentoPrenotazioneImpl implements DAORicevutaPagament
 	@Override
 	public int updateRicevutaPagamentoPrenotazione(RicevutaPagamentoPrenotazione rpp) {
 		try {
-			String query = "UPDATE ricevutepagamentoprenotazione SET idPagamentoPrenotazione = ?, importo = ?, dataPagamento = ?, PRENOTAZIONE = ?, CLIENTE = ?, STRUTTURATURISTICA = ? WHERE idPagamentoPrenotazione = ?";
+			String query = "UPDATE ricevutepagamentoprenotazioni SET idPagamentoPrenotazione = ?, importo = ?, dataPagamento = ?, PRENOTAZIONE = ?, CLIENTE = ?, STRUTTURATURISTICA = ? WHERE idPagamentoPrenotazione = ?";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, rpp.getIdPagamento());
 			preparedStmt.setDouble(2, rpp.getImporto());

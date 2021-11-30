@@ -23,7 +23,7 @@ public class PagamentoFacade {
 		this.pagamentoController = pagamentoController;
 	}
 	
-	public void showStoricoPagamentiUI(int modalità, String cerca) {
-		StoricoPagamentiUI.display(modalità, cerca);
+	public void showStoricoPagamentiUI(int modalita, String cerca) {
+		StoricoPagamentiUI.display(modalita, cerca);
 	}
 }

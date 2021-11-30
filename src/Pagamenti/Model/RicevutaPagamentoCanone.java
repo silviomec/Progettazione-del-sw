@@ -11,6 +11,12 @@ public class RicevutaPagamentoCanone extends RicevutaPagamento implements Compar
 		this.cfInserzionista = cfInserzionista;
 		this.pIva = pIva;
 	}
+	public RicevutaPagamentoCanone(double importo, LocalDate dataPagamento, int idCanone, String cfInserzionista, String pIva) {
+		super(importo, dataPagamento);
+		this.idCanone = idCanone;
+		this.cfInserzionista = cfInserzionista;
+		this.pIva = pIva;
+	}
 
 	@Override
 	public int compareTo(RicevutaPagamentoCanone rpc) {

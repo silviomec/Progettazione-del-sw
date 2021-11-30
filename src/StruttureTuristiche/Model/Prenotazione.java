@@ -1,6 +1,5 @@
 package StruttureTuristiche.Model;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class Prenotazione implements Comparable<Prenotazione> {

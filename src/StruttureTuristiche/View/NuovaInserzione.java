@@ -3,28 +3,46 @@ package StruttureTuristiche.View;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
+
+import Repository.DAOFactory;
+import Repository.Utenti.DAOPersonaImpl;
+import StruttureTuristiche.Model.StrutturaTuristica;
+import Utenti.Model.Persona;
+
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.regex.Pattern;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.awt.event.ActionEvent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 public class NuovaInserzione extends JDialog {
-
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField descrizioneTextField;
+	private JComboBox strutturaTuristicaComboBox;
+	private JComboBox<Integer> numeroPersoneComboBox;
+	private JFormattedTextField prezzoPerNotteTextField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
+	private ArrayList<String> inserzioni;
+	private ArrayList<String> struttureTuristiche;
+
+	public static void display() {
 		try {
 			NuovaInserzione dialog = new NuovaInserzione();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -34,119 +52,139 @@ public class NuovaInserzione extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public NuovaInserzione() {
-		setTitle("Nuova Inserzione");
+		setTitle("Nuova inserzione");
 		setBounds(100, 100, 950, 650);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		{
-			JLabel lblNewLabel = new JLabel("Titolo");
-			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblNewLabel.setBounds(127, 68, 96, 13);
-			contentPanel.add(lblNewLabel);
-		}
-		{
-			textField = new JTextField();
-			textField.setColumns(10);
-			textField.setBounds(127, 91, 235, 35);
-			contentPanel.add(textField);
-		}
-		{
-			JLabel lblDescrizione = new JLabel("Descrizione");
-			lblDescrizione.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblDescrizione.setBounds(127, 150, 96, 13);
-			contentPanel.add(lblDescrizione);
-		}
-		{
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(127, 173, 235, 35);
-			contentPanel.add(textField_1);
-		}
-		{
-			JLabel lblNumeroPersone = new JLabel("Numero Persone");
-			lblNumeroPersone.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblNumeroPersone.setBounds(127, 233, 128, 13);
-			contentPanel.add(lblNumeroPersone);
-		}
-		{
-			textField_2 = new JTextField();
-			textField_2.setColumns(10);
-			textField_2.setBounds(127, 256, 235, 35);
-			contentPanel.add(textField_2);
-		}
-		{
-			JLabel lblPrezzoPerNotte = new JLabel("Prezzo Per Notte");
-			lblPrezzoPerNotte.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblPrezzoPerNotte.setBounds(127, 316, 139, 13);
-			contentPanel.add(lblPrezzoPerNotte);
-		}
-		{
-			textField_3 = new JTextField();
-			textField_3.setColumns(10);
-			textField_3.setBounds(127, 339, 235, 35);
-			contentPanel.add(textField_3);
-		}
-		{
-			JLabel lblEmailInserzionista = new JLabel("Email Inserzionista");
-			lblEmailInserzionista.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblEmailInserzionista.setBounds(127, 403, 162, 13);
-			contentPanel.add(lblEmailInserzionista);
-		}
-		{
-			textField_4 = new JTextField();
-			textField_4.setColumns(10);
-			textField_4.setBounds(127, 426, 235, 35);
-			contentPanel.add(textField_4);
-		}
-		{
-			JComboBox comboBox = new JComboBox();
-			comboBox.setBounds(582, 91, 235, 35);
-			contentPanel.add(comboBox);
-		}
-		{
-			JLabel lblStrutturaTuristica = new JLabel("Struttura Turistica");
-			lblStrutturaTuristica.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblStrutturaTuristica.setBounds(582, 68, 186, 13);
-			contentPanel.add(lblStrutturaTuristica);
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 506, 936, 69);
-			contentPanel.add(buttonPane);
-			buttonPane.setLayout(null);
-			{
-				JButton okButton = new JButton("Conferma");
-				okButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-				okButton.setBounds(238, 14, 144, 44);
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+
+		JLabel lblDescrizione = new JLabel("Descrizione");
+		lblDescrizione.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblDescrizione.setBounds(127, 68, 96, 13);
+		contentPanel.add(lblDescrizione);
+
+		descrizioneTextField = new JTextField();
+		descrizioneTextField.setColumns(10);
+		descrizioneTextField.setBounds(127, 91, 235, 105);
+		contentPanel.add(descrizioneTextField);
+
+		JLabel lblPrezzoPerNotte = new JLabel("Prezzo per notte");
+		lblPrezzoPerNotte.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblPrezzoPerNotte.setBounds(582, 231, 162, 20);
+		contentPanel.add(lblPrezzoPerNotte);
+
+		JLabel lblNumeroPersone = new JLabel("Numero persone");
+		lblNumeroPersone.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNumeroPersone.setBounds(127, 233, 128, 20);
+		contentPanel.add(lblNumeroPersone);
+		inserzioni = getCfInserzionistiOrdered();
+
+		JLabel lblStrutturaTuristica = new JLabel("Struttura turistica");
+		lblStrutturaTuristica.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblStrutturaTuristica.setBounds(582, 68, 186, 13);
+		contentPanel.add(lblStrutturaTuristica);
+
+		strutturaTuristicaComboBox = new JComboBox();
+		strutturaTuristicaComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
+		struttureTuristiche = getPIvaOrdered();
+		strutturaTuristicaComboBox.setModel(new DefaultComboBoxModel(struttureTuristiche.toArray()));
+		strutturaTuristicaComboBox.setBounds(582, 91, 235, 35);
+		strutturaTuristicaComboBox.setSelectedIndex(-1);
+		contentPanel.add(strutturaTuristicaComboBox);
+
+		JPanel buttonPane = new JPanel();
+		buttonPane.setBounds(0, 451, 936, 124);
+		contentPanel.add(buttonPane);
+		buttonPane.setLayout(null);
+
+		JButton confermaButton = new JButton("Conferma");
+		confermaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 			}
-			{
-				JButton cancelButton = new JButton("Annulla");
-				cancelButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-				cancelButton.setBounds(610, 14, 144, 44);
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
+		});
+		confermaButton.setBounds(410, 20, 141, 43);
+		buttonPane.add(confermaButton);
+
+
+		numeroPersoneComboBox = new JComboBox();
+		numeroPersoneComboBox.setBounds(127, 265, 128, 27);
+		for(int i=1; i<11 ;i++) {
+			numeroPersoneComboBox.addItem(i);
 		}
-		{
-			JLabel lblNewLabel_5 = new JLabel("Id Inserzione");
-			lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblNewLabel_5.setBounds(582, 412, 134, 29);
-			contentPanel.add(lblNewLabel_5);
+		numeroPersoneComboBox.setSelectedIndex(-1);
+		contentPanel.add(numeroPersoneComboBox);
+
+		try {
+			//NumberFormat format = NumberFormat.getInstance();
+		    NumberFormatter formatter = new NumberFormatter();
+		    formatter.setValueClass(Float.class);
+		    formatter.setMinimum(Float.MIN_VALUE);
+		    formatter.setMaximum(Float.MAX_VALUE);
+		    formatter.setAllowsInvalid(true);
+		    // If you want the value to be committed on each keystroke instead of focus lost
+		    formatter.setCommitsOnValidEdit(false);
+			
+			//MaskFormatter formatter = new MaskFormatter("#####.##");
+			//formatter.setPlaceholderCharacter('0');
+			prezzoPerNotteTextField = new JFormattedTextField(formatter);
+			//prezzoPerNotteTextField.setText("00001.00");
+		} catch(Exception e) {}
+		
+		prezzoPerNotteTextField.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		prezzoPerNotteTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		prezzoPerNotteTextField.setBounds(582, 262, 218, 20);
+		contentPanel.add(prezzoPerNotteTextField);
+
+		JLabel lblNewLabel = new JLabel("\u20AC");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNewLabel.setBounds(810, 265, 7, 14);
+		contentPanel.add(lblNewLabel);
+	} 
+
+	public ArrayList<String> getCfInserzionistiOrdered() {
+		HashMap<String, Persona> inserzionisti = new HashMap<String, Persona>(); 
+		inserzionisti = DAOFactory.getDAOPersona().doRetrieveAll(DAOPersonaImpl.INSERZIONISTA);
+
+		ArrayList<String> lista = new ArrayList<String>();
+
+		for(Persona p : inserzionisti.values()) {
+			lista.add(p.getCodiceFiscale());
 		}
-		{
-			JLabel lblIDStruttura = new JLabel("*****");
-			lblIDStruttura.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblIDStruttura.setBounds(582, 448, 45, 13);
-			contentPanel.add(lblIDStruttura);
+
+		Collections.sort(lista);
+		return lista;
+	}
+
+	public ArrayList<String> getPIvaOrdered() {
+		HashMap<String, StrutturaTuristica> struttureTuristiche = new HashMap<String, StrutturaTuristica>(); 
+		struttureTuristiche = DAOFactory.getDAOStrutturaTuristica().doRetrieveAll();
+
+		ArrayList<String> lista = new ArrayList<String>();
+
+		for(StrutturaTuristica s : struttureTuristiche.values()) {
+			lista.add(s.getPIva());
+		}
+
+		Collections.sort(lista);
+		return lista;
+	}
+
+	public String checkPrezzoPerNotte() {
+		String prezzoPerNotte = prezzoPerNotteTextField.getText();
+		String msg = "";
+
+		String prezzoPerNottePattern = "^[0-9]+,+[0-9]{2}$";
+		Pattern pattern = Pattern.compile(prezzoPerNottePattern, Pattern.CASE_INSENSITIVE);
+		if(!pattern.matcher(prezzoPerNotte).matches()) {
+			System.out.println("Prezzo per notte non valido.");
+			msg = "Prezzo per notte non valido.";
+			return msg;
+		}
+		else {
+			//System.out.println("Prezzo per notte valido.");
+			return msg;
 		}
 	}
 }

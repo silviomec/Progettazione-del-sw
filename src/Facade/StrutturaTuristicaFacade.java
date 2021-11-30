@@ -33,8 +33,8 @@ public class StrutturaTuristicaFacade {
 		DAOFactory.getDAOStrutturaTuristica().delete(s.getPIva());
 	}
 
-	public Inserzione creaInserzione(String titolo, String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String pIva, String cfInserzionista) {
-		Inserzione in = new Inserzione(titolo, descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, pIva, cfInserzionista);
+	public Inserzione creaInserzione(String descrizione, double prezzoPerNotte, int numeroPersone, LocalDate dataInizio, LocalDate dataFine, String pIva, String cfInserzionista) {
+		Inserzione in = new Inserzione(descrizione, prezzoPerNotte, numeroPersone, dataInizio, dataFine, pIva, cfInserzionista);
 		return DAOFactory.getDAOInserzione().updateInserzione(in);
 	}
 
@@ -63,8 +63,8 @@ public class StrutturaTuristicaFacade {
 		DAOFactory.getDAOPrenotazione().delete(p.getIdPrenotazione());
 	}
 
-	public boolean controlloDisponibilità(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
-		return DAOFactory.getDAOPrenotazione().controlloDisponibilità(in, dataArrivo, dataPartenza);
+	public boolean controlloDisponibilita(Inserzione in, LocalDate dataArrivo, LocalDate dataPartenza) {
+		return DAOFactory.getDAOPrenotazione().controlloDisponibilita(in, dataArrivo, dataPartenza);
 	}
 
 	public StrutturaTuristicaController getStrutturaTuristicaController() {
@@ -87,5 +87,19 @@ public class StrutturaTuristicaFacade {
 		GestisciCanone.display(canone);
 	}
 	
+	public void showPrenotazioneUI() {
+		PrenotazioniUI.display();
+	}
 	
+	public void showInserzioniUI() {
+		InserzioniUI.display();
+	}
+	
+	public void showNuovaInserzione() {
+		NuovaInserzione.display();
+	}
+
+	public void showNuovaPrenotazioneUI(Inserzione inserzione) {
+		NuovaPrenotazioneUI.display(inserzione);
+	}
 }

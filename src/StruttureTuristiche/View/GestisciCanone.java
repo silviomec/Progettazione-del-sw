@@ -14,6 +14,7 @@ import Facade.PagamentoFacade;
 import java.time.LocalDate;
 
 import Pagamenti.Model.Canone;
+import Pagamenti.Model.RicevutaPagamentoCanone;
 import Pagamenti.View.StoricoPagamentiUI;
 import Repository.DAOFactory;
 
@@ -44,6 +45,7 @@ public class GestisciCanone {
 				canone.setSaldato(true);
 				pagaButton.setEnabled(false);
 				DAOFactory.getDAOCanone().updateCanone(canone);
+				DAOFactory.getDAORicevutaPagamentoCanone().insertRicevutaPagamentoCanone(new RicevutaPagamentoCanone(canone.getImportoAnnuale(), LocalDate.now(), canone.getIdCanone(), canone.getCfInserzionista(), canone.getPIva()));
 			}
 		});
 		
@@ -56,9 +58,9 @@ public class GestisciCanone {
 
 		JLabel jLabel;
 		if(giorni > 0)
-			jLabel = new JLabel("<html><center>Il canone scadr‡ il " + canone.getScadenza().toString() + ".<br/>(tra " + giorni + " giorn" + (giorni==1 ? "o" : "i") + ")</center></html>");
+			jLabel = new JLabel("<html><center>Il canone scadr√† il " + canone.getScadenza().toString() + ".<br/>(tra " + giorni + " giorn" + (giorni==1 ? "o" : "i") + ")</center></html>");
 		else {
-			jLabel = new JLabel("<html><center>Il canone Ë scaduto il " + canone.getScadenza().toString() + ".<br/>(" + (giorni*-1) + " giorn" + (giorni==1 ? "o" : "i") + " fa)</center></html>");
+			jLabel = new JLabel("<html><center>Il canone √® scaduto il " + canone.getScadenza().toString() + ".<br/>(" + (giorni*-1) + " giorn" + (giorni==1 ? "o" : "i") + " fa)</center></html>");
 			pagaButton.setEnabled(true);
 		}
 		jLabel.setHorizontalAlignment(SwingConstants.CENTER);

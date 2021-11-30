@@ -107,8 +107,7 @@ public class DAOCanoneImpl implements DAOCanone {
 	@Override
 	public int updateCanone(Canone c) {
 		try {
-			String query = "UPDATE canoni SET idCanone = ?, importoAnnuale = ?, scadenza = ?, saldato = ?, inserzionista = ?, strutturaTuristica = ? WHERE idCanone = ?"
-					+ " values (?, ?, ?, ?, ?, ?)";
+			String query = "UPDATE canoni SET idCanone = ?, importoAnnuale = ?, scadenza = ?, saldato = ?, inserzionista = ?, strutturaTuristica = ? WHERE idCanone = ?";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, c.getIdCanone());
 			preparedStmt.setDouble(2, c.getImportoAnnuale());
