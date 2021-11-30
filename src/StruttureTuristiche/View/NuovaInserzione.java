@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import Repository.DAOFactory;
@@ -20,6 +21,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -27,13 +29,16 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 public class NuovaInserzione extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField descrizioneTextField;
 	private JComboBox strutturaTuristicaComboBox;
 	private JComboBox<Integer> numeroPersoneComboBox;
-	
+	private JFormattedTextField prezzoPerNotteTextField;
+
 	private ArrayList<String> inserzioni;
 	private ArrayList<String> struttureTuristiche;
 
@@ -88,12 +93,12 @@ public class NuovaInserzione extends JDialog {
 		strutturaTuristicaComboBox.setBounds(582, 91, 235, 35);
 		strutturaTuristicaComboBox.setSelectedIndex(-1);
 		contentPanel.add(strutturaTuristicaComboBox);
-		
+
 		JPanel buttonPane = new JPanel();
 		buttonPane.setBounds(0, 451, 936, 124);
 		contentPanel.add(buttonPane);
 		buttonPane.setLayout(null);
-		
+
 		JButton confermaButton = new JButton("Conferma");
 		confermaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -101,8 +106,8 @@ public class NuovaInserzione extends JDialog {
 		});
 		confermaButton.setBounds(410, 20, 141, 43);
 		buttonPane.add(confermaButton);
-		
-		
+
+
 		numeroPersoneComboBox = new JComboBox();
 		numeroPersoneComboBox.setBounds(127, 265, 128, 27);
 		for(int i=1; i<11 ;i++) {
@@ -110,30 +115,34 @@ public class NuovaInserzione extends JDialog {
 		}
 		numeroPersoneComboBox.setSelectedIndex(-1);
 		contentPanel.add(numeroPersoneComboBox);
+
+		try {
+			//NumberFormat format = NumberFormat.getInstance();
+		    NumberFormatter formatter = new NumberFormatter();
+		    formatter.setValueClass(Float.class);
+		    formatter.setMinimum(Float.MIN_VALUE);
+		    formatter.setMaximum(Float.MAX_VALUE);
+		    formatter.setAllowsInvalid(true);
+		    // If you want the value to be committed on each keystroke instead of focus lost
+		    formatter.setCommitsOnValidEdit(false);
+			
+			//MaskFormatter formatter = new MaskFormatter("#####.##");
+			//formatter.setPlaceholderCharacter('0');
+			prezzoPerNotteTextField = new JFormattedTextField(formatter);
+			//prezzoPerNotteTextField.setText("00001.00");
+		} catch(Exception e) {}
 		
-		
-		
-	/*	JFormattedTextField prezzoPerNotteTextField = new JFormattedTextField();
-		prezzoPerNotteTextField.addKeyListener(new KeyAdapter() {
-	         public void keyPressed(KeyEvent ke) {
-	            String value = prezzoPerNotteTextField.getText();
-	            int l = value.length();
-	            if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
-	            	prezzoPerNotteTextField.setEditable(true);
-	               label.setText("");
-	            } else {
-	            	prezzoPerNotteTextField.setEditable(false);
-	               label.setText("* Enter only numeric digits(0-9)");
-	            }
-	         }
-	      });
-	      setVisible(true);
-	   }
-		prezzoPerNotteTextField.setBounds(582, 257, 114, 35);
+		prezzoPerNotteTextField.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		prezzoPerNotteTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		prezzoPerNotteTextField.setBounds(582, 262, 218, 20);
 		contentPanel.add(prezzoPerNotteTextField);
-		*/
+
+		JLabel lblNewLabel = new JLabel("\u20AC");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNewLabel.setBounds(810, 265, 7, 14);
+		contentPanel.add(lblNewLabel);
 	} 
-	
+
 	public ArrayList<String> getCfInserzionistiOrdered() {
 		HashMap<String, Persona> inserzionisti = new HashMap<String, Persona>(); 
 		inserzionisti = DAOFactory.getDAOPersona().doRetrieveAll(DAOPersonaImpl.INSERZIONISTA);
@@ -147,7 +156,7 @@ public class NuovaInserzione extends JDialog {
 		Collections.sort(lista);
 		return lista;
 	}
-	
+
 	public ArrayList<String> getPIvaOrdered() {
 		HashMap<String, StrutturaTuristica> struttureTuristiche = new HashMap<String, StrutturaTuristica>(); 
 		struttureTuristiche = DAOFactory.getDAOStrutturaTuristica().doRetrieveAll();
@@ -160,5 +169,22 @@ public class NuovaInserzione extends JDialog {
 
 		Collections.sort(lista);
 		return lista;
+	}
+
+	public String checkPrezzoPerNotte() {
+		String prezzoPerNotte = prezzoPerNotteTextField.getText();
+		String msg = "";
+
+		String prezzoPerNottePattern = "^[0-9]+,+[0-9]{2}$";
+		Pattern pattern = Pattern.compile(prezzoPerNottePattern, Pattern.CASE_INSENSITIVE);
+		if(!pattern.matcher(prezzoPerNotte).matches()) {
+			System.out.println("Prezzo per notte non valido.");
+			msg = "Prezzo per notte non valido.";
+			return msg;
+		}
+		else {
+			//System.out.println("Prezzo per notte valido.");
+			return msg;
+		}
 	}
 }
