@@ -210,4 +210,23 @@ public class DAOPrenotazioneImpl implements DAOPrenotazione {
 		disponibilita = true;
 		return disponibilita;
 	}
+	@Override
+	public int lastInsertId() {
+		Statement statement = null;
+		int idPrenotazione = 0;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT MAX(idprenotazione) AS id FROM db_pds.prenotazioni;");
+			while (result.next()) {
+			idPrenotazione = result.getInt("id");
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		return idPrenotazione;
+	}
+	
 }

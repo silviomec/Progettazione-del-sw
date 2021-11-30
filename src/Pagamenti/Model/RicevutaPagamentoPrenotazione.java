@@ -12,6 +12,13 @@ public class RicevutaPagamentoPrenotazione extends RicevutaPagamento implements 
 		this.pIva = pIva;
 	}
 	
+	public RicevutaPagamentoPrenotazione(double importo, LocalDate dataPagamento, int idPrenotazione, String cfCliente, String pIva) {
+		super(importo, dataPagamento);
+		this.idPrenotazione = idPrenotazione;
+		this.cfCliente = cfCliente;
+		this.pIva = pIva;
+	}
+	
 	@Override
 	public int compareTo(RicevutaPagamentoPrenotazione rpp) {
 		return getCfCliente().compareTo(rpp.getCfCliente());
