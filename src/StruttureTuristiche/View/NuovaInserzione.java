@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.NumberFormatter;
 
 import Repository.DAOFactory;
 import Repository.Utenti.DAOPersonaImpl;
@@ -22,14 +23,16 @@ import java.util.HashMap;
 
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.awt.event.ActionEvent;
+import javax.swing.JFormattedTextField;
 
 public class NuovaInserzione extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField descrizioneTextField;
-	private JTextField prezzoPerNotteTextField;
-	private JTextField numeroPersoneTextField;
-	private JComboBox inserzionistaComboBox;
 	private JComboBox strutturaTuristicaComboBox;
+	private JComboBox<Integer> numeroPersoneComboBox;
 	
 	private ArrayList<String> inserzioni;
 	private ArrayList<String> struttureTuristiche;
@@ -59,41 +62,19 @@ public class NuovaInserzione extends JDialog {
 
 		descrizioneTextField = new JTextField();
 		descrizioneTextField.setColumns(10);
-		descrizioneTextField.setBounds(127, 91, 235, 35);
+		descrizioneTextField.setBounds(127, 91, 235, 105);
 		contentPanel.add(descrizioneTextField);
 
 		JLabel lblPrezzoPerNotte = new JLabel("Prezzo per notte");
 		lblPrezzoPerNotte.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblPrezzoPerNotte.setBounds(127, 150, 162, 13);
+		lblPrezzoPerNotte.setBounds(582, 231, 162, 20);
 		contentPanel.add(lblPrezzoPerNotte);
-
-		prezzoPerNotteTextField = new JTextField();
-		prezzoPerNotteTextField.setColumns(10);
-		prezzoPerNotteTextField.setBounds(127, 173, 235, 35);
-		contentPanel.add(prezzoPerNotteTextField);
 
 		JLabel lblNumeroPersone = new JLabel("Numero persone");
 		lblNumeroPersone.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNumeroPersone.setBounds(127, 233, 128, 13);
+		lblNumeroPersone.setBounds(127, 233, 128, 20);
 		contentPanel.add(lblNumeroPersone);
-
-		numeroPersoneTextField = new JTextField();
-		numeroPersoneTextField.setColumns(10);
-		numeroPersoneTextField.setBounds(127, 256, 235, 35);
-		contentPanel.add(numeroPersoneTextField);
-
-		JLabel lblInserzionista = new JLabel("Inserzionista");
-		lblInserzionista.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblInserzionista.setBounds(127, 316, 139, 13);
-		contentPanel.add(lblInserzionista);
-
-		inserzionistaComboBox = new JComboBox();
-		inserzionistaComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
 		inserzioni = getCfInserzionistiOrdered();
-		inserzionistaComboBox.setModel(new DefaultComboBoxModel(inserzioni.toArray()));
-		inserzionistaComboBox.setBounds(127, 339, 235, 35);
-		inserzionistaComboBox.setSelectedIndex(-1);
-		contentPanel.add(inserzionistaComboBox);
 
 		JLabel lblStrutturaTuristica = new JLabel("Struttura turistica");
 		lblStrutturaTuristica.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -109,17 +90,49 @@ public class NuovaInserzione extends JDialog {
 		contentPanel.add(strutturaTuristicaComboBox);
 		
 		JPanel buttonPane = new JPanel();
-		buttonPane.setBounds(0, 506, 936, 69);
+		buttonPane.setBounds(0, 451, 936, 124);
 		contentPanel.add(buttonPane);
 		buttonPane.setLayout(null);
-
-		JButton okButton = new JButton("Conferma");
-		okButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		okButton.setBounds(238, 14, 144, 44);
-		okButton.setActionCommand("OK");
-		buttonPane.add(okButton);
-		getRootPane().setDefaultButton(okButton);
-	}
+		
+		JButton confermaButton = new JButton("Conferma");
+		confermaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		confermaButton.setBounds(410, 20, 141, 43);
+		buttonPane.add(confermaButton);
+		
+		
+		numeroPersoneComboBox = new JComboBox();
+		numeroPersoneComboBox.setBounds(127, 265, 128, 27);
+		for(int i=1; i<11 ;i++) {
+			numeroPersoneComboBox.addItem(i);
+		}
+		numeroPersoneComboBox.setSelectedIndex(-1);
+		contentPanel.add(numeroPersoneComboBox);
+		
+		
+		
+	/*	JFormattedTextField prezzoPerNotteTextField = new JFormattedTextField();
+		prezzoPerNotteTextField.addKeyListener(new KeyAdapter() {
+	         public void keyPressed(KeyEvent ke) {
+	            String value = prezzoPerNotteTextField.getText();
+	            int l = value.length();
+	            if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
+	            	prezzoPerNotteTextField.setEditable(true);
+	               label.setText("");
+	            } else {
+	            	prezzoPerNotteTextField.setEditable(false);
+	               label.setText("* Enter only numeric digits(0-9)");
+	            }
+	         }
+	      });
+	      setVisible(true);
+	   }
+		prezzoPerNotteTextField.setBounds(582, 257, 114, 35);
+		contentPanel.add(prezzoPerNotteTextField);
+		*/
+	} 
 	
 	public ArrayList<String> getCfInserzionistiOrdered() {
 		HashMap<String, Persona> inserzionisti = new HashMap<String, Persona>(); 
