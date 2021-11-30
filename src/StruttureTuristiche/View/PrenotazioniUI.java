@@ -71,16 +71,6 @@ public class PrenotazioniUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JButton btnInserisciInserzione = new JButton("Nuova prenotazione");
-		btnInserisciInserzione.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				stf.showNuovaInserzione();
-			}
-		});
-		btnInserisciInserzione.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnInserisciInserzione.setBounds(27, 100, 207, 97);
-		contentPane.add(btnInserisciInserzione);
-
 		rimuoviPrenotazioneButton = new JButton("Rimuovi prenotazione");
 		rimuoviPrenotazioneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -95,7 +85,7 @@ public class PrenotazioniUI extends JFrame {
 		});
 		rimuoviPrenotazioneButton.setFont(new Font("Dialog", Font.BOLD, 18));
 		rimuoviPrenotazioneButton.setEnabled(false);
-		rimuoviPrenotazioneButton.setBounds(27, 217, 207, 97);
+		rimuoviPrenotazioneButton.setBounds(27, 94, 207, 97);
 		contentPane.add(rimuoviPrenotazioneButton);
 
 		table = new JTable();

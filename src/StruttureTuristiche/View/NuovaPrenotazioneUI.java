@@ -6,6 +6,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
+
+import java.awt.Component;
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -13,9 +15,12 @@ import java.time.temporal.ChronoUnit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
+
+import Pagamenti.Model.RicevutaPagamentoPrenotazione;
 import Repository.DAOFactory;
 import Repository.Utenti.DAOPersonaImpl;
 import StruttureTuristiche.Model.Inserzione;
@@ -95,7 +100,10 @@ public class NuovaPrenotazioneUI extends JDialog {
 		prenotaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				DAOFactory.getDAOPrenotazione().insertPrenotazione(new Prenotazione(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()), dateToLocalDate.convertToLocalDateViaInstant(dataPartenza.getDate()), prezzoTotale, CodiceClientecomboBox.getEditor().getItem().toString(), inserzione.getIdInserzione(), inserzione.getStrutturaTuristica()) );
+				DAOFactory.getDAOPrenotazione().insertPrenotazione(new Prenotazione(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()), dateToLocalDate.convertToLocalDateViaInstant(dataPartenza.getDate()), prezzoTotale, CodiceClientecomboBox.getEditor().getItem().toString(), inserzione.getIdInserzione(), inserzione.getStrutturaTuristica()) );	
+				DAOFactory.getDAORicevutaPagamentoPrenotazione().insertRicevutaPagamentoPrenotazione(new RicevutaPagamentoPrenotazione(prezzoTotale, LocalDate.now(), DAOFactory.getDAOPrenotazione().lastInsertId(), CodiceClientecomboBox.getEditor().getItem().toString(), inserzione.getStrutturaTuristica())) ;
+				JOptionPane.showMessageDialog(null, "Prenotazione e Pagamento effettuati correttamente.", "Prenotazione e Pagamento", JOptionPane.INFORMATION_MESSAGE);
+				thisNuovaPrenotazioneUI.dispose();
 			}
 		});
 		configuraPrenotazionePanel.add(prenotaButton);
@@ -142,6 +150,7 @@ public class NuovaPrenotazioneUI extends JDialog {
 		CodiceClientecomboBox.setBounds(15, 39, 236, 27);
 		clienti = getCfClientiOrdered();
 		CodiceClientecomboBox.setModel(new DefaultComboBoxModel(clienti.toArray()));
+		CodiceClientecomboBox.setSelectedItem(null);
 		configuraPrenotazionePanel.add(CodiceClientecomboBox);
 
 		JPanel contentPanel = new JPanel();
@@ -212,22 +221,29 @@ public class NuovaPrenotazioneUI extends JDialog {
 			dataPartenza.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()).plusDays(1)));
 			dataPartenza.setDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()).plusDays(1)));
 			dataPartenza.setEnabled(true);
+
+
+			prezzoTotale = this.calcolaPrezzoTotale(inserzione.getPrezzoPerNotte(), dataArrivo.getDate(), dataPartenza.getDate());
+			prezzoTotaleField.setText(Double.toString(prezzoTotale)+" €");
+
 		}
 
-		prezzoTotale = this.calcolaPrezzoTotale(inserzione.getPrezzoPerNotte(), dataArrivo.getDate(), dataPartenza.getDate());
-		prezzoTotaleField.setText(Double.toString(prezzoTotale)+" €");
-
-		prenotaButton.setEnabled(true);
-
+		if(!CodiceClientecomboBox.getEditor().getItem().toString().equals("")) {
+			prenotaButton.setEnabled(true);
+		}
 	}
 
 	public void warn1() {
-
 		if(dataPartenza.getDate() != null) {
 			prezzoTotale = this.calcolaPrezzoTotale(inserzione.getPrezzoPerNotte(), dataArrivo.getDate(), dataPartenza.getDate());
 			prezzoTotaleField.setText(Double.toString(prezzoTotale)+" €");
 		}
+	}
 
+	public void warn2() {
+		if(!CodiceClientecomboBox.getEditor().getItem().toString().equals("") && dataArrivo.getDate() !=null && dataPartenza.getDate() !=null) {
+			prenotaButton.setEnabled(true);
+		}
 	}
 
 	private void createEvents() {
@@ -267,6 +283,25 @@ public class NuovaPrenotazioneUI extends JDialog {
 
 		}); 
 
+		Component editor = CodiceClientecomboBox.getEditor().getEditorComponent();
+		if (editor instanceof JTextField) {
+			((JTextField) editor).getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void insertUpdate(DocumentEvent documentEvent) {
+					warn2();
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent documentEvent) {
+					warn2();
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent documentEvent) {
+					warn2();
+				}
+			});   
+		}
 	}
 
 	public JCalendar calendarioDisponibilita() {

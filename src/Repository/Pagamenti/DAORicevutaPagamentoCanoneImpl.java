@@ -29,7 +29,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOCANONE");
+			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOCANONI");
 
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
@@ -87,7 +87,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 		Statement statement = null;
 		try {
 			statement = connection.getConnection().createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOCANONE WHERE idpagamentocanone=\"" + id + "\"");
+			ResultSet result = statement.executeQuery("SELECT * FROM RICEVUTEPAGAMENTOCANONI WHERE idpagamentocanone=\"" + id + "\"");
 
 			while (result.next()) {
 				int idPagamentoCanone = result.getInt("idPagamentoCanone");
@@ -110,7 +110,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 		try {
 			System.out.println(id);
 			Statement statement = connection.getConnection().createStatement();
-			int result = statement.executeUpdate("DELETE FROM RICEVUTEPAGAMENTOCANONE WHERE idpagamentocanone=\"" + id + "\"");
+			int result = statement.executeUpdate("DELETE FROM RICEVUTEPAGAMENTOCANONI WHERE idpagamentocanone=\"" + id + "\"");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,15 +121,14 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 	@Override
 	public int insertRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc) {
 		try {
-			String query = "INSERT INTO ricevutepagamentocanone (idPagamentoCanone, importo, dataPagamento, CANONE, INSERZIONISTA, STRUTTURATURISTICA)"
-					+ " values (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO ricevutepagamentocanoni (importo, dataPagamento, CANONE, INSERZIONISTA, STRUTTURATURISTICA)"
+					+ " values (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
-			preparedStmt.setInt(1, rpc.getIdPagamento());
-			preparedStmt.setDouble(2, rpc.getImporto());
-			preparedStmt.setDate(3, Date.valueOf(rpc.getDataPagamento()));
-			preparedStmt.setInt(4, rpc.getIdCanone());
-			preparedStmt.setString(5, rpc.getCfInserzionista());
-			preparedStmt.setString(6, rpc.getPIva());
+			preparedStmt.setDouble(1, rpc.getImporto());
+			preparedStmt.setDate(2, Date.valueOf(rpc.getDataPagamento()));
+			preparedStmt.setInt(3, rpc.getIdCanone());
+			preparedStmt.setString(4, rpc.getCfInserzionista());
+			preparedStmt.setString(5, rpc.getPIva());
 		
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -141,7 +140,7 @@ public class DAORicevutaPagamentoCanoneImpl implements DAORicevutaPagamentoCanon
 	@Override
 	public int updateRicevutaPagamentoCanone(RicevutaPagamentoCanone rpc) {
 		try {
-			String query = "UPDATE ricevutepagamentocanone SET idPagamentoCanone = ?, importo = ?, dataPagamento = ?, CANONE = ?, INSERZIONISTA = ?, STUTTURATURISTICA = ? WHERE idPagamentoCanone = ?";
+			String query = "UPDATE ricevutepagamentocanoni SET idPagamentoCanone = ?, importo = ?, dataPagamento = ?, CANONE = ?, INSERZIONISTA = ?, STUTTURATURISTICA = ? WHERE idPagamentoCanone = ?";
 			PreparedStatement preparedStmt = connection.getConnection().prepareStatement(query);
 			preparedStmt.setInt(1, rpc.getIdPagamento());
 			preparedStmt.setDouble(2, rpc.getImporto());

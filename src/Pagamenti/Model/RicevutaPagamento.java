@@ -8,7 +8,10 @@ public class RicevutaPagamento {
 		this.importo = importo;
 		this.dataPagamento = dataPagamento;
 	}
-	
+	public RicevutaPagamento(double importo, LocalDate dataPagamento) {
+		this.importo = importo;
+		this.dataPagamento = dataPagamento;
+	}
 	public boolean verificaPagamento(RicevutaPagamento p) {
 		return true;
 		// TODO: da implementare

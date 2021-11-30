@@ -14,6 +14,7 @@ import Facade.PagamentoFacade;
 import java.time.LocalDate;
 
 import Pagamenti.Model.Canone;
+import Pagamenti.Model.RicevutaPagamentoCanone;
 import Pagamenti.View.StoricoPagamentiUI;
 import Repository.DAOFactory;
 
@@ -44,6 +45,7 @@ public class GestisciCanone {
 				canone.setSaldato(true);
 				pagaButton.setEnabled(false);
 				DAOFactory.getDAOCanone().updateCanone(canone);
+				DAOFactory.getDAORicevutaPagamentoCanone().insertRicevutaPagamentoCanone(new RicevutaPagamentoCanone(canone.getImportoAnnuale(), LocalDate.now(), canone.getIdCanone(), canone.getCfInserzionista(), canone.getPIva()));
 			}
 		});
 		
