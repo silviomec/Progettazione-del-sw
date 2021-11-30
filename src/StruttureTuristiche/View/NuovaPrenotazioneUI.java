@@ -216,16 +216,13 @@ public class NuovaPrenotazioneUI extends JDialog {
 	}
 
 	public void warn() {
-
 		if(dataArrivo.getDate() != null) {
 			dataPartenza.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()).plusDays(1)));
 			dataPartenza.setDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataArrivo.getDate()).plusDays(1)));
 			dataPartenza.setEnabled(true);
 
-
 			prezzoTotale = this.calcolaPrezzoTotale(inserzione.getPrezzoPerNotte(), dataArrivo.getDate(), dataPartenza.getDate());
-			prezzoTotaleField.setText(Double.toString(prezzoTotale)+" €");
-
+			prezzoTotaleField.setText(Double.toString(prezzoTotale));
 		}
 
 		if(!CodiceClientecomboBox.getEditor().getItem().toString().equals("")) {
@@ -236,7 +233,7 @@ public class NuovaPrenotazioneUI extends JDialog {
 	public void warn1() {
 		if(dataPartenza.getDate() != null) {
 			prezzoTotale = this.calcolaPrezzoTotale(inserzione.getPrezzoPerNotte(), dataArrivo.getDate(), dataPartenza.getDate());
-			prezzoTotaleField.setText(Double.toString(prezzoTotale)+" €");
+			prezzoTotaleField.setText(Double.toString(prezzoTotale));
 		}
 	}
 
