@@ -160,6 +160,7 @@ public class DAOInserzioneImpl implements DAOInserzione {
 			preparedStmt.setDate(6, Date.valueOf(in.getDataFine()));
 			preparedStmt.setString(7, in.getStrutturaTuristica());
 			preparedStmt.setString(8, in.getInserzionista());
+			preparedStmt.setInt(9, in.getIdInserzione());
 
 			preparedStmt.executeUpdate();
 
