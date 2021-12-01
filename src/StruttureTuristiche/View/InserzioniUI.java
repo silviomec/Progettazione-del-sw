@@ -1,5 +1,7 @@
 package StruttureTuristiche.View;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,12 +16,17 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.text.JTextComponent;
 
 import Facade.StrutturaTuristicaFacade;
+import Pagamenti.Model.Canone;
 import Repository.DAOFactory;
+import Repository.Pagamenti.DAOCanoneImpl;
 import StruttureTuristiche.Model.Inserzione;
 import Utenti.View.Home;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -30,11 +37,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class InserzioniUI extends JFrame {
 	private JPanel contentPane;
 	StrutturaTuristicaFacade stf = StrutturaTuristicaFacade.getInstance();
 	private static ArrayList<Inserzione> inserzioni = new ArrayList<Inserzione>();
+	private static JComboBox filtroComboBox;
 	private JButton btnCerca;
 	private JTextField cercaTextField;
 	private JTable table;
@@ -64,7 +73,7 @@ public class InserzioniUI extends JFrame {
 
 	public InserzioniUI() {
 		InserzioniUI thisInserzioniUI = this;
-		
+
 		setTitle("Inserzioni");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 650);
@@ -113,14 +122,33 @@ public class InserzioniUI extends JFrame {
 		modificaInserzioneButton.setBounds(27, 336, 207, 97);
 		contentPane.add(modificaInserzioneButton);
 
-		table = new JTable();
+		table = new JTable() {
+			Color rosso = new Color(247 , 127, 127);
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+				Component comp = super.prepareRenderer(renderer, row, col);
+				boolean saldato = (boolean) (DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, getModel().getValueAt(row, 6).toString())).isSaldato();
+
+				if(!saldato) {
+					comp.setBackground(rosso);
+				} else {
+					comp.setBackground(Color.white);
+					comp.setForeground(new Color(51, 51, 51));
+				}
+
+				if(this.isRowSelected(row))
+					comp.setBackground(new Color(184, 207, 229));
+
+				return comp;
+			}
+		};
 		table.setBounds(344, 322, 314, -206);
 		table.setModel(dtm);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(252, 82, 674, 521);
 		contentPane.add(scrollPane);
-		
+
 		dtm.setColumnIdentifiers(new String[]{"Inserzione", "Descrizione", "Prezzo per notte", "Numero persone", "Data inizio", "Data fine", "Struttura turistica", "Inserzionista"});
 
 		btnCerca = new JButton("Cerca");
@@ -135,7 +163,7 @@ public class InserzioniUI extends JFrame {
 		});
 		btnCerca.setBounds(753, 47, 85, 21);
 		contentPane.add(btnCerca);
-		
+
 		JButton btnRipristina = new JButton("Ripristina");
 		btnRipristina.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,7 +191,7 @@ public class InserzioniUI extends JFrame {
 		});
 		btnIndietro.setBounds(10, 10, 85, 21);
 		contentPane.add(btnIndietro);
-		
+
 		prenotaButton = new JButton("Prenota");
 		prenotaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,6 +203,12 @@ public class InserzioniUI extends JFrame {
 		prenotaButton.setFont(new Font("Dialog", Font.BOLD, 18));
 		prenotaButton.setBounds(27, 506, 207, 97);
 		contentPane.add(prenotaButton);
+		
+		filtroComboBox = new JComboBox();
+		filtroComboBox.setBounds(753, 14, 173, 22);
+		filtroComboBox.setModel(new DefaultComboBoxModel(new String[] {"Inserzioni valide", "Inserzioni scadute", "Canoni scaduti"}));
+		filtroComboBox.getEditor().setItem("Inserzioni valide");
+		contentPane.add(filtroComboBox);
 
 		cerca("");
 		createEvents();
@@ -185,12 +219,27 @@ public class InserzioniUI extends JFrame {
 			btnCerca.setEnabled(true);
 		else
 			btnCerca.setEnabled(false);
+	}
 
+	public void warn1() {
 		if(table.isRowSelected(table.getSelectedRow())) {
 			rimuoviInserzioneButton.setEnabled(true);
 			modificaInserzioneButton.setEnabled(true);
-			prenotaButton.setEnabled(true);
+			if(filtroComboBox.getEditor().getItem().toString().equals((String) "Inserzioni valide"))
+				prenotaButton.setEnabled(true);
+			else
+				prenotaButton.setEnabled(false);
+			
+			/*Canone canone = DAOFactory.getDAOCanone().doRetrieve(DAOCanoneImpl.STRUTTURA_TURISTICA, table.getModel().getValueAt(table.getSelectedRow(), 6).toString());
+			if(canone.isSaldato() && (LocalDate.parse((table.getModel().getValueAt(table.getSelectedRow(), 5)).toString()).isBefore(LocalDate.now())))
+				prenotaButton.setEnabled(true);
+			else
+				prenotaButton.setEnabled(false);*/
 		}
+	}
+	
+	public void warn2() {
+		cerca("");
 	}
 
 	private void createEvents() {
@@ -209,7 +258,20 @@ public class InserzioniUI extends JFrame {
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				warn();
+				warn1();
+			}
+		});
+		
+		final JTextComponent fTC = (JTextComponent) filtroComboBox.getEditor().getEditorComponent();
+		fTC.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn2();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn2();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn2();
 			}
 		});
 	}
@@ -229,9 +291,22 @@ public class InserzioniUI extends JFrame {
 			getDtm().removeRow(0);
 
 		inserzioni = new ArrayList<Inserzione>();
-		for (Inserzione ins : DAOFactory.getDAOInserzione().doRetrieveAllFiltered(target).values()) {
-			if(DAOFactory.getDAOCanone().doRetrieve("STRUTTURATURISTICA", ins.getStrutturaTuristica()).isSaldato())
-				inserzioni.add(ins);
+		for(Inserzione ins : DAOFactory.getDAOInserzione().doRetrieveAllFiltered(target).values()) {
+			switch(filtroComboBox.getEditor().getItem().toString()) {
+			case "Inserzioni valide":
+			default:
+				if(DAOFactory.getDAOCanone().doRetrieve("STRUTTURATURISTICA", ins.getStrutturaTuristica()).isSaldato() && ins.getDataFine().isAfter(LocalDate.now()))
+					inserzioni.add(ins);
+				break;
+			case "Inserzioni scadute":
+				if(DAOFactory.getDAOCanone().doRetrieve("STRUTTURATURISTICA", ins.getStrutturaTuristica()).isSaldato() && ins.getDataFine().isBefore(LocalDate.now()))
+					inserzioni.add(ins);
+				break;
+			case "Canoni scaduti":
+				if(!DAOFactory.getDAOCanone().doRetrieve("STRUTTURATURISTICA", ins.getStrutturaTuristica()).isSaldato())
+					inserzioni.add(ins);
+				break;
+			}
 		}
 		Collections.sort(inserzioni);
 		for(Inserzione ins : inserzioni) {
