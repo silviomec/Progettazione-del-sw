@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for macos11 (x86_64)
 --
 -- Host: localhost    Database: db_pds
 -- ------------------------------------------------------
@@ -15,9 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-drop database if exists db_pds;
-create database db_pds;
-use db_pds;
 --
 -- Table structure for table `canoni`
 --
@@ -122,7 +119,6 @@ DROP TABLE IF EXISTS `inserzioni`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inserzioni` (
   `idInserzione` int NOT NULL AUTO_INCREMENT,
-  `titolo` varchar(45) NOT NULL,
   `descrizione` varchar(200) NOT NULL,
   `prezzoPerNotte` decimal(6,2) unsigned zerofill NOT NULL,
   `numeroPersone` int NOT NULL,
@@ -138,7 +134,7 @@ CREATE TABLE `inserzioni` (
   CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `numeroPersone` CHECK ((`numeroPersone` >= 0)),
   CONSTRAINT `prezzoPerNotte` CHECK ((`prezzoPerNotte` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +143,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Hotel Rabona','Camera Matrimoniale',0070.00,2,'2021-08-08','2021-08-20','69745223097','LMPRTI99B65A783J'),(2,'marta','ampia camera',0060.00,3,'2021-10-19','2021-10-26','12345678901','DTMKNL98L02A783Z');
+INSERT INTO `inserzioni` VALUES (1,'Camera Matrimoniale',0070.00,2,'2021-08-08','2023-08-20','69745223097','LMPRTI99B65A783J'),(2,'ampia camera',0060.00,3,'2021-10-19','2021-10-26','12345678901','DTMKNL98L02A783Z');
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,4 +325,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-23 19:14:46
+-- Dump completed on 2021-12-01 17:48:33

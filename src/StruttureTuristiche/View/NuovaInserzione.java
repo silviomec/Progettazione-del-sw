@@ -41,17 +41,19 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.JScrollBar;
+import javax.swing.JTextArea;
 
 public class NuovaInserzione extends JDialog implements ActionListener {
 	private final JPanel contentPanel = new JPanel();
-	private JTextField descrizioneTextField;
+	private JTextPane descrizioneTextField;
 	private JComboBox strutturaTuristicaComboBox;
 	private JComboBox<Integer> numeroPersoneComboBox;
 	private JFormattedTextField prezzoPerNotteTextField;
 	private JDateChooser dataInizio;
 	private JDateChooser dataFine;
 	private JButton confermaButton;
-	
+
 	DateToLocalDate dateToLocalDate = new DateToLocalDate();
 	LocalDateToDate localDateToDate = new LocalDateToDate();
 
@@ -81,8 +83,8 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 		lblDescrizione.setBounds(127, 68, 96, 13);
 		contentPanel.add(lblDescrizione);
 
-		descrizioneTextField = new JTextField();
-		descrizioneTextField.setColumns(10);
+		descrizioneTextField = new JTextPane();
+		//descrizioneTextField.setColumns(10);
 		descrizioneTextField.setBounds(127, 91, 235, 105);
 		contentPanel.add(descrizioneTextField);
 
@@ -132,20 +134,20 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 
 		try {
 			//NumberFormat format = NumberFormat.getInstance();
-		    NumberFormatter formatter = new NumberFormatter();
-		    formatter.setValueClass(Float.class);
-		    formatter.setMinimum(Float.MIN_VALUE);
-		    formatter.setMaximum(Float.MAX_VALUE);
-		    formatter.setAllowsInvalid(true);
-		    // If you want the value to be committed on each keystroke instead of focus lost
-		    formatter.setCommitsOnValidEdit(false);
-			
+			NumberFormatter formatter = new NumberFormatter();
+			formatter.setValueClass(Float.class);
+			formatter.setMinimum(Float.MIN_VALUE);
+			formatter.setMaximum(Float.MAX_VALUE);
+			formatter.setAllowsInvalid(true);
+			// If you want the value to be committed on each keystroke instead of focus lost
+			formatter.setCommitsOnValidEdit(false);
+
 			//MaskFormatter formatter = new MaskFormatter("#####.##");
 			//formatter.setPlaceholderCharacter('0');
 			prezzoPerNotteTextField = new JFormattedTextField(formatter);
 			//prezzoPerNotteTextField.setText("00001.00");
 		} catch(Exception e) {}
-		
+
 		prezzoPerNotteTextField.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		prezzoPerNotteTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 		prezzoPerNotteTextField.setBounds(582, 262, 218, 20);
@@ -155,36 +157,36 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 		lblEuro.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblEuro.setBounds(810, 265, 7, 14);
 		contentPanel.add(lblEuro);
-		
-		JLabel dataInizioLabel = new JLabel("Inizio validità inserzione");
+
+		JLabel dataInizioLabel = new JLabel("Inizio validitï¿½ inserzione");
 		dataInizioLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		dataInizioLabel.setBounds(127, 315, 162, 23);
 		contentPanel.add(dataInizioLabel);
-		
+
 		dataInizio = new JDateChooser();
 		dataInizio.setBounds(127, 338, 133, 19);
 		contentPanel.add(dataInizio);
 
-		JLabel dataFineLabel = new JLabel("Fine validità inserzione");
+		JLabel dataFineLabel = new JLabel("Fine validitï¿½ inserzione");
 		dataFineLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		dataFineLabel.setBounds(582, 315, 162, 23);
 		contentPanel.add(dataFineLabel);
-		
+
 		dataFine = new JDateChooser();
 		dataFine.setBounds(582, 338, 133, 19);
 		dataFine.setEnabled(false);
 		contentPanel.add(dataFine);
-		
+
 		createEvents();
 	}
-	
+
 	public void warn() {
 		if(!descrizioneTextField.getText().equals("") && strutturaTuristicaComboBox.getEditor().getItem() != null && numeroPersoneComboBox.getEditor().getItem() != null && !prezzoPerNotteTextField.getText().equals("") && dataInizio.getDate() != null && dataFine.getDate() != null) {
 			confermaButton.setEnabled(true);
 		} else
 			confermaButton.setEnabled(false);
 	}
-	
+
 	public void warn1() {
 		if(dataInizio.getDate() != null) {
 			dataFine.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataInizio.getDate()).plusDays(1)));
@@ -192,7 +194,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 			dataFine.setEnabled(true);
 		}
 	}
-	
+
 	private void createEvents() {
 		descrizioneTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -205,7 +207,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 				warn();
 			}
 		});
-		
+
 		final JTextComponent stTC = (JTextComponent) strutturaTuristicaComboBox.getEditor().getEditorComponent();
 		stTC.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -218,7 +220,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 				warn();
 			}
 		});
-		
+
 		final JTextComponent npTC = (JTextComponent) numeroPersoneComboBox.getEditor().getEditorComponent();
 		npTC.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -231,7 +233,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 				warn();
 			}
 		});
-		
+
 		prezzoPerNotteTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				warn();
@@ -243,7 +245,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 				warn();
 			}
 		});
-		
+
 		((JTextField) dataInizio.getDateEditor().getUiComponent()).getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -263,7 +265,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 				warn1();
 			}
 		});
-		
+
 		((JTextField) dataFine.getDateEditor().getUiComponent()).getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -316,7 +318,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 		String strutturaTuristica = strutturaTuristicaComboBox.getEditor().getItem().toString();
 		String numeroPersone = numeroPersoneComboBox.getEditor().getItem().toString();
 		String prezzoPerNotte = prezzoPerNotteTextField.getText();
-		
+
 		DAOFactory.getDAOInserzione().insertInserzione(new Inserzione(descrizione, Double.parseDouble(prezzoPerNotte), Integer.parseInt(numeroPersone), dateToLocalDate.convertToLocalDateViaInstant(dataInizio.getDate()), dateToLocalDate.convertToLocalDateViaInstant(dataFine.getDate()), strutturaTuristica, DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(strutturaTuristica).getInserzionista()));
 		JOptionPane.showMessageDialog(null, "Inserzione inserita correttamente.", "Inserzione", JOptionPane.INFORMATION_MESSAGE);
 	}

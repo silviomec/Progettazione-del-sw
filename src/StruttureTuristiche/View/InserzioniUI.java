@@ -114,7 +114,7 @@ public class InserzioniUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO: implementare correttamente il bottone
 				int idInserzione = inserzioni.get(table.getSelectedRow()).getIdInserzione();
-				stf.showNuovaInserzione();
+				stf.showModificaInserzione(DAOFactory.getDAOInserzione().doRetrieveByIdInserzione(idInserzione));
 			}
 		});
 		modificaInserzioneButton.setFont(new Font("Dialog", Font.BOLD, 18));
