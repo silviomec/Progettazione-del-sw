@@ -8,15 +8,25 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import com.toedter.calendar.JDateChooser;
+
 import Repository.DAOFactory;
 import Repository.Utenti.DAOPersonaImpl;
+import StruttureTuristiche.Model.Inserzione;
 import StruttureTuristiche.Model.StrutturaTuristica;
 import Utenti.Model.Persona;
+import Util.DateToLocalDate;
+import Util.LocalDateToDate;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,13 +41,21 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.JScrollBar;
+import javax.swing.JTextArea;
 
-public class NuovaInserzione extends JDialog {
+public class NuovaInserzione extends JDialog implements ActionListener {
 	private final JPanel contentPanel = new JPanel();
-	private JTextField descrizioneTextField;
+	private JTextPane descrizioneTextField;
 	private JComboBox strutturaTuristicaComboBox;
 	private JComboBox<Integer> numeroPersoneComboBox;
 	private JFormattedTextField prezzoPerNotteTextField;
+	private JDateChooser dataInizio;
+	private JDateChooser dataFine;
+	private JButton confermaButton;
+
+	DateToLocalDate dateToLocalDate = new DateToLocalDate();
+	LocalDateToDate localDateToDate = new LocalDateToDate();
 
 	private ArrayList<String> inserzioni;
 	private ArrayList<String> struttureTuristiche;
@@ -65,8 +83,8 @@ public class NuovaInserzione extends JDialog {
 		lblDescrizione.setBounds(127, 68, 96, 13);
 		contentPanel.add(lblDescrizione);
 
-		descrizioneTextField = new JTextField();
-		descrizioneTextField.setColumns(10);
+		descrizioneTextField = new JTextPane();
+		//descrizioneTextField.setColumns(10);
 		descrizioneTextField.setBounds(127, 91, 235, 105);
 		contentPanel.add(descrizioneTextField);
 
@@ -99,11 +117,9 @@ public class NuovaInserzione extends JDialog {
 		contentPanel.add(buttonPane);
 		buttonPane.setLayout(null);
 
-		JButton confermaButton = new JButton("Conferma");
-		confermaButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		confermaButton = new JButton("Conferma");
+		confermaButton.setEnabled(false);
+		confermaButton.addActionListener(this);
 		confermaButton.setBounds(410, 20, 141, 43);
 		buttonPane.add(confermaButton);
 
@@ -118,30 +134,155 @@ public class NuovaInserzione extends JDialog {
 
 		try {
 			//NumberFormat format = NumberFormat.getInstance();
-		    NumberFormatter formatter = new NumberFormatter();
-		    formatter.setValueClass(Float.class);
-		    formatter.setMinimum(Float.MIN_VALUE);
-		    formatter.setMaximum(Float.MAX_VALUE);
-		    formatter.setAllowsInvalid(true);
-		    // If you want the value to be committed on each keystroke instead of focus lost
-		    formatter.setCommitsOnValidEdit(false);
-			
+			NumberFormatter formatter = new NumberFormatter();
+			formatter.setValueClass(Float.class);
+			formatter.setMinimum(Float.MIN_VALUE);
+			formatter.setMaximum(Float.MAX_VALUE);
+			formatter.setAllowsInvalid(true);
+			// If you want the value to be committed on each keystroke instead of focus lost
+			formatter.setCommitsOnValidEdit(false);
+
 			//MaskFormatter formatter = new MaskFormatter("#####.##");
 			//formatter.setPlaceholderCharacter('0');
 			prezzoPerNotteTextField = new JFormattedTextField(formatter);
 			//prezzoPerNotteTextField.setText("00001.00");
 		} catch(Exception e) {}
-		
+
 		prezzoPerNotteTextField.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		prezzoPerNotteTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 		prezzoPerNotteTextField.setBounds(582, 262, 218, 20);
 		contentPanel.add(prezzoPerNotteTextField);
 
-		JLabel lblNewLabel = new JLabel("\u20AC");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel.setBounds(810, 265, 7, 14);
-		contentPanel.add(lblNewLabel);
-	} 
+		JLabel lblEuro = new JLabel("\u20AC");
+		lblEuro.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblEuro.setBounds(810, 265, 7, 14);
+		contentPanel.add(lblEuro);
+
+		JLabel dataInizioLabel = new JLabel("Inizio validit� inserzione");
+		dataInizioLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		dataInizioLabel.setBounds(127, 315, 162, 23);
+		contentPanel.add(dataInizioLabel);
+
+		dataInizio = new JDateChooser();
+		dataInizio.setBounds(127, 338, 133, 19);
+		contentPanel.add(dataInizio);
+
+		JLabel dataFineLabel = new JLabel("Fine validit� inserzione");
+		dataFineLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		dataFineLabel.setBounds(582, 315, 162, 23);
+		contentPanel.add(dataFineLabel);
+
+		dataFine = new JDateChooser();
+		dataFine.setBounds(582, 338, 133, 19);
+		dataFine.setEnabled(false);
+		contentPanel.add(dataFine);
+
+		createEvents();
+	}
+
+	public void warn() {
+		if(!descrizioneTextField.getText().equals("") && strutturaTuristicaComboBox.getEditor().getItem() != null && numeroPersoneComboBox.getEditor().getItem() != null && !prezzoPerNotteTextField.getText().equals("") && dataInizio.getDate() != null && dataFine.getDate() != null) {
+			confermaButton.setEnabled(true);
+		} else
+			confermaButton.setEnabled(false);
+	}
+
+	public void warn1() {
+		if(dataInizio.getDate() != null) {
+			dataFine.setMinSelectableDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataInizio.getDate()).plusDays(1)));
+			dataFine.setDate(localDateToDate.convertToDateViaInstant(dateToLocalDate.convertToLocalDateViaInstant(dataInizio.getDate()).plusDays(1)));
+			dataFine.setEnabled(true);
+		}
+	}
+
+	private void createEvents() {
+		descrizioneTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		final JTextComponent stTC = (JTextComponent) strutturaTuristicaComboBox.getEditor().getEditorComponent();
+		stTC.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		final JTextComponent npTC = (JTextComponent) numeroPersoneComboBox.getEditor().getEditorComponent();
+		npTC.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		prezzoPerNotteTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+
+		((JTextField) dataInizio.getDateEditor().getUiComponent()).getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+				warn1();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+				warn1();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+				warn1();
+			}
+		});
+
+		((JTextField) dataFine.getDateEditor().getUiComponent()).getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+		});
+	}
 
 	public ArrayList<String> getCfInserzionistiOrdered() {
 		HashMap<String, Persona> inserzionisti = new HashMap<String, Persona>(); 
@@ -171,20 +312,14 @@ public class NuovaInserzione extends JDialog {
 		return lista;
 	}
 
-	public String checkPrezzoPerNotte() {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String descrizione = descrizioneTextField.getText();
+		String strutturaTuristica = strutturaTuristicaComboBox.getEditor().getItem().toString();
+		String numeroPersone = numeroPersoneComboBox.getEditor().getItem().toString();
 		String prezzoPerNotte = prezzoPerNotteTextField.getText();
-		String msg = "";
 
-		String prezzoPerNottePattern = "^[0-9]+,+[0-9]{2}$";
-		Pattern pattern = Pattern.compile(prezzoPerNottePattern, Pattern.CASE_INSENSITIVE);
-		if(!pattern.matcher(prezzoPerNotte).matches()) {
-			System.out.println("Prezzo per notte non valido.");
-			msg = "Prezzo per notte non valido.";
-			return msg;
-		}
-		else {
-			//System.out.println("Prezzo per notte valido.");
-			return msg;
-		}
+		DAOFactory.getDAOInserzione().insertInserzione(new Inserzione(descrizione, Double.parseDouble(prezzoPerNotte), Integer.parseInt(numeroPersone), dateToLocalDate.convertToLocalDateViaInstant(dataInizio.getDate()), dateToLocalDate.convertToLocalDateViaInstant(dataFine.getDate()), strutturaTuristica, DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(strutturaTuristica).getInserzionista()));
+		JOptionPane.showMessageDialog(null, "Inserzione inserita correttamente.", "Inserzione", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
