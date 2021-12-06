@@ -86,7 +86,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		nomeTextField.setBounds(130, 158, 235, 35);
 		contentPanel.add(nomeTextField);
 
-		JLabel lblNome = new JLabel("Nome Struttura");
+		JLabel lblNome = new JLabel("Nome struttura");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNome.setBounds(130, 125, 134, 29);
 		contentPanel.add(lblNome);
@@ -112,7 +112,7 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		indirizzoTextField.setBounds(526, 246, 235, 35);
 		contentPanel.add(indirizzoTextField);
 
-		JLabel lblCFInserzionista = new JLabel("CF Inserzionista");
+		JLabel lblCFInserzionista = new JLabel("Inserzionista");
 		lblCFInserzionista.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCFInserzionista.setBounds(526, 317, 134, 29);
 		contentPanel.add(lblCFInserzionista);

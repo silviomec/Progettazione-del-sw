@@ -98,6 +98,10 @@ public class StrutturaTuristicaFacade {
 	public void showNuovaInserzione() {
 		NuovaInserzione.display();
 	}
+	
+	public void showModificaInserzione(Inserzione inserzione) {
+		ModificaInserzione.display(inserzione);
+	}
 
 	public void showNuovaPrenotazioneUI(Inserzione inserzione) {
 		NuovaPrenotazioneUI.display(inserzione);
