@@ -10,4 +10,5 @@ public interface DAOCanone {
 	public void delete(int id);
 	public int insertCanone(Canone c);
 	public int updateCanone(Canone c);
+	public int lastInsertId();
 }

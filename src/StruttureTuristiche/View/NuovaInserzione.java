@@ -53,6 +53,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 	private JDateChooser dataInizio;
 	private JDateChooser dataFine;
 	private JButton confermaButton;
+	NuovaInserzione thisNuovaInserzioneUI = this;
 
 	DateToLocalDate dateToLocalDate = new DateToLocalDate();
 	LocalDateToDate localDateToDate = new LocalDateToDate();
@@ -158,7 +159,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 		lblEuro.setBounds(810, 265, 7, 14);
 		contentPanel.add(lblEuro);
 
-		JLabel dataInizioLabel = new JLabel("Inizio validit� inserzione");
+		JLabel dataInizioLabel = new JLabel("Inizio validita' inserzione");
 		dataInizioLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		dataInizioLabel.setBounds(127, 315, 162, 23);
 		contentPanel.add(dataInizioLabel);
@@ -167,7 +168,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 		dataInizio.setBounds(127, 338, 133, 19);
 		contentPanel.add(dataInizio);
 
-		JLabel dataFineLabel = new JLabel("Fine validit� inserzione");
+		JLabel dataFineLabel = new JLabel("Fine validita'  inserzione");
 		dataFineLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		dataFineLabel.setBounds(582, 315, 162, 23);
 		contentPanel.add(dataFineLabel);
@@ -320,6 +321,7 @@ public class NuovaInserzione extends JDialog implements ActionListener {
 		String prezzoPerNotte = prezzoPerNotteTextField.getText();
 
 		DAOFactory.getDAOInserzione().insertInserzione(new Inserzione(descrizione, Double.parseDouble(prezzoPerNotte), Integer.parseInt(numeroPersone), dateToLocalDate.convertToLocalDateViaInstant(dataInizio.getDate()), dateToLocalDate.convertToLocalDateViaInstant(dataFine.getDate()), strutturaTuristica, DAOFactory.getDAOStrutturaTuristica().doRetrieveByPartitaIva(strutturaTuristica).getInserzionista()));
-		JOptionPane.showMessageDialog(null, "Inserzione inserita correttamente.", "Inserzione", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Inserzione inserita correttamente.", "Nuova Inserzione", JOptionPane.INFORMATION_MESSAGE);
+		thisNuovaInserzioneUI.dispose();
 	}
 }

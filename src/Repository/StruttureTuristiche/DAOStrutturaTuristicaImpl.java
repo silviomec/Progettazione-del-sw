@@ -154,4 +154,6 @@ public class DAOStrutturaTuristicaImpl implements DAOStrutturaTuristica {
 		}
 		return null;
 	}
+	
+	
 } 

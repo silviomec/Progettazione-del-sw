@@ -11,6 +11,7 @@ import javax.swing.text.JTextComponent;
 import Facade.StrutturaTuristicaFacade;
 import Facade.UtenteFacade;
 import Pagamenti.Model.Canone;
+import Pagamenti.Model.RicevutaPagamentoCanone;
 import Repository.DAOFactory;
 import Repository.StruttureTuristiche.DAOStrutturaTuristica;
 import Repository.Utenti.DAOPersonaImpl;
@@ -123,9 +124,13 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		buttonPane.setLayout(null);
 
 		confermaButton = new JButton("Conferma");
+		if (operazione == 0) {
+			confermaButton.setText("Conferma e paga canone");
+		}
+		else confermaButton.setText("Conferma modifica");
 		confermaButton.addActionListener(this);
 		confermaButton.setFont(new Font("Dialog", Font.BOLD, 15));
-		confermaButton.setBounds(194, 9, 144, 44);
+		confermaButton.setBounds(194, 9, 275, 44);
 		confermaButton.setActionCommand("OK");
 		confermaButton.setEnabled(false);
 		buttonPane.add(confermaButton);
@@ -140,12 +145,14 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 		stelleComboBox = new JComboBox();
 		stelleComboBox.setFont(new Font("Dialog", Font.BOLD, 14));
 		stelleComboBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
+		stelleComboBox.setSelectedIndex(-1);
 		stelleComboBox.setBounds(130, 347, 235, 35);
 		contentPanel.add(stelleComboBox);
 
 		hotelComboBox = new JComboBox();
 		hotelComboBox.setFont(new Font("Dialog", Font.BOLD, 13));
 		hotelComboBox.setModel(new DefaultComboBoxModel(new String[] {"Hotel", "B&B", "Residence", "Ostello"}));
+		hotelComboBox.setSelectedIndex(-1);
 		hotelComboBox.setBounds(130, 245, 235, 35);
 		contentPanel.add(hotelComboBox);
 
@@ -364,13 +371,14 @@ public class UpdateStruttura extends JFrame implements ActionListener {
 					System.out.println("Struttura turistica registrata con successo!");
 					JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Messaggio", 1);
 					DAOFactory.getDAOCanone().insertCanone(new Canone(inserzionista, pIva, 125.00, LocalDate.now().plusYears(1), true));
+					DAOFactory.getDAORicevutaPagamentoCanone().insertRicevutaPagamentoCanone(new RicevutaPagamentoCanone(125.00, LocalDate.now(), DAOFactory.getDAOCanone().lastInsertId(), inserzionista, pIva));
 					StruttureTuristicheUI.cerca("");
 					nomeTextField.setText("");
 					pIvaTextField.setText("");
 					indirizzoTextField.setText("");
-					hotelComboBox.setSelectedIndex(0);;
+					hotelComboBox.setSelectedIndex(-1);;
 					inserzionistaComboBox.setSelectedIndex(-1);
-					stelleComboBox.setSelectedIndex(0);
+					stelleComboBox.setSelectedIndex(-1);
 					break;
 				case MODIFICA:
 					msg = "Partita IVA non ancora registrata.";

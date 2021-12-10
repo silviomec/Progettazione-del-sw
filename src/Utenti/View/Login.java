@@ -12,6 +12,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import Util.ImageUtils;
+
 import Exception.DipendenteNotFoundException;
 
 import javax.swing.JLabel;
@@ -25,6 +27,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class Login extends JFrame implements ActionListener {
 
@@ -34,8 +37,10 @@ public class Login extends JFrame implements ActionListener {
 	private JButton confirmButton = new JButton("CONFIRM");
 	private JLabel lbl_error_username;
 	private JLabel lbl_error_password;
+	private JLabel lblLogo;
 
 	UtenteFacade uf = UtenteFacade.getInstance();
+	
 
 	/**
 	 * Launch the application.
@@ -57,6 +62,7 @@ public class Login extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Login() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\rital\\OneDrive\\University\\Terzo anno\\Progettazione del software\\Nostro Progetto\\Workspace PDS\\Progettazione-del-sw\\Opera_senza_titolo.ico"));
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -122,6 +128,13 @@ public class Login extends JFrame implements ActionListener {
 		lbl_error_password.setIcon(new ImageIcon("res/dialog-error.png"));
 		lbl_error_password.setVisible(false);
 		this.getContentPane().add(lbl_error_password);
+		
+		lblLogo = new JLabel();
+		//lblLogo.setIcon(new ImageIcon("C:\\Users\\rital\\OneDrive\\University\\Terzo anno\\Progettazione del software\\Nostro Progetto\\Workspace PDS\\Progettazione-del-sw\\src\\Util\\Logo.ico"));
+		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLogo.setIcon(ImageUtils.getLogo(150, 150));
+		lblLogo.setBounds(192, 54, 351, 116);
+		contentPane.add(lblLogo);
 
 		createEvents();
 	}

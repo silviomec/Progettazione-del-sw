@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for macos11 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
 -- Host: localhost    Database: db_pds
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -35,7 +35,7 @@ CREATE TABLE `canoni` (
   KEY `STRUTTURATURISTICA_idx` (`STRUTTURATURISTICA`),
   CONSTRAINT `canoni_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `canoni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `clienti` (
 
 LOCK TABLES `clienti` WRITE;
 /*!40000 ALTER TABLE `clienti` DISABLE KEYS */;
-INSERT INTO `clienti` VALUES ('DTMKNL98L02A783Z','Kevin Luca','De Toma','388777','k.detoma@studenti.unisannio.it'),('LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),('LPOPNE98R03A784R','Pene','Lope','329y678909','PENElope@outlook.it'),('RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it');
+INSERT INTO `clienti` VALUES ('DTMKNL98L02A783Z','Kevin Luca','De Toma','388777','k.detoma@studenti.unisannio.it'),('LMPRTI99B65A783J','Rita','Lamparelli','7776724231','r.l@email.it'),('RSSMRC98E01A783A','Marco','Rossi','7770491329','m.rossi@email.it');
 /*!40000 ALTER TABLE `clienti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,7 +134,7 @@ CREATE TABLE `inserzioni` (
   CONSTRAINT `inserzioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `numeroPersone` CHECK ((`numeroPersone` >= 0)),
   CONSTRAINT `prezzoPerNotte` CHECK ((`prezzoPerNotte` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,7 +143,7 @@ CREATE TABLE `inserzioni` (
 
 LOCK TABLES `inserzioni` WRITE;
 /*!40000 ALTER TABLE `inserzioni` DISABLE KEYS */;
-INSERT INTO `inserzioni` VALUES (1,'Camera Matrimoniale',0070.00,2,'2021-08-08','2023-08-20','69745223097','LMPRTI99B65A783J'),(2,'ampia camera',0060.00,3,'2021-10-19','2021-10-26','12345678901','DTMKNL98L02A783Z');
+INSERT INTO `inserzioni` VALUES (1,'Camera Matrimoniale',0070.00,2,'2021-08-08','2021-08-20','69745223097','LMPRTI99B65A783J'),(2,'ampia camera',0060.00,3,'2021-10-19','2021-10-26','12345678901','DTMKNL98L02A783Z'),(3,'capera tripla',0085.00,4,'2021-11-21','2022-08-22','69745223097','LMPRTI99B65A783J'),(16,'Camera doppia',0007.00,5,'2021-12-02','2022-12-02','47654387986','LMPRTI99B65A783J');
 /*!40000 ALTER TABLE `inserzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,7 +201,7 @@ CREATE TABLE `prenotazioni` (
   CONSTRAINT `prenotazioni_STRUTTURATURISTICA` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `prenotazioni_chk_1` CHECK ((`dataPartenza` > `dataArrivo`)),
   CONSTRAINT `prenotazioni_chk_2` CHECK ((`prezzoTotale` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +210,7 @@ CREATE TABLE `prenotazioni` (
 
 LOCK TABLES `prenotazioni` WRITE;
 /*!40000 ALTER TABLE `prenotazioni` DISABLE KEYS */;
-INSERT INTO `prenotazioni` VALUES (1,'2020-01-01','2020-01-10',600.00,'LMPRTI99B65A783J',1,'69745223097'),(2,'2021-11-23','2021-11-30',300.00,'DTMKNL98L02A783Z',2,'12345678901');
+INSERT INTO `prenotazioni` VALUES (1,'2020-01-01','2020-01-10',600.00,'LMPRTI99B65A783J',1,'69745223097'),(2,'2021-11-23','2021-11-30',300.00,'DTMKNL98L02A783Z',2,'12345678901'),(3,'2021-12-17','2021-12-18',85.00,'LMPRTI99B65A783J',3,'69745223097');
 /*!40000 ALTER TABLE `prenotazioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +237,7 @@ CREATE TABLE `ricevutepagamentocanoni` (
   CONSTRAINT `pagamento_INSERZIONISTA` FOREIGN KEY (`INSERZIONISTA`) REFERENCES `inserzionisti` (`codiceFiscale`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `pagamento_STRUTTURATURISTICA1` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `ricevutepagamentocanoni_chk_1` CHECK ((`importo` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ CREATE TABLE `ricevutepagamentocanoni` (
 
 LOCK TABLES `ricevutepagamentocanoni` WRITE;
 /*!40000 ALTER TABLE `ricevutepagamentocanoni` DISABLE KEYS */;
-INSERT INTO `ricevutepagamentocanoni` VALUES (1,125.00,'2020-09-13',1,'LMPRTI99B65A783J','47654387986'),(2,125.00,'2021-05-01',2,'MCCSLV98M11A783F','12345678911'),(3,125.00,'2021-07-02',3,'LMPRTI99B65A783J','69745223097');
+INSERT INTO `ricevutepagamentocanoni` VALUES (1,125.00,'2020-09-13',1,'LMPRTI99B65A783J','47654387986'),(2,125.00,'2021-05-01',2,'MCCSLV98M11A783F','12345678911'),(3,125.00,'2021-07-02',3,'LMPRTI99B65A783J','69745223097'),(4,125.00,'2021-11-16',4,'DTMKNL98L02A783Z','77777777777'),(5,125.00,'2021-11-17',5,'DTMKNL98L02A783Z','12345678911');
 /*!40000 ALTER TABLE `ricevutepagamentocanoni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,7 +273,7 @@ CREATE TABLE `ricevutepagamentoprenotazioni` (
   CONSTRAINT `pagamento_PRENOTAZIONE` FOREIGN KEY (`PRENOTAZIONE`) REFERENCES `prenotazioni` (`idprenotazione`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `pagamento_STRUTTURATURISTICA2` FOREIGN KEY (`STRUTTURATURISTICA`) REFERENCES `struttureturistiche` (`PartitaIva`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `ricevutepagamentoprenotazioni_chk_1` CHECK ((`importo` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -282,7 +282,7 @@ CREATE TABLE `ricevutepagamentoprenotazioni` (
 
 LOCK TABLES `ricevutepagamentoprenotazioni` WRITE;
 /*!40000 ALTER TABLE `ricevutepagamentoprenotazioni` DISABLE KEYS */;
-INSERT INTO `ricevutepagamentoprenotazioni` VALUES (1,600.00,'2020-01-01',1,'LMPRTI99B65A783J','69745223097'),(2,300.00,'2021-11-23',2,'DTMKNL98L02A783Z','12345678901');
+INSERT INTO `ricevutepagamentoprenotazioni` VALUES (1,600.00,'2020-01-01',1,'LMPRTI99B65A783J','69745223097'),(2,300.00,'2021-11-23',2,'DTMKNL98L02A783Z','12345678901'),(3,85.00,'2021-12-09',3,'LMPRTI99B65A783J','69745223097');
 /*!40000 ALTER TABLE `ricevutepagamentoprenotazioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,4 +325,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-01 17:48:33
+-- Dump completed on 2021-12-09 19:33:00

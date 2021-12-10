@@ -124,6 +124,25 @@ public class DAOCanoneImpl implements DAOCanone {
 		return 0;
 	}
 	
+	@Override
+	public int lastInsertId() {
+		Statement statement = null;
+		int idCanone = 0;
+		try {
+			statement = connection.getConnection().createStatement();
+			ResultSet result = statement.executeQuery("SELECT MAX(idcanone) AS id FROM db_pds.canoni;");
+			while (result.next()) {
+			idCanone = result.getInt("id");
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		return idCanone;
+	}
+	
 	public static final String ID_CANONE = "idCanone";
 	public static final String STRUTTURA_TURISTICA = "STRUTTURATURISTICA";
 }

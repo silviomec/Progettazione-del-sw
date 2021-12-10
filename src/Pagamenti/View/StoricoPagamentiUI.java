@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JList;
+import javax.swing.JLabel;
 
 public class StoricoPagamentiUI extends JFrame {
 	private int modalita = 0;
@@ -102,7 +103,7 @@ public class StoricoPagamentiUI extends JFrame {
 		contentPane.add(btnIndietro);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setBounds(27, 47, 716, 25);
+		cercaTextField.setBounds(320, 10, 416, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
 		cercaTextField.setText(cerca);
@@ -115,7 +116,7 @@ public class StoricoPagamentiUI extends JFrame {
 				cerca(cercaTextField.getText());
 			}
 		});
-		btnCerca.setBounds(753, 47, 85, 21);
+		btnCerca.setBounds(746, 14, 85, 21);
 		contentPane.add(btnCerca);
 
 		JButton btnRipristina = new JButton("Ripristina");
@@ -125,7 +126,7 @@ public class StoricoPagamentiUI extends JFrame {
 				cercaTextField.setText("");
 			}
 		});
-		btnRipristina.setBounds(841, 47, 85, 21);
+		btnRipristina.setBounds(841, 14, 85, 21);
 		contentPane.add(btnRipristina);
 
 		dtmRicevutePagamentoCanoni.setColumnIdentifiers(new String[]{"Inserzionista", "Importo", "Data pagamento", "Struttura turistica", "Partita IVA", "ID pagamento"});
@@ -143,11 +144,21 @@ public class StoricoPagamentiUI extends JFrame {
 		tablePrenotazioni.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPanePrenotazioni = new JScrollPane(tablePrenotazioni);
 		contentPane.add(scrollPanePrenotazioni);
+		
+		JLabel canonilbl = new JLabel("Storico pagamenti canone");
+		canonilbl.setFont(new Font("Tahoma", Font.BOLD, 15));
+		canonilbl.setBounds(33, 52, 273, 21);
+		contentPane.add(canonilbl);
+		
+		JLabel lblNewLabel = new JLabel("Storico pagamenti prenotazione");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setBounds(33, 337, 273, 21);
+		contentPane.add(lblNewLabel);
 
 		switch(modalita) {
 		case 0:
-			scrollPaneCanoni.setBounds(27, 83, 886, 250);
-			scrollPanePrenotazioni.setBounds(27, 343, 886, 250);
+			scrollPaneCanoni.setBounds(27, 77, 886, 240);
+			scrollPanePrenotazioni.setBounds(27, 360, 886, 240);
 			break;
 		case 1:
 			scrollPaneCanoni.setBounds(27, 83, 886, 521);

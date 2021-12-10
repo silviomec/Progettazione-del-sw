@@ -30,6 +30,7 @@ import javax.swing.JList;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class VisualizzaPersone extends JFrame {
@@ -40,6 +41,7 @@ public class VisualizzaPersone extends JFrame {
 	private JTextField cercaTextField;
 	private JButton btnCerca;
 	private JPanel contentPane;
+	VisualizzaPersone thisVisualizzaPersone = this;
 	DefaultTableModel dtm = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
@@ -69,7 +71,7 @@ public class VisualizzaPersone extends JFrame {
 	public VisualizzaPersone(String tabella) {
 		this.tabella = tabella;
 		
-		setTitle("Visualizza " + tabella);
+		setTitle("Visualizza Persone");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -78,7 +80,7 @@ public class VisualizzaPersone extends JFrame {
 		contentPane.setLayout(null);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setBounds(10, 30, 776, 25);
+		cercaTextField.setBounds(10, 61, 419, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
 
@@ -98,6 +100,16 @@ public class VisualizzaPersone extends JFrame {
 			dtm.addRow(new Object[]{p.getCodiceFiscale(), p.getNome(),  p.getCognome(), p.getTelefono(), p.getEmail()});
 		}
 
+		JButton btnIndietro = new JButton("Indietro");
+		btnIndietro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestioneUtentiUI.display();
+				thisVisualizzaPersone.dispose();
+			}
+		});
+		btnIndietro.setBounds(10, 21, 85, 21);
+		contentPane.add(btnIndietro);
+		
 		table = new JTable();
 		table.setBounds(344, 322, 314, -206);
 		table.setModel(dtm);
@@ -114,7 +126,7 @@ public class VisualizzaPersone extends JFrame {
 				cerca(cercaTextField.getText());
 			}
 		});
-		btnCerca.setBounds(49, 65, 85, 21);
+		btnCerca.setBounds(461, 65, 85, 21);
 		contentPane.add(btnCerca);
 
 		btnRipristina = new JButton("Ripristina");
@@ -124,8 +136,13 @@ public class VisualizzaPersone extends JFrame {
 				cercaTextField.setText("");
 			}
 		});
-		btnRipristina.setBounds(144, 65, 85, 21);
+		btnRipristina.setBounds(556, 65, 85, 21);
 		contentPane.add(btnRipristina);
+		
+		JLabel lblPersoneRegistrate = new JLabel("Persone registrate");
+		lblPersoneRegistrate.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblPersoneRegistrate.setBounds(10, 123, 192, 24);
+		contentPane.add(lblPersoneRegistrate);
 
 		createEvents();
 	}

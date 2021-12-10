@@ -39,6 +39,7 @@ public class RegistraPersona extends JFrame implements ActionListener {
 	private JLabel lblCf;
 	private JLabel lblEmail;
 	private String tabella;
+	RegistraPersona thisRegistraPersona = this;
 
 	UtenteFacade uf = UtenteFacade.getInstance();
 
@@ -71,7 +72,17 @@ public class RegistraPersona extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
+		JButton btnIndietro = new JButton("Indietro");
+		btnIndietro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestioneUtentiUI.display();
+				thisRegistraPersona.dispose();
+			}
+		});
+		btnIndietro.setBounds(10, 10, 85, 21);
+		contentPane.add(btnIndietro);
+		
 		JLabel lblNome = new JLabel("Nome");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNome.setBounds(46, 54, 134, 29);

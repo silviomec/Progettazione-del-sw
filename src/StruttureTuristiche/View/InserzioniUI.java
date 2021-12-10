@@ -86,6 +86,7 @@ public class InserzioniUI extends JFrame {
 		btnInserisciInserzione.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				stf.showNuovaInserzione();
+				cerca(cercaTextField.getText());
 			}
 		});
 		btnInserisciInserzione.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -178,7 +179,7 @@ public class InserzioniUI extends JFrame {
 		contentPane.add(btnRipristina);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setBounds(27, 47, 716, 25);
+		cercaTextField.setBounds(252, 47, 491, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
 
@@ -201,7 +202,7 @@ public class InserzioniUI extends JFrame {
 		});
 		prenotaButton.setEnabled(false);
 		prenotaButton.setFont(new Font("Dialog", Font.BOLD, 18));
-		prenotaButton.setBounds(27, 506, 207, 97);
+		prenotaButton.setBounds(27, 485, 207, 83);
 		contentPane.add(prenotaButton);
 		
 		filtroComboBox = new JComboBox();

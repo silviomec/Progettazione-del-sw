@@ -85,7 +85,7 @@ public class StruttureTuristicheUI extends JFrame {
 		contentPane.setLayout(null);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setBounds(27, 47, 716, 25);
+		cercaTextField.setBounds(252, 47, 491, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
 
@@ -152,7 +152,7 @@ public class StruttureTuristicheUI extends JFrame {
 				stf.showGestisciCanone(canone);
 			} 
 		});
-		gestisciCanoneButton.setBounds(54, 524, 166, 35);
+		gestisciCanoneButton.setBounds(27, 524, 193, 35);
 		contentPane.add(gestisciCanoneButton);
 
 		dtm.setColumnIdentifiers(new String[]{"Partita IVA", "Nome", "Indirizzo", "Tipologia", "Stelle", "Inserzionista", "Scadenza canone"});

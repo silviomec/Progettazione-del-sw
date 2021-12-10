@@ -121,7 +121,7 @@ public class PrenotazioniUI extends JFrame {
 		contentPane.add(btnRipristina);
 
 		cercaTextField = new JTextField();
-		cercaTextField.setBounds(27, 47, 716, 25);
+		cercaTextField.setBounds(252, 47, 491, 25);
 		cercaTextField.setFont(new Font("Dialog", Font.ITALIC, 14));
 		contentPane.add(cercaTextField);
 
