@@ -183,8 +183,8 @@ public class Login extends JFrame implements ActionListener {
 		else if(username.length() > 16) msg = "Username di massimo 16 caratteri\n";
 		else error_username = false;
 
-		if(password.length() < 4) msg += "Password di almeno 4 caratteri";
-		else if(password.length() > 30) msg += "Password di massimo 30 caratteri";
+		/*if(password.length() < 4) msg += "Password di almeno 4 caratteri";
+		else */if(password.length() > 30) msg += "Password di massimo 30 caratteri";
 		else error_password = false;	
 
 		if(!msg.equals("")) { 
